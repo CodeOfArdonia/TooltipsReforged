@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "tooltips_reforged",
+  "version": "${version}",
+  "name": "Tooltips Reforged",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/tooltips_reforged/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.iafenvoy.tooltipsreforged.fabric.TooltipReforgedFabricClient"
+    ],
+    "modmenu": [
+      "com.iafenvoy.tooltipsreforged.fabric.ModMenu"
+    ]
+  },
+  "mixins": [
+    "tooltips_reforged.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "~1.20.1"
+  }
+}

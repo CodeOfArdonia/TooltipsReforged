@@ -1,0 +1,84 @@
+package com.iafenvoy.tooltipsreforged.component;
+
+import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
+import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+
+public class DurabilityTooltipComponent implements TooltipComponent {
+    private static final int SPACING = 4;
+    private static final int WIDTH = 80;
+    private final ItemStack stack;
+    private final TooltipReforgedConfig config;
+
+    public DurabilityTooltipComponent(ItemStack stack) {
+        this.stack = stack;
+        this.config = TooltipReforgedConfig.INSTANCE;
+    }
+
+    public boolean isDurabilityDisabled() {
+        return !this.stack.isDamageable() || !this.config.common.durabilityBar.getValue();
+    }
+
+    private Text getDurabilityText() {
+        int damaged = this.stack.getMaxDamage() - this.stack.getDamage();
+        if (this.config.common.enhancedDurabilityTooltip.getValue()) {
+            Text percentageText = Text.literal(" " + (damaged * 100 / this.stack.getMaxDamage()) + "%");
+            return this.config.common.durabilityBar.getValue() ? percentageText : percentageText.getWithStyle(Style.EMPTY.withColor(this.stack.getItemBarColor())).get(0);
+        } else
+            return this.config.common.durabilityBar.getValue()
+                    ? Text.literal(" " + damaged + " / " + this.stack.getMaxDamage())
+                    : Text.literal(" ")
+                    .append(Text.literal(String.valueOf(damaged)).setStyle(Style.EMPTY.withColor(this.stack.getItemBarColor())))
+                    .append(Text.literal(" / ").setStyle(Style.EMPTY.withColor(-8355712)))
+                    .append(Text.literal(String.valueOf(this.stack.getMaxDamage())).setStyle(Style.EMPTY.withColor(0xFF00FF00)));
+    }
+
+    @Override
+    public int getHeight() {
+        if (this.isDurabilityDisabled()) return 0;
+        return this.config.common.durabilityBar.getValue() ? 14 : 9;
+    }
+
+    @Override
+    public int getWidth(TextRenderer textRenderer) {
+        if (this.isDurabilityDisabled()) return 0;
+
+        int durabilityTextWidth = textRenderer.getWidth(Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID)));
+        if (this.config.common.durabilityBar.getValue()) return durabilityTextWidth + SPACING + WIDTH + 1;
+
+        Text durability = this.getDurabilityText();
+        return durabilityTextWidth + textRenderer.getWidth(durability);
+    }
+
+    @Override
+    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+        if (this.isDurabilityDisabled()) return;
+
+        if (this.config.common.durabilityBar.getValue()) y += 2;
+        int textHeight = textRenderer.fontHeight;
+        int textY = this.config.common.durabilityBar.getValue() ? y - textHeight + SPACING * 2 + 2 : y;
+
+        context.drawText(textRenderer, Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID)), x, textY, 0xffffffff, true);
+
+        x += textRenderer.getWidth(Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID))) + SPACING;
+        int damaged = this.stack.getMaxDamage() - this.stack.getDamage();
+
+        if (this.config.common.durabilityBar.getValue())
+            context.fill(x, textY - SPACING / 2, x + (damaged * WIDTH) / this.stack.getMaxDamage(), textY + textHeight, BadgesUtils.darkenColor(0xff000000 | this.stack.getItemBarColor(), 0.9f));
+
+        Text durabilityText = this.getDurabilityText();
+        if (!durabilityText.equals(Text.empty())) {
+            int textX = this.config.common.durabilityBar.getValue() ? x + ((WIDTH - textRenderer.getWidth(durabilityText)) / 2) : x - SPACING;
+            context.drawText(textRenderer, durabilityText, textX, textY, 0xFFFFFFFF, true);
+        }
+
+        if (this.config.common.durabilityBar.getValue())
+            BadgesUtils.drawFrame(context, x, textY - SPACING / 2, WIDTH, textHeight + SPACING, 400, BadgesUtils.darkenColor(0xff000000 | this.stack.getItemBarColor(), 0.8f));
+    }
+}

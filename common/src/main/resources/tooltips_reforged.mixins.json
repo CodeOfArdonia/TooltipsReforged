@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.iafenvoy.tooltipsreforged.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+    "DrawContextMixin",
+    "ItemStackMixin"
+  ],
+  "mixins": [
+    "DecorationItemAccessor",
+    "LingeringPotionItemMixin",
+    "PotionItemMixin",
+    "TippedArrowItemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
