@@ -1,17 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/CodeOfArdonia/TooltipsReforged/issues"
+license = "MIT"
 
 [[mods]]
 modId = "tooltips_reforged"
 version = "${version}"
 displayName = "Tooltips Reforged"
-authors = "Me!"
+authors = "IAFEnvoy"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Fully remake the whole tooltips and add various functions
 '''
-#logoFile = ""
+logoFile = "logo.png"
 
 [[dependencies.tooltips_reforged]]
 modId = "forge"
@@ -23,6 +23,13 @@ side = "BOTH"
 [[dependencies.tooltips_reforged]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.1,)"
+versionRange = "[1.20.1,1.20.5)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tooltips_reforged]]
+modId = "jupiter"
+mandatory = true
+versionRange = "[2,)"
 ordering = "NONE"
 side = "BOTH"
