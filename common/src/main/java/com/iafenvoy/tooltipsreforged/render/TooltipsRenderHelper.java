@@ -31,11 +31,11 @@ public class TooltipsRenderHelper {
         return MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - EDGE_SPACING;
     }
 
+    @SuppressWarnings("deprecation")
     public static void drawTooltip(DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner) {
         if (components.isEmpty()) return;
 
         TooltipBackgroundComponent backgroundComponent = getBackgroundComponent(components);
-
         components.removeIf(component -> component.getHeight() == 0 || component.getWidth(textRenderer) == 0);
 
         MatrixStack matrices = context.getMatrices();
@@ -43,7 +43,6 @@ public class TooltipsRenderHelper {
 
         double scale = TooltipReforgedConfig.INSTANCE.common.scaleFactor.getValue();
 
-        int pageWidth = 0;
         int maxWidth = (int) (getMaxWidth() / scale);
         int totalWidth = 0;
 
@@ -74,7 +73,7 @@ public class TooltipsRenderHelper {
 
                     page.components.add(wrappedComponent);
                     page.height = pageHeight += wrappedHeight;
-                    page.width = pageWidth = Math.max(page.width, wrappedWidth);
+                    page.width = Math.max(page.width, wrappedWidth);
                 }
             } else {
                 if (pageHeight + height > maxHeight) {
@@ -86,7 +85,7 @@ public class TooltipsRenderHelper {
 
                 page.components.add(tooltipComponent);
                 page.height = pageHeight += height;
-                page.width = pageWidth = Math.max(page.width, width);
+                page.width = Math.max(page.width, width);
             }
         }
 
@@ -107,7 +106,6 @@ public class TooltipsRenderHelper {
         }
 
         matrices.push();
-
         matrices.scale((float) scale, (float) scale, (float) scale);
 
         for (TooltipPage p : pageList) {
@@ -116,14 +114,13 @@ public class TooltipsRenderHelper {
 
             if (backgroundComponent == null)
                 context.draw(() -> TooltipBackgroundRenderer.render(context, p.x, p.y, p.width, p.height, 400));
-            else
-                context.draw(() -> {
-                    try {
-                        backgroundComponent.render(context, p.x, p.y, p.width, p.height, (int) (400 / scale), pageList.indexOf(p));
-                    } catch (Exception e) {
-                        TooltipReforgedClient.LOGGER.error("[{}]", TooltipReforgedClient.MOD_ID, e);
-                    }
-                });
+            else context.draw(() -> {
+                try {
+                    backgroundComponent.render(context, p.x, p.y, p.width, p.height, (int) (400 / scale), pageList.indexOf(p));
+                } catch (Exception e) {
+                    TooltipReforgedClient.LOGGER.error("[{}]", TooltipReforgedClient.MOD_ID, e);
+                }
+            });
         }
 
         matrices.translate(0.0f, 0.0f, 400.0f / scale);
@@ -151,29 +148,19 @@ public class TooltipsRenderHelper {
     }
 
     private static TooltipBackgroundComponent getBackgroundComponent(List<TooltipComponent> components) {
-        for (TooltipComponent component : components) {
-            if (component instanceof TooltipBackgroundComponent) {
-                return (TooltipBackgroundComponent) component;
-            }
-        }
-
+        for (TooltipComponent component : components)
+            if (component instanceof TooltipBackgroundComponent backgroundComponent)
+                return backgroundComponent;
         return null;
     }
 
     private static List<TooltipComponent> wrapComponent(TooltipComponent component, TextRenderer textRenderer, int maxWidth) {
         List<TooltipComponent> wrappedComponents = new ArrayList<>();
-
         if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent) {
             Text text = ExtendedTextVisitor.get(orderedTextTooltipComponent.text);
-
             List<OrderedText> lines = textRenderer.wrapLines(text, maxWidth);
-            for (OrderedText line : lines) {
-                wrappedComponents.add(TooltipComponent.of(line));
-            }
-        } else {
-            wrappedComponents.add(component);
-        }
-
+            for (OrderedText line : lines) wrappedComponents.add(TooltipComponent.of(line));
+        } else wrappedComponents.add(component);
         return wrappedComponents;
     }
 

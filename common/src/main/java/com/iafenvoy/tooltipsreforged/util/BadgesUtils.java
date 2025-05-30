@@ -2,43 +2,18 @@ package com.iafenvoy.tooltipsreforged.util;
 
 import com.iafenvoy.tooltipsreforged.Static;
 import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class BadgesUtils {
-    private static final Map<String, String> MODS_MAP;
-    private static final Object2IntMap<String> COLOR_MAP = new Object2IntLinkedOpenHashMap<>();
-
-    static {
-        MODS_MAP = Static.getAllMods();
-        COLOR_MAP.put("building_blocks", 0xfff2c94c);
-        COLOR_MAP.put("colored_blocks", 0xff42a5f5);
-        COLOR_MAP.put("natural_blocks", 0xff66bb6a);
-        COLOR_MAP.put("functional_blocks", 0xff2a9d8f);
-        COLOR_MAP.put("redstone_blocks", 0xffff6b6b);
-        COLOR_MAP.put("tools_and_utilities", 0xff9b59b6);
-        COLOR_MAP.put("combat", 0xfff94144);
-        COLOR_MAP.put("food_and_drinks", 0xff61b748);
-        COLOR_MAP.put("ingredients", 0xffff6347);
-        COLOR_MAP.put("spawn_eggs", 0xffa29bfe);
-        COLOR_MAP.put("op_blocks", 0xff9c89b8);
-    }
+    private static final Map<String, String> MODS_MAP = Static.getAllMods();
 
     public static @NotNull Pair<Text, Integer> getBadgeText(ItemStack stack) {
-        for (ItemGroup group : ItemGroups.getGroupsToDisplay())
-            if (group.getType() == ItemGroup.Type.CATEGORY && group.contains(stack))
-                return new Pair<>(group.getDisplayName(), COLOR_MAP.getOrDefault(Objects.requireNonNullElse(Registries.ITEM_GROUP.getId(group), Identifier.of("", "")).getPath(), 0xff000000));
         String namespace = Registries.ITEM.getId(stack.getItem()).getNamespace();
         return new Pair<>(Text.literal(MODS_MAP.getOrDefault(namespace, "Minecraft")), getColorFromModName(namespace));
     }

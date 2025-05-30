@@ -7,5 +7,6 @@ public final class TooltipReforgedFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         TooltipReforgedClient.init();
+        FabricEntryPointLoader.init();
     }
 }

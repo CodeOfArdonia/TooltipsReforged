@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
-import com.iafenvoy.tooltipsreforged.render.TooltipProvider;
+import com.iafenvoy.tooltipsreforged.render.TooltipProviders;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.font.TextRenderer;
@@ -24,8 +24,8 @@ public class HeaderTooltipComponent implements TooltipComponent {
 
     public HeaderTooltipComponent(ItemStack stack) {
         this.stack = stack;
-        this.nameText = TooltipProvider.getDisplayName(stack).asOrderedText();
-        this.rarityName = TooltipProvider.getRarityName(stack).asOrderedText();
+        this.nameText = TooltipProviders.getDisplayName(stack).asOrderedText();
+        this.rarityName = TooltipProviders.getRarityName(stack).asOrderedText();
         this.config = TooltipReforgedConfig.INSTANCE;
     }
 

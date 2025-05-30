@@ -16,6 +16,7 @@ public class TooltipReforgedForgeClient {
     @SubscribeEvent
     public static void onInit(FMLClientSetupEvent event) {
         event.enqueueWork(TooltipReforgedClient::init);
+        ForgeEntryPointLoader.init();
         FMLJavaModLoadingContext.get().getContainer().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(parent -> new ClientConfigScreen(parent, TooltipReforgedConfig.INSTANCE)));
     }
 }

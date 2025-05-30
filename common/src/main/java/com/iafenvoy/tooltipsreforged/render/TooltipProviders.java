@@ -11,7 +11,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
 
-public class TooltipProvider {
+public class TooltipProviders {
     static ItemRarityNameProvider rarityNameProvider = new DefaultItemRarityNameProvider();
     static ItemDisplayNameProvider displayNameProvider = new DefaultItemDisplayNameProvider();
     static ItemBorderColorProvider borderColorProvider = new DefaultItemBorderColorProvider();

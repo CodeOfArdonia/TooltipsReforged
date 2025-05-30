@@ -18,7 +18,12 @@ import net.minecraft.nbt.NbtCompound;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
 public class ModelViewerComponent extends ColorBorderComponent {
+    public static final Map<EntityBucketItem, Supplier<? extends EntityType<?>>> ENTITY_BUCKET_MAP = new HashMap<>();
     private static final float ROTATION_INCREMENT = 0.2f;
     private static float CURRENT_ROTATION = 0f;
 
@@ -74,7 +79,8 @@ public class ModelViewerComponent extends ColorBorderComponent {
     }
 
     private void renderBucketEntity(DrawContext context, int x, int y, int z, EntityBucketItem bucketItem) throws Exception {
-        EntityType<?> entityType = bucketItem.entityType;
+        if (!ENTITY_BUCKET_MAP.containsKey(bucketItem)) return;
+        EntityType<?> entityType = ENTITY_BUCKET_MAP.get(bucketItem).get();
         Entity entity = entityType.create(MinecraftClient.getInstance().world);
 
         if (entity instanceof Bucketable bucketable) {
