@@ -36,6 +36,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         public IConfigEntry<Boolean> paintingTooltip = new BooleanEntry("config.tooltips_reforged.paintingTooltip", true).json("paintingTooltip");
         public IConfigEntry<Boolean> mapTooltip = new BooleanEntry("config.tooltips_reforged.mapTooltip", true).json("mapTooltip");
         public IConfigEntry<Boolean> itemGroupTooltip = new BooleanEntry("config.tooltips_reforged.itemGroupTooltip", true).json("itemGroupTooltip");
+        public IConfigEntry<Boolean> debugInfoTooltip = new BooleanEntry("config.tooltips_reforged.debugInfoTooltip", true).json("debugInfoTooltip");
         public SeparatorEntry s1 = new SeparatorEntry();
         public IConfigEntry<Boolean> usePlayer = new BooleanEntry("config.tooltips_reforged.usePlayer", false).json("usePlayer");
         public IConfigEntry<Double> scaleFactor = new DoubleEntry("config.tooltips_reforged.scaleFactor", 1.0).json("scaleFactor");

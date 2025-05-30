@@ -17,7 +17,8 @@ import java.util.List;
 public class BuiltinTooltips implements TooltipsReforgeEntrypoint {
     @Override
     public void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
-        components.set(0, new HeaderTooltipComponent(stack));
+        if (!components.isEmpty()) components.remove(0);
+        components.add(0, new HeaderTooltipComponent(stack));
 
         if (stack.getItem() instanceof LingeringPotionItem)
             components.add(1, new PotionEffectsTooltipComponent(stack, 0.25f));
@@ -37,13 +38,15 @@ public class BuiltinTooltips implements TooltipsReforgeEntrypoint {
             components.add(new PaintingTooltipComponent(stack));
 
         if (MinecraftClient.getInstance().options.advancedItemTooltips) {
-            for (TooltipComponent component : components)
+            for (int i = 0; i < components.size(); i++) {
+                TooltipComponent component = components.get(i);
                 if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent)
                     if (ExtendedTextVisitor.get(orderedTextTooltipComponent.text).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
-                        components.remove(component);
+                        components.set(i, new DurabilityTooltipComponent(stack));
                         break;
                     }
-            components.add(components.size() - 3, new DurabilityTooltipComponent(stack));
+            }
+            components.add(new DebugInfoComponent(stack));
         } else
             components.add(new DurabilityTooltipComponent(stack));
     }

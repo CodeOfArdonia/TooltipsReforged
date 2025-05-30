@@ -44,8 +44,8 @@ public class PotionEffectsTooltipComponent implements TooltipComponent {
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        int lineY = y - textRenderer.fontHeight - 1;
         if (!this.config.common.effectsTooltip.getValue()) return;
+        int lineY = y - textRenderer.fontHeight - 1;
         for (StatusEffectInstance effect : this.getPotionEffects()) {
             int c = effect.getEffectType().getColor();
             Sprite effectTexture = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(effect.getEffectType());

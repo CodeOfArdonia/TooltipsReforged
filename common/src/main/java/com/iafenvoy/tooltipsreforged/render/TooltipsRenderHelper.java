@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.render;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
-import com.iafenvoy.tooltipsreforged.component.TooltipBackgroundComponent;
+import com.iafenvoy.tooltipsreforged.component.BackgroundComponent;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
 import net.minecraft.client.MinecraftClient;
@@ -35,7 +35,7 @@ public class TooltipsRenderHelper {
     public static void drawTooltip(DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner) {
         if (components.isEmpty()) return;
 
-        TooltipBackgroundComponent backgroundComponent = getBackgroundComponent(components);
+        BackgroundComponent backgroundComponent = getBackgroundComponent(components);
         components.removeIf(component -> component.getHeight() == 0 || component.getWidth(textRenderer) == 0);
 
         MatrixStack matrices = context.getMatrices();
@@ -147,9 +147,9 @@ public class TooltipsRenderHelper {
         matrices.pop();
     }
 
-    private static TooltipBackgroundComponent getBackgroundComponent(List<TooltipComponent> components) {
+    private static BackgroundComponent getBackgroundComponent(List<TooltipComponent> components) {
         for (TooltipComponent component : components)
-            if (component instanceof TooltipBackgroundComponent backgroundComponent)
+            if (component instanceof BackgroundComponent backgroundComponent)
                 return backgroundComponent;
         return null;
     }

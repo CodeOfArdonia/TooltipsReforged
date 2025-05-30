@@ -75,6 +75,7 @@ public class ModelViewerComponent extends ColorBorderComponent {
         ArmorStandEntity armorStand = new ArmorStandEntity(EntityType.ARMOR_STAND, MinecraftClient.getInstance().world);
         armorStand.equipStack(LivingEntity.getPreferredEquipmentSlot(this.stack), this.stack);
         super.render(context, x - ENTITY_OFFSET - 25, y, ENTITY_SIZE + 10, ENTITY_SIZE + 30 + 10, z, -1);
+        armorStand.tick();
         drawEntity(context, x - ENTITY_SIZE / 2 - SPACING - 10, y + ENTITY_SIZE + 30 + 5, ENTITY_SIZE, CURRENT_ROTATION, armorStand);
     }
 

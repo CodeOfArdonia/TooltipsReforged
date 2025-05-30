@@ -8,7 +8,7 @@ import net.minecraft.util.Rarity;
 
 import java.util.Objects;
 
-public class ColorBorderComponent extends TooltipBackgroundComponent {
+public class ColorBorderComponent extends BackgroundComponent {
     private final ItemStack stack;
 
     public ColorBorderComponent(ItemStack stack) {

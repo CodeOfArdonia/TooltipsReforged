@@ -9,7 +9,7 @@ import net.minecraft.util.Rarity;
 
 import java.util.Objects;
 
-public class TooltipBackgroundComponent implements TooltipComponent {
+public class BackgroundComponent implements TooltipComponent {
     protected static final int INNER_PADDING = 4;
 
     public void render(DrawContext context, int x, int y, int width, int height, int z, int page) throws Exception {
