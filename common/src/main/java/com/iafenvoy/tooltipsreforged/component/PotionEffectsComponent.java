@@ -14,12 +14,12 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public class PotionEffectsTooltipComponent implements TooltipComponent {
+public class PotionEffectsComponent implements TooltipComponent {
     private final ItemStack stack;
     private final float durationMultiplier;
     private final TooltipReforgedConfig config;
 
-    public PotionEffectsTooltipComponent(ItemStack stack, float durationMultiplier) {
+    public PotionEffectsComponent(ItemStack stack, float durationMultiplier) {
         this.stack = stack;
         this.durationMultiplier = durationMultiplier;
         this.config = TooltipReforgedConfig.INSTANCE;

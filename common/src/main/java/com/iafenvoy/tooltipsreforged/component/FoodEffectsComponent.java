@@ -15,11 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class FoodEffectsTooltipComponent implements TooltipComponent {
+public class FoodEffectsComponent implements TooltipComponent {
     private final ItemStack stack;
     private final TooltipReforgedConfig config;
 
-    public FoodEffectsTooltipComponent(ItemStack stack) {
+    public FoodEffectsComponent(ItemStack stack) {
         this.stack = stack;
         this.config = TooltipReforgedConfig.INSTANCE;
     }

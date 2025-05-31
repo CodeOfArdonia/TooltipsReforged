@@ -6,6 +6,7 @@
   "config.tooltips_reforged.durabilityBar": "Display Durability",
   "config.tooltips_reforged.effectsIcon": "Append Effects Icon",
   "config.tooltips_reforged.effectsTooltip": "Effects Tooltip",
+  "config.tooltips_reforged.enchantmentTooltip": "Advanced Enchantment Tooltip",
   "config.tooltips_reforged.enhancedDurabilityTooltip": "Enhanced Durability Tooltip",
   "config.tooltips_reforged.group.background": "Background",
   "config.tooltips_reforged.hungerTooltip": "Hunger Tooltip",

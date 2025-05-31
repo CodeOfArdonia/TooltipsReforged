@@ -13,13 +13,13 @@ import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 
-public class PaintingTooltipComponent implements TooltipComponent {
+public class PaintingComponent implements TooltipComponent {
     private final PaintingVariant variant;
     private final int width;
     private final int height;
     private final TooltipReforgedConfig config = TooltipReforgedConfig.INSTANCE;
 
-    public PaintingTooltipComponent(ItemStack stack) {
+    public PaintingComponent(ItemStack stack) {
         NbtCompound nbtCompound = stack.getSubNbt("EntityTag");
         PaintingEntity painting = EntityType.PAINTING.create(MinecraftClient.getInstance().world);
         if (nbtCompound != null && painting != null) {

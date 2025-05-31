@@ -13,11 +13,11 @@ import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapState;
 
-public class MapTooltipComponent implements TooltipComponent {
+public class MapComponent implements TooltipComponent {
     private final ItemStack stack;
     private final TooltipReforgedConfig config = TooltipReforgedConfig.INSTANCE;
 
-    public MapTooltipComponent(ItemStack stack) {
+    public MapComponent(ItemStack stack) {
         this.stack = stack;
     }
 

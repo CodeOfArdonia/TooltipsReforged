@@ -1,15 +1,14 @@
 package com.iafenvoy.tooltipsreforged.util;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
@@ -21,7 +20,7 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class DebugInfoCollectHelper {
+public final class InfoCollectHelper {
     private static final List<EntityAttribute> ATTRIBUTES = List.of(EntityAttributes.GENERIC_MAX_HEALTH, EntityAttributes.GENERIC_MOVEMENT_SPEED, EntityAttributes.GENERIC_ATTACK_DAMAGE, EntityAttributes.GENERIC_ARMOR, EntityAttributes.GENERIC_FOLLOW_RANGE, EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
 
     public static List<String> collectItemTags(ItemStack stack) {
@@ -59,5 +58,25 @@ public final class DebugInfoCollectHelper {
         if (type == EntityGroup.ILLAGER) return "type.tooltips_reforged.illager";
         if (type == EntityGroup.AQUATIC) return "type.tooltips_reforged.aquatic";
         return "";
+    }
+
+    public static List<Item> resolveEnchantmentTarget(EnchantmentTarget target) {
+        return switch (target) {
+            case ARMOR ->
+                    List.of(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS);
+            case ARMOR_FEET -> List.of(Items.DIAMOND_BOOTS);
+            case ARMOR_LEGS -> List.of(Items.DIAMOND_LEGGINGS);
+            case ARMOR_CHEST -> List.of(Items.DIAMOND_CHESTPLATE);
+            case ARMOR_HEAD -> List.of(Items.DIAMOND_HELMET);
+            case WEAPON -> List.of(Items.DIAMOND_SWORD);
+            case DIGGER -> List.of(Items.DIAMOND_PICKAXE);
+            case FISHING_ROD -> List.of(Items.FISHING_ROD);
+            case TRIDENT -> List.of(Items.TRIDENT);
+            case BREAKABLE -> List.of(Items.ELYTRA);
+            case BOW -> List.of(Items.BOW);
+            case WEARABLE -> List.of(Items.LEATHER_CHESTPLATE);
+            case CROSSBOW -> List.of(Items.CROSSBOW);
+            case VANISHABLE -> List.of(Items.COMPASS);
+        };
     }
 }

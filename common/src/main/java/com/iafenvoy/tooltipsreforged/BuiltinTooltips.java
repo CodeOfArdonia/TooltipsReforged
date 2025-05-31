@@ -14,36 +14,38 @@ import java.util.List;
 public class BuiltinTooltips {
     public static void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
         if (!components.isEmpty()) components.remove(0);
-        components.add(0, new HeaderTooltipComponent(stack));
+        components.add(0, new HeaderComponent(stack));
 
         if (stack.getItem() instanceof LingeringPotionItem)
-            components.add(1, new PotionEffectsTooltipComponent(stack, 0.25f));
+            components.add(1, new PotionEffectsComponent(stack, 0.25f));
         else if (stack.getItem() instanceof PotionItem)
-            components.add(1, new PotionEffectsTooltipComponent(stack, 1));
+            components.add(1, new PotionEffectsComponent(stack, 1));
         else if (stack.getItem() instanceof TippedArrowItem)
-            components.add(1, new PotionEffectsTooltipComponent(stack, 0.125f));
+            components.add(1, new PotionEffectsComponent(stack, 0.125f));
         else if (stack.getItem().getFoodComponent() != null)
-            components.add(1, new FoodEffectsTooltipComponent(stack));
+            components.add(1, new FoodEffectsComponent(stack));
+        else if (stack.getItem() instanceof EnchantedBookItem)
+            components.add(1, new EnchantmentInfoComponent(stack));
 
         if (stack.getItem() instanceof Equipment || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
             components.add(new ModelViewerComponent(stack));
         components.add(new ColorBorderComponent(stack));
 
-        if (stack.getItem() instanceof FilledMapItem) components.add(new MapTooltipComponent(stack));
+        if (stack.getItem() instanceof FilledMapItem) components.add(new MapComponent(stack));
         if (stack.getItem() instanceof DecorationItemAccessor accessor && accessor.getEntityType() == EntityType.PAINTING)
-            components.add(new PaintingTooltipComponent(stack));
+            components.add(new PaintingComponent(stack));
 
         if (MinecraftClient.getInstance().options.advancedItemTooltips) {
             for (int i = 0; i < components.size(); i++) {
                 TooltipComponent component = components.get(i);
                 if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent)
                     if (ExtendedTextVisitor.get(orderedTextTooltipComponent.text).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
-                        components.set(i, new DurabilityTooltipComponent(stack));
+                        components.set(i, new DurabilityComponent(stack));
                         break;
                     }
             }
             components.add(new DebugInfoComponent(stack));
         } else
-            components.add(new DurabilityTooltipComponent(stack));
+            components.add(new DurabilityComponent(stack));
     }
 }

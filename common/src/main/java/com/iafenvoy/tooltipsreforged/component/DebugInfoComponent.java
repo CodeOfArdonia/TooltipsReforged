@@ -2,7 +2,7 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.google.common.collect.ImmutableList;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
-import com.iafenvoy.tooltipsreforged.util.DebugInfoCollectHelper;
+import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import com.iafenvoy.tooltipsreforged.util.NbtProcessor;
 import com.iafenvoy.tooltipsreforged.util.TooltipKeyManager;
 import net.minecraft.client.font.TextRenderer;
@@ -23,10 +23,10 @@ public class DebugInfoComponent implements TooltipComponent {
     private final List<MutableText> nbt, entityInfo;
 
     public DebugInfoComponent(ItemStack stack) {
-        this.itemTags = DebugInfoCollectHelper.collectItemTags(stack);
-        this.blockTags = DebugInfoCollectHelper.collectBlockTags(stack);
+        this.itemTags = InfoCollectHelper.collectItemTags(stack);
+        this.blockTags = InfoCollectHelper.collectBlockTags(stack);
         this.nbt = NbtProcessor.process(stack);
-        this.entityInfo = DebugInfoCollectHelper.collectEntityInfo(stack);
+        this.entityInfo = InfoCollectHelper.collectEntityInfo(stack);
     }
 
     @Override

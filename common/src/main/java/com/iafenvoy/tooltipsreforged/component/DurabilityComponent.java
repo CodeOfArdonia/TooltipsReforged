@@ -10,13 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class DurabilityTooltipComponent implements TooltipComponent {
+public class DurabilityComponent implements TooltipComponent {
     private static final int SPACING = 4;
     private static final int WIDTH = 80;
     private final ItemStack stack;
     private final TooltipReforgedConfig config;
 
-    public DurabilityTooltipComponent(ItemStack stack) {
+    public DurabilityComponent(ItemStack stack) {
         this.stack = stack;
         this.config = TooltipReforgedConfig.INSTANCE;
     }

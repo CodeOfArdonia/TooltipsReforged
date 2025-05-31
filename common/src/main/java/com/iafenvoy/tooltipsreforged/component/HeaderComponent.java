@@ -13,7 +13,7 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import org.joml.Matrix4f;
 
-public class HeaderTooltipComponent implements TooltipComponent {
+public class HeaderComponent implements TooltipComponent {
     private static final int TEXTURE_SIZE = 20;
     private static final int ITEM_MODEL_SIZE = 16;
     private static final int SPACING = 4;
@@ -22,7 +22,7 @@ public class HeaderTooltipComponent implements TooltipComponent {
     private final OrderedText rarityName;
     private final TooltipReforgedConfig config;
 
-    public HeaderTooltipComponent(ItemStack stack) {
+    public HeaderComponent(ItemStack stack) {
         this.stack = stack;
         this.nameText = TooltipProviders.getDisplayName(stack).asOrderedText();
         this.rarityName = TooltipProviders.getRarityName(stack).asOrderedText();
