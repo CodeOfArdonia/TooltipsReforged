@@ -27,9 +27,11 @@ features for both players and developers.
 
 For block, it will display block tag.
 
+For spawn egg, it will display target entity info.
+
 ## Future plan
 
 - Spawn egg target entity info (also compat with other mods)
-- Enchantment info 
+- Enchantment info
 
 If you have any idea, submit on GitHub!

@@ -2,16 +2,13 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.google.common.collect.ImmutableList;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.util.DebugInfoCollectHelper;
 import com.iafenvoy.tooltipsreforged.util.NbtProcessor;
-import net.minecraft.client.MinecraftClient;
+import com.iafenvoy.tooltipsreforged.util.TooltipKeyManager;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -21,26 +18,15 @@ import org.joml.Matrix4f;
 import java.util.List;
 
 public class DebugInfoComponent implements TooltipComponent {
-    private static final KeyManager KEY_MANAGER = new KeyManager();
-    private final ItemStack stack;
+    private static final TooltipKeyManager KEY_MANAGER = new TooltipKeyManager();
     private final List<String> itemTags, blockTags;
-    private final List<Text> nbts;
+    private final List<MutableText> nbt, entityInfo;
 
     public DebugInfoComponent(ItemStack stack) {
-        this.stack = stack;
-        this.itemTags = this.collectItemTags();
-        this.blockTags = this.collectBlockTags();
-        this.nbts = NbtProcessor.process(this.stack);
-    }
-
-    private List<String> collectItemTags() {
-        return Registries.ITEM.getEntry(this.stack.getItem()).streamTags().map(TagKey::id).map(x -> "#" + x.toString()).toList();
-    }
-
-    private List<String> collectBlockTags() {
-        if (this.stack.getItem() instanceof BlockItem blockItem)
-            return Registries.BLOCK.getEntry(blockItem.getBlock()).streamTags().map(TagKey::id).map(x -> "#" + x.toString()).toList();
-        else return List.of();
+        this.itemTags = DebugInfoCollectHelper.collectItemTags(stack);
+        this.blockTags = DebugInfoCollectHelper.collectBlockTags(stack);
+        this.nbt = NbtProcessor.process(stack);
+        this.entityInfo = DebugInfoCollectHelper.collectEntityInfo(stack);
     }
 
     @Override
@@ -75,66 +61,28 @@ public class DebugInfoComponent implements TooltipComponent {
                 processed = true;
             } else first.append(Text.literal("[CTRL Item Tags] ").formatted(Formatting.WHITE));
         }
-        if (!this.nbts.isEmpty()) {
+        if (!this.nbt.isEmpty()) {
             if (KEY_MANAGER.alt() && !processed) {
                 first.append(Text.literal("[ALT NBT] ").formatted(Formatting.GOLD));
-                infos = this.nbts.stream().map(Text::copy).toList();
+                infos = this.nbt.stream().map(Text::copy).toList();
                 processed = true;
             } else first.append(Text.literal("[ALT NBT] ").formatted(Formatting.WHITE));
         }
-        Pair<String, List<String>> specific = this.getSpecificInfo();
+        Pair<String, List<MutableText>> specific = this.getSpecificInfo();
         if (specific != null) {
             if (KEY_MANAGER.shift() && !processed) {
                 first.append(Text.literal("[SHIFT %s] ".formatted(specific.getLeft())).formatted(Formatting.GOLD));
-                infos = specific.getRight().stream().map(Text::literal).map(x -> x.formatted(Formatting.GRAY)).toList();
+                infos = specific.getRight().stream().map(x -> x.formatted(Formatting.GRAY)).toList();
             } else first.append(Text.literal("[SHIFT %s] ".formatted(specific.getLeft())).formatted(Formatting.WHITE));
         }
         return ImmutableList.<MutableText>builder().add(first).addAll(infos).build();
     }
 
-    private Pair<String, List<String>> getSpecificInfo() {
+    private Pair<String, List<MutableText>> getSpecificInfo() {
         if (!this.blockTags.isEmpty())
-            return new Pair<>("Block Tags", this.blockTags);
+            return new Pair<>("Block Tags", this.blockTags.stream().map(Text::literal).toList());
+        if (!this.entityInfo.isEmpty())
+            return new Pair<>("Mob Info", this.entityInfo);
         return null;
-    }
-
-    private static class KeyManager {
-        private boolean pressing;
-        private Pressed pressed;
-
-        public void renderTick() {
-            if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), InputUtil.GLFW_KEY_LEFT_CONTROL)) {
-                if (!this.pressing) {
-                    this.pressed = this.pressed == Pressed.CTRL ? Pressed.NONE : Pressed.CTRL;
-                    this.pressing = true;
-                }
-            } else if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), InputUtil.GLFW_KEY_LEFT_SHIFT)) {
-                if (!this.pressing) {
-                    this.pressed = this.pressed == Pressed.SHIFT ? Pressed.NONE : Pressed.SHIFT;
-                    this.pressing = true;
-                }
-            } else if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), InputUtil.GLFW_KEY_LEFT_ALT)) {
-                if (!this.pressing) {
-                    this.pressed = this.pressed == Pressed.ALT ? Pressed.NONE : Pressed.ALT;
-                    this.pressing = true;
-                }
-            } else this.pressing = false;
-        }
-
-        public boolean ctrl() {
-            return this.pressed == Pressed.CTRL;
-        }
-
-        public boolean shift() {
-            return this.pressed == Pressed.SHIFT;
-        }
-
-        public boolean alt() {
-            return this.pressed == Pressed.ALT;
-        }
-
-        private enum Pressed {
-            NONE, CTRL, SHIFT, ALT
-        }
     }
 }

@@ -11,8 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NbtProcessor {
-    public static List<Text> process(ItemStack stack) {
-        List<Text> list = new LinkedList<>();
+    public static List<MutableText> process(ItemStack stack) {
+        List<MutableText> list = new LinkedList<>();
         if (!stack.hasNbt()) return list;
         /*
             Get the NBT list that we want to show.
