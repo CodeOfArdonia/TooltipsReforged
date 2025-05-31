@@ -19,9 +19,6 @@
     ],
     "modmenu": [
       "com.iafenvoy.tooltipsreforged.fabric.ModMenu"
-    ],
-    "tooltips_reforged": [
-      "com.iafenvoy.tooltipsreforged.BuiltinTooltips"
     ]
   },
   "mixins": [

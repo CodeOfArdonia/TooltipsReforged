@@ -1,5 +1,6 @@
 package com.iafenvoy.tooltipsreforged.mixin;
 
+import com.iafenvoy.tooltipsreforged.BuiltinTooltips;
 import com.iafenvoy.tooltipsreforged.EntryPointLoader;
 import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
@@ -25,6 +26,7 @@ public abstract class DrawContextMixin {
     private void injectDrawTooltip(TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner, CallbackInfo ci) {
         List<TooltipComponent> mutable = new ArrayList<>(components);
         if (Static.CACHE != null && EntryPointLoader.INSTANCE != null) {
+            BuiltinTooltips.appendTooltip(Static.CACHE, mutable);
             EntryPointLoader.INSTANCE.getEntries().forEach(e -> e.appendTooltip(Static.CACHE, mutable));
             TooltipsRenderHelper.drawTooltip((DrawContext) (Object) this, textRenderer, mutable, x, y, HoveredTooltipPositioner.INSTANCE);
             Static.CACHE = null;

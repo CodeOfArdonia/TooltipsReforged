@@ -84,14 +84,15 @@ public class ModelViewerComponent extends ColorBorderComponent {
         EntityType<?> entityType = ENTITY_BUCKET_MAP.get(bucketItem).get();
         Entity entity = entityType.create(MinecraftClient.getInstance().world);
 
-        if (entity instanceof Bucketable bucketable) {
+        if (entity instanceof Bucketable bucketable && entity instanceof LivingEntity livingEntity) {
             var nbtComponent = this.stack.getOrCreateNbt();
             bucketable.copyDataFromNbt(nbtComponent);
             if (entityType == EntityType.TROPICAL_FISH) return;
             if (bucketable instanceof PufferfishEntity pufferfishEntity) pufferfishEntity.setPuffState(2);
 
             super.render(context, x - ENTITY_OFFSET - 70, y, ENTITY_SIZE + 50, ENTITY_SIZE + 10, z, -1);
-            drawEntity(context, x - ENTITY_SIZE / 2 - SPACING - 35, y + ENTITY_SIZE, ENTITY_SIZE, CURRENT_ROTATION, (LivingEntity) bucketable);
+            livingEntity.tick();
+            drawEntity(context, x - ENTITY_SIZE / 2 - SPACING - 35, y + ENTITY_SIZE, ENTITY_SIZE, CURRENT_ROTATION, livingEntity);
         }
     }
 
@@ -121,6 +122,7 @@ public class ModelViewerComponent extends ColorBorderComponent {
             if (entity instanceof GhastEntity) size = 10;
             if (entity instanceof CamelEntity) size = 20;
 
+            livingEntity.tick();
             drawEntity(context, x - size / 2 - SPACING - 35, y + size * 2 + SPACING, size, CURRENT_ROTATION, livingEntity);
         }
     }

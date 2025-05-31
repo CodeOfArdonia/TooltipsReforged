@@ -9,8 +9,7 @@ public abstract class EntryPointLoader {
     private List<TooltipsReforgeEntrypoint> entries;
 
     public List<TooltipsReforgeEntrypoint> getEntries() {
-        if (this.entries == null)
-            this.entries = this.loadEntries();
+        if (this.entries == null) this.entries = this.loadEntries();
         return this.entries;
     }
 

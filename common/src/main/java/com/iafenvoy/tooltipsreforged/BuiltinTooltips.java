@@ -1,7 +1,5 @@
 package com.iafenvoy.tooltipsreforged;
 
-import com.iafenvoy.tooltipsreforged.api.TooltipsProvider;
-import com.iafenvoy.tooltipsreforged.api.TooltipsReforgeEntrypoint;
 import com.iafenvoy.tooltipsreforged.component.*;
 import com.iafenvoy.tooltipsreforged.mixin.DecorationItemAccessor;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
@@ -13,10 +11,8 @@ import net.minecraft.item.*;
 
 import java.util.List;
 
-@TooltipsProvider
-public class BuiltinTooltips implements TooltipsReforgeEntrypoint {
-    @Override
-    public void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
+public class BuiltinTooltips {
+    public static void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
         if (!components.isEmpty()) components.remove(0);
         components.add(0, new HeaderTooltipComponent(stack));
 

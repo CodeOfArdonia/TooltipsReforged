@@ -15,6 +15,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Pair;
 import org.joml.Matrix4f;
 
 import java.util.List;
@@ -81,7 +82,20 @@ public class DebugInfoComponent implements TooltipComponent {
                 processed = true;
             } else first.append(Text.literal("[ALT NBT] ").formatted(Formatting.WHITE));
         }
+        Pair<String, List<String>> specific = this.getSpecificInfo();
+        if (specific != null) {
+            if (KEY_MANAGER.shift() && !processed) {
+                first.append(Text.literal("[SHIFT %s] ".formatted(specific.getLeft())).formatted(Formatting.GOLD));
+                infos = specific.getRight().stream().map(Text::literal).map(x -> x.formatted(Formatting.GRAY)).toList();
+            } else first.append(Text.literal("[SHIFT %s] ".formatted(specific.getLeft())).formatted(Formatting.WHITE));
+        }
         return ImmutableList.<MutableText>builder().add(first).addAll(infos).build();
+    }
+
+    private Pair<String, List<String>> getSpecificInfo() {
+        if (!this.blockTags.isEmpty())
+            return new Pair<>("Block Tags", this.blockTags);
+        return null;
     }
 
     private static class KeyManager {

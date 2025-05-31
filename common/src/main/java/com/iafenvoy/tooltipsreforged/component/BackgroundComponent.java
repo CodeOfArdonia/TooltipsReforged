@@ -17,7 +17,6 @@ public class BackgroundComponent implements TooltipComponent {
         int j = y - INNER_PADDING;
         int k = width + INNER_PADDING * 2;
         int l = height + INNER_PADDING * 2;
-
         int bgColor = TooltipReforgedConfig.INSTANCE.backgroundColor.getRGB();
 
         this.renderHorizontalLine(context, i, j - 1, k, z, bgColor);
