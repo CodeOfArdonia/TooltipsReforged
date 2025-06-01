@@ -6,6 +6,7 @@ import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 
@@ -25,7 +26,9 @@ public class BuiltinTooltips {
         else if (stack.getItem().getFoodComponent() != null)
             components.add(1, new FoodEffectsComponent(stack));
         else if (stack.getItem() instanceof EnchantedBookItem)
-            components.add(1, new EnchantmentInfoComponent(stack));
+            components.add(1, new EnchantmentInfoComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
+        else if (stack.getItem().isEnchantable(stack))
+            components.add(1, new EnchantmentInfoComponent(EnchantmentHelper.get(stack)));
 
         if (stack.getItem() instanceof Equipment || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
             components.add(new ModelViewerComponent(stack));
@@ -39,7 +42,7 @@ public class BuiltinTooltips {
             for (int i = 0; i < components.size(); i++) {
                 TooltipComponent component = components.get(i);
                 if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent)
-                    if (ExtendedTextVisitor.get(orderedTextTooltipComponent.text).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
+                    if (ExtendedTextVisitor.getText(orderedTextTooltipComponent.text).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
                         components.set(i, new DurabilityComponent(stack));
                         break;
                     }

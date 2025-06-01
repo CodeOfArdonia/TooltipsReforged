@@ -21,6 +21,7 @@
       "com.iafenvoy.tooltipsreforged.fabric.ModMenu"
     ]
   },
+  "accessWidener": "tooltips_reforged.accesswidener",
   "mixins": [
     "tooltips_reforged.mixins.json"
   ],

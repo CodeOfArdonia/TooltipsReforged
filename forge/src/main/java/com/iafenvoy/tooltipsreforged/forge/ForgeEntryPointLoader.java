@@ -40,4 +40,9 @@ public class ForgeEntryPointLoader extends EntryPointLoader {
                         .toList())
                 .reduce(new ArrayList<>(), ForgeEntryPointLoader::combine);
     }
+
+    @Override
+    public boolean isModLoaded(String modId) {
+        return ModList.get().isLoaded(modId);
+    }
 }

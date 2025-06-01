@@ -14,12 +14,13 @@ features for both players and developers.
 - New durability bar
 - Map & Paint preview
 - Armor preview for equipments
-- Entity preview for spawn eggs and bucketed entities.
-- Badge displaying which mod provide this item.
+- Entity preview for spawn eggs and bucketed entities
+- Badge displaying which mod provide this item
+- Enchantment targets and descriptions
 
 ### Features for developers
 
-**Info display section include rich information**
+**You need to open advanced tooltip (F3+H) to use**
 
 - Ctrl: Display item tags
 - Alt: Display raw nbt
@@ -32,6 +33,5 @@ For spawn egg, it will display target entity info.
 ## Future plan
 
 - Spawn egg target entity info (also compat with other mods)
-- Enchantment info
 
 If you have any idea, submit on GitHub!

@@ -60,7 +60,7 @@ public final class InfoCollectHelper {
         return "";
     }
 
-    public static List<Item> resolveEnchantmentTarget(EnchantmentTarget target) {
+    public static List<Item> getEnchantmentTarget(EnchantmentTarget target) {
         return switch (target) {
             case ARMOR ->
                     List.of(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS);
