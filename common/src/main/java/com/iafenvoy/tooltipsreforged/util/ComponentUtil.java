@@ -6,11 +6,13 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.List;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-public class ComponentUtil {
+public final class ComponentUtil {
     public static List<MutableText> splitText(MutableText text, int chatWidth, TextRenderer fontRenderer) {
         int i = 0;
         MutableText ichatcomponent = Text.literal("");
@@ -88,6 +90,23 @@ public class ComponentUtil {
             last = c;
         }
         return color + format;
+    }
+
+    public static int getColorFromTranslation(Text text) {
+        return getColorFromTranslation(text.getString());
+    }
+
+    public static int getColorFromTranslation(String text) {
+        char[] charArray = text.toCharArray();
+        if (charArray.length < 2) return 0xFFFFFFFF;
+        for (int i = 0; i < charArray.length - 1; i++) {
+            if (charArray[i] == '§') {
+                Formatting formatting = Formatting.byCode(charArray[i + 1]);
+                int color = formatting == null ? 0xFFFFFFFF : Objects.requireNonNullElse(formatting.getColorValue(), 0xFFFFFFFF);
+                if (color != 0xFFFFFFFF) return color;
+            }
+        }
+        return 0xFFFFFFFF;
     }
 }
 

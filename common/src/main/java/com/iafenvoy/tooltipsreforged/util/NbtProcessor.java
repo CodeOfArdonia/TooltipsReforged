@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NbtProcessor {
+public final class NbtProcessor {
     public static List<MutableText> process(ItemStack stack) {
         List<MutableText> list = new LinkedList<>();
         if (!stack.hasNbt()) return list;

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class BadgesUtils {
+public final class BadgesUtils {
     private static final Map<String, String> MODS_MAP = Static.getAllMods();
 
     public static @NotNull Pair<Text, Integer> getBadgeText(ItemStack stack) {

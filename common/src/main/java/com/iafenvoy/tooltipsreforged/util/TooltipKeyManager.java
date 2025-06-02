@@ -1,6 +1,5 @@
 package com.iafenvoy.tooltipsreforged.util;
 
-import com.iafenvoy.tooltipsreforged.component.DebugInfoComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 

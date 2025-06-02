@@ -5,7 +5,7 @@ import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.api.ItemBorderColorProvider;
 import com.iafenvoy.tooltipsreforged.render.api.ItemDisplayNameProvider;
 import com.iafenvoy.tooltipsreforged.render.api.ItemRarityNameProvider;
-import com.iafenvoy.tooltipsreforged.util.TranslationStringColorParser;
+import com.iafenvoy.tooltipsreforged.util.ComponentUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -48,7 +48,7 @@ public class TooltipProviders {
             Integer color = null;
 
             if (TooltipReforgedConfig.INSTANCE.common.useNameColor.getValue()) {
-                color = TranslationStringColorParser.getColorFromTranslation(getDisplayName(stack));
+                color = ComponentUtil.getColorFromTranslation(getDisplayName(stack));
             }
 
             if (color == null || color == -1) {
