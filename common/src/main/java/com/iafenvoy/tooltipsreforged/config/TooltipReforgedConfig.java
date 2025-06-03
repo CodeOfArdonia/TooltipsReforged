@@ -24,7 +24,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
 
     @SuppressWarnings("unused")
     public static class CommonConfig extends AutoInitConfigCategoryBase {
-        public IConfigEntry<Boolean> rarityTooltip = new BooleanEntry("config.tooltips_reforged.rarityTooltip", true).json("rarityTooltip");
+        public IConfigEntry<Boolean> rarityTooltip = new BooleanEntry("config.tooltips_reforged.rarityTooltip", false).json("rarityTooltip");
         public IConfigEntry<Boolean> hungerTooltip = new BooleanEntry("config.tooltips_reforged.hungerTooltip", true).json("hungerTooltip");
         public IConfigEntry<Boolean> saturationTooltip = new BooleanEntry("config.tooltips_reforged.saturationTooltip", true).json("saturationTooltip");
         public IConfigEntry<Boolean> effectsTooltip = new BooleanEntry("config.tooltips_reforged.effectsTooltip", true).json("effectsTooltip");

@@ -76,8 +76,8 @@ public class HeaderComponent implements TooltipComponent {
     private void drawBadge(TextRenderer textRenderer, Text text, int x, int y, DrawContext context, int fillColor) {
         int textWidth = textRenderer.getWidth(text);
         int textHeight = textRenderer.fontHeight;
-        int textX = x + this.getTitleOffset() + (!this.config.common.rarityTooltip.getValue() ? 4 : textRenderer.getWidth(this.nameText) + SPACING + 2);
-        int textY = y - textRenderer.fontHeight + SPACING * 2 + 2 + 1;
+        int textX = x + this.getTitleOffset() + (this.config.common.rarityTooltip.getValue() ? textRenderer.getWidth(this.nameText) + SPACING + 2 : 4);
+        int textY = (this.config.common.rarityTooltip.getValue() ? y : y + 12) - textRenderer.fontHeight + SPACING * 2 + 3;
         context.fill(textX - SPACING, textY - SPACING / 2, textX + textWidth + SPACING, textY + textHeight, BadgesUtils.darkenColor(fillColor, 0.9f));
         context.drawText(textRenderer, text, textX, textY, 0xffffffff, true);
         BadgesUtils.drawFrame(context, textX - SPACING, textY - SPACING / 2, textWidth + SPACING * 2, textHeight + SPACING, 400, BadgesUtils.darkenColor(fillColor, 0.8f));

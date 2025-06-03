@@ -6,9 +6,9 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.item.EntityBucketItem;
 import net.minecraft.item.Equipment;
@@ -27,9 +27,7 @@ public class ModelViewerComponent extends ColorBorderComponent {
     private static final float ROTATION_INCREMENT = 0.2f;
     private static float CURRENT_ROTATION = 0f;
 
-    private static final int ENTITY_SIZE = 30;
-    private static final int SPACING = 20;
-    private static final int ENTITY_OFFSET = ENTITY_SIZE + SPACING - 10;
+    private static final int ENTITY_OFFSET = 40;
     private static final int SHADOW_LIGHT_COLOR = 15728880;
 
     private final ItemStack stack;
@@ -66,17 +64,17 @@ public class ModelViewerComponent extends ColorBorderComponent {
         EquipmentSlot slot = LivingEntity.getPreferredEquipmentSlot(this.stack);
         ItemStack original = player.getEquippedStack(slot);
         player.equipStack(slot, this.stack);
-        super.render(context, x - ENTITY_OFFSET - 25, y, ENTITY_SIZE + 10, ENTITY_SIZE + 30 + 10, z, -1);
-        drawEntity(context, x - ENTITY_SIZE / 2 - SPACING - 10, y + ENTITY_SIZE + 30 + 5, ENTITY_SIZE, CURRENT_ROTATION, player);
+        super.render(context, x - ENTITY_OFFSET - 25, y, 40, 70, z, -1);
+        drawEntity(context, x - 45, y + 65, 35, -CURRENT_ROTATION, player);
         player.equipStack(slot, original);
     }
 
     private void renderArmorStand(DrawContext context, int x, int y, int z) throws Exception {
         ArmorStandEntity armorStand = new ArmorStandEntity(EntityType.ARMOR_STAND, MinecraftClient.getInstance().world);
         armorStand.equipStack(LivingEntity.getPreferredEquipmentSlot(this.stack), this.stack);
-        super.render(context, x - ENTITY_OFFSET - 25, y, ENTITY_SIZE + 10, ENTITY_SIZE + 30 + 10, z, -1);
+        super.render(context, x - ENTITY_OFFSET - 25, y, 40, 70, z, -1);
         armorStand.tick();
-        drawEntity(context, x - ENTITY_SIZE / 2 - SPACING - 10, y + ENTITY_SIZE + 30 + 5, ENTITY_SIZE, CURRENT_ROTATION, armorStand);
+        drawEntity(context, x - 45, y + 65, 35, -CURRENT_ROTATION, armorStand);
     }
 
     private void renderBucketEntity(DrawContext context, int x, int y, int z, EntityBucketItem bucketItem) throws Exception {
@@ -90,9 +88,9 @@ public class ModelViewerComponent extends ColorBorderComponent {
             if (entityType == EntityType.TROPICAL_FISH) return;
             if (bucketable instanceof PufferfishEntity pufferfishEntity) pufferfishEntity.setPuffState(2);
 
-            super.render(context, x - ENTITY_OFFSET - 70, y, ENTITY_SIZE + 50, ENTITY_SIZE + 10, z, -1);
+            super.render(context, x - ENTITY_OFFSET - 70, y, 80, 40, z, -1);
             livingEntity.tick();
-            drawEntity(context, x - ENTITY_SIZE / 2 - SPACING - 35, y + ENTITY_SIZE, ENTITY_SIZE, CURRENT_ROTATION, livingEntity);
+            drawEntity(context, x - 67, y + 40, 30, -CURRENT_ROTATION, livingEntity);
         }
     }
 
@@ -116,27 +114,27 @@ public class ModelViewerComponent extends ColorBorderComponent {
         if (entity instanceof SnowGolemEntity snowGolemEntity) snowGolemEntity.setHasPumpkin(false);
 
         if (entity instanceof LivingEntity livingEntity) {
-            super.render(context, x - ENTITY_OFFSET - 70, y, ENTITY_SIZE + 50, ENTITY_SIZE + 50, z, -1);
-
-            int size = ENTITY_SIZE;
-            if (entity instanceof GhastEntity) size = 10;
-            if (entity instanceof CamelEntity) size = 20;
-
+            super.render(context, x - ENTITY_OFFSET - 70, y, 80, 80, z, -1);
             livingEntity.tick();
-            drawEntity(context, x - size / 2 - SPACING - 35, y + size * 2 + SPACING, size, CURRENT_ROTATION, livingEntity);
+            drawEntity(context, x - 67, y + 75, 40, -CURRENT_ROTATION, livingEntity);
         }
     }
 
-    public static void drawEntity(DrawContext context, int x, int y, int size, float rotationYaw, LivingEntity entity) {
+    public static void drawEntity(DrawContext context, int centerX, int centerY, int maxSize, float rotationYaw, LivingEntity entity) {
         float pitch = entity.getPitch(), yaw = entity.getYaw(), bodyYaw = entity.bodyYaw, headYaw = entity.headYaw;
         entity.setPitch(0);
         entity.setYaw(rotationYaw);
         entity.bodyYaw = rotationYaw;
         entity.headYaw = rotationYaw;
 
+        double boxX = entity.getBoundingBox().getXLength(), boxY = entity.getBoundingBox().getYLength(), scale = (boxX + boxY) / 2;
         Quaternionf correctionRotation = entity instanceof CodEntity || entity instanceof SalmonEntity ? new Quaternionf().rotateZ((float) Math.toRadians(-90)) : new Quaternionf().rotateX((float) Math.toRadians(180));
         Quaternionf combinedRotation = new Quaternionf().rotateY((float) Math.toRadians(rotationYaw)).mul(correctionRotation);
-        drawEntity(context, x, y, size, combinedRotation, entity);
+        if (entity instanceof SchoolingFishEntity) {
+            centerY -= 20;
+            scale *= 1.5;
+        }
+        drawEntity(context, centerX - boxX / 2, centerY - boxY / 2, (float) (maxSize / scale), combinedRotation, entity);
 
         entity.setPitch(pitch);
         entity.setYaw(yaw);
@@ -144,11 +142,13 @@ public class ModelViewerComponent extends ColorBorderComponent {
         entity.headYaw = headYaw;
     }
 
-    public static void drawEntity(DrawContext context, int x, int y, int size, Quaternionf rotation, Entity entity) {
-        context.getMatrices().push();
-        context.getMatrices().translate(x, y, 450);
-        context.getMatrices().multiplyPositionMatrix(new Matrix4f().scaling(size, size, size));
-        context.getMatrices().multiply(rotation);
+    public static void drawEntity(DrawContext context, double x, double y, float size, Quaternionf rotation, Entity entity) {
+        MatrixStack matrices = context.getMatrices();
+        matrices.push();
+        matrices.translate(x, y, 450);
+        matrices.scale(-1, 1, 1);
+        matrices.multiplyPositionMatrix(new Matrix4f().scaling(size, size, size));
+        matrices.multiply(rotation);
 
         DiffuseLighting.method_34742();
 
@@ -157,7 +157,7 @@ public class ModelViewerComponent extends ColorBorderComponent {
         dispatcher.render(entity, 0, 0, 0, 0, 1, context.getMatrices(), context.getVertexConsumers(), SHADOW_LIGHT_COLOR);
         dispatcher.setRenderShadows(true);
 
-        context.getMatrices().pop();
+        matrices.pop();
         DiffuseLighting.enableGuiDepthLighting();
     }
 }
