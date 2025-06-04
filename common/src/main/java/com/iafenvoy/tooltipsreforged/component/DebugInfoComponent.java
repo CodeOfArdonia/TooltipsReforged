@@ -3,8 +3,8 @@ package com.iafenvoy.tooltipsreforged.component;
 import com.google.common.collect.ImmutableList;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
-import com.iafenvoy.tooltipsreforged.util.NbtProcessor;
 import com.iafenvoy.tooltipsreforged.util.TooltipKeyManager;
+import it.unimi.dsi.fastutil.objects.ObjectLongPair;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import org.joml.Matrix4f;
 
@@ -21,12 +22,14 @@ public class DebugInfoComponent implements TooltipComponent {
     private static final TooltipKeyManager KEY_MANAGER = new TooltipKeyManager();
     private final List<String> itemTags, blockTags;
     private final List<MutableText> nbt, entityInfo;
+    private final ObjectLongPair<Identifier> lootTable;
 
     public DebugInfoComponent(ItemStack stack) {
         this.itemTags = InfoCollectHelper.collectItemTags(stack);
         this.blockTags = InfoCollectHelper.collectBlockTags(stack);
-        this.nbt = NbtProcessor.process(stack);
+        this.nbt = InfoCollectHelper.collectNbt(stack);
         this.entityInfo = InfoCollectHelper.collectEntityInfo(stack);
+        this.lootTable = InfoCollectHelper.collectLootTable(stack);
     }
 
     @Override
@@ -83,6 +86,11 @@ public class DebugInfoComponent implements TooltipComponent {
             return new Pair<>("Block Tags", this.blockTags.stream().map(Text::literal).toList());
         if (!this.entityInfo.isEmpty())
             return new Pair<>("Mob Info", this.entityInfo);
+        if (this.lootTable != null && this.lootTable.left() != null)
+            return new Pair<>("Loot Table", List.of(
+                    Text.literal("Id: " + this.lootTable.left().toString()),
+                    Text.literal("Seed: " + this.lootTable.rightLong())
+            ));
         return null;
     }
 }

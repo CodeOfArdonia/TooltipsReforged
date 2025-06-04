@@ -2,6 +2,7 @@
   "config.tooltips_reforged.armorTooltip": "Armor Tooltip",
   "config.tooltips_reforged.backgroundColor": "Background Color",
   "config.tooltips_reforged.bucketTooltip": "Bucket Tooltip",
+  "config.tooltips_reforged.containerTooltip": "Container Preview Tooltip",
   "config.tooltips_reforged.debugInfoTooltip": "Debug Info Tooltip",
   "config.tooltips_reforged.durabilityBar": "Display Durability",
   "config.tooltips_reforged.effectsIcon": "Append Effects Icon",

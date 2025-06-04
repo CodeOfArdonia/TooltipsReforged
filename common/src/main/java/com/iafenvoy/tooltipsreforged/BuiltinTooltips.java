@@ -34,6 +34,7 @@ public class BuiltinTooltips {
             components.add(new ModelViewerComponent(stack));
         components.add(new ColorBorderComponent(stack));
 
+        components.add(new ContainerPreviewComponent(stack));
         if (stack.getItem() instanceof FilledMapItem) components.add(new MapComponent(stack));
         if (stack.getItem() instanceof DecorationItemAccessor accessor && accessor.getEntityType() == EntityType.PAINTING)
             components.add(new PaintingComponent(stack));

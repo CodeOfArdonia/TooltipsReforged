@@ -1,5 +1,7 @@
 package com.iafenvoy.tooltipsreforged.util;
 
+import it.unimi.dsi.fastutil.objects.ObjectLongImmutablePair;
+import it.unimi.dsi.fastutil.objects.ObjectLongPair;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.Entity;
@@ -8,16 +10,21 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -57,6 +64,10 @@ public final class InfoCollectHelper {
         return list;
     }
 
+    public static List<MutableText> collectNbt(ItemStack stack) {
+        return NbtProcessor.process(stack);
+    }
+
     private static String getMobType(EntityGroup type) {
         if (type == EntityGroup.DEFAULT) return "type.tooltips_reforged.default";
         if (type == EntityGroup.UNDEAD) return "type.tooltips_reforged.undead";
@@ -66,8 +77,27 @@ public final class InfoCollectHelper {
         return "";
     }
 
+    @Nullable
+    public static ObjectLongPair<Identifier> collectLootTable(ItemStack stack) {
+        NbtCompound nbt = BlockItem.getBlockEntityNbt(stack);
+        if (nbt != null && nbt.contains("LootTable", 8))
+            return new ObjectLongImmutablePair<>(Identifier.tryParse(nbt.getString("LootTable")), nbt.getLong("LootTableSeed"));
+        else
+            return null;
+    }
+
     public static List<Item> getEnchantmentTarget(EnchantmentTarget target) {
         return TARGET_ITEMS_MAP.getOrDefault(target, List.of());
+    }
+
+    @Nullable
+    public static DefaultedList<ItemStack> collectContainer(ItemStack stack) {
+        DefaultedList<ItemStack> stacks = DefaultedList.ofSize(27, ItemStack.EMPTY);
+        NbtCompound nbt = BlockItem.getBlockEntityNbt(stack);
+        if (nbt == null)
+            return null;
+        Inventories.readNbt(nbt, stacks);
+        return stacks;
     }
 
     static {
