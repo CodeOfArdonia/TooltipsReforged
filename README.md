@@ -17,6 +17,7 @@ features for both players and developers.
 - Entity preview for spawn eggs and bucketed entities
 - Badge displaying which mod provide this item
 - Enchantment targets and descriptions
+- Container preview
 
 ### Features for developers
 
@@ -30,8 +31,4 @@ For block, it will display block tag.
 
 For spawn egg, it will display target entity info.
 
-## Future plan
-
-- Spawn egg target entity info (also compat with other mods)
-
-If you have any idea, submit on GitHub!
+**If you have any idea, submit on GitHub!**

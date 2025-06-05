@@ -17,7 +17,7 @@ public class BackgroundComponent implements TooltipComponent {
         int j = y - INNER_PADDING;
         int k = width + INNER_PADDING * 2;
         int l = height + INNER_PADDING * 2;
-        int bgColor = TooltipReforgedConfig.INSTANCE.backgroundColor.getRGB();
+        int bgColor = TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue();
 
         this.renderHorizontalLine(context, i, j - 1, k, z, bgColor);
         this.renderHorizontalLine(context, i, j + l, k, z, bgColor);
@@ -46,7 +46,7 @@ public class BackgroundComponent implements TooltipComponent {
     }
 
     protected void renderRectangle(DrawContext context, int x, int y, int width, int height, int z) {
-        context.fill(x, y, x + width, y + height, z, TooltipReforgedConfig.INSTANCE.backgroundColor.getRGB());
+        context.fill(x, y, x + width, y + height, z, TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue());
     }
 
     @Override

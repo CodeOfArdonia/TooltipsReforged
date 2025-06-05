@@ -9,14 +9,10 @@ import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import net.minecraft.util.Identifier;
 
-import java.awt.*;
-
 public class TooltipReforgedConfig extends AutoInitConfigContainer {
     public static final TooltipReforgedConfig INSTANCE = new TooltipReforgedConfig();
 
     public final CommonConfig common = new CommonConfig();
-
-    public Color backgroundColor = new Color(this.common.backgroundColor.getValue(), true);
 
     public TooltipReforgedConfig() {
         super(Identifier.of(TooltipReforgedClient.MOD_ID, TooltipReforgedClient.MOD_ID), "screen.%s.title".formatted(TooltipReforgedClient.MOD_ID), "./config/tooltips_reforged.json");
