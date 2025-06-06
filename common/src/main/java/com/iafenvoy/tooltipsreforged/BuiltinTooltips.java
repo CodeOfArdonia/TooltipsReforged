@@ -3,6 +3,8 @@ package com.iafenvoy.tooltipsreforged;
 import com.iafenvoy.tooltipsreforged.component.*;
 import com.iafenvoy.tooltipsreforged.mixin.DecorationItemAccessor;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -12,6 +14,7 @@ import net.minecraft.item.*;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class BuiltinTooltips {
     public static void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
         if (!components.isEmpty()) components.remove(0);

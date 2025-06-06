@@ -2,6 +2,8 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -9,6 +11,7 @@ import net.minecraft.util.Rarity;
 
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 public class BackgroundComponent implements TooltipComponent {
     protected static final int INNER_PADDING = 4;
 

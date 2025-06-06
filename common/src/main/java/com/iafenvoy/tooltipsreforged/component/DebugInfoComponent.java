@@ -5,6 +5,8 @@ import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import com.iafenvoy.tooltipsreforged.util.TooltipKeyManager;
 import it.unimi.dsi.fastutil.objects.ObjectLongPair;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -14,19 +16,22 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class DebugInfoComponent implements TooltipComponent {
     private static final TooltipKeyManager KEY_MANAGER = new TooltipKeyManager();
-    private final List<String> itemTags, blockTags;
+    private final List<String> itemTags, blockTags, entityTags;
     private final List<MutableText> nbt, entityInfo;
     private final ObjectLongPair<Identifier> lootTable;
 
     public DebugInfoComponent(ItemStack stack) {
         this.itemTags = InfoCollectHelper.collectItemTags(stack);
         this.blockTags = InfoCollectHelper.collectBlockTags(stack);
+        this.entityTags = InfoCollectHelper.collectEntityTags(stack);
         this.nbt = InfoCollectHelper.collectNbt(stack);
         this.entityInfo = InfoCollectHelper.collectEntityInfo(stack);
         this.lootTable = InfoCollectHelper.collectLootTable(stack);
@@ -56,36 +61,44 @@ public class DebugInfoComponent implements TooltipComponent {
     private List<MutableText> getDisplayTexts() {
         MutableText first = Text.empty();
         List<MutableText> infos = List.of();
-        boolean processed = false;
         if (!this.itemTags.isEmpty()) {
             if (KEY_MANAGER.ctrl()) {
-                first.append(Text.literal("[CTRL Item Tags] ").formatted(Formatting.GOLD));
-                infos = this.itemTags.stream().map(Text::literal).map(x -> x.formatted(Formatting.GRAY)).toList();
-                processed = true;
-            } else first.append(Text.literal("[CTRL Item Tags] ").formatted(Formatting.WHITE));
+                first.append(Text.literal("[CTRL Item Tags] ").formatted(Formatting.WHITE));
+                infos = this.itemTags.stream().map(Text::literal).map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
+            } else first.append(Text.literal("[CTRL Item Tags] ").formatted(Formatting.GRAY));
         }
-        if (!this.nbt.isEmpty()) {
-            if (KEY_MANAGER.alt() && !processed) {
-                first.append(Text.literal("[ALT NBT] ").formatted(Formatting.GOLD));
-                infos = this.nbt.stream().map(Text::copy).toList();
-                processed = true;
-            } else first.append(Text.literal("[ALT NBT] ").formatted(Formatting.WHITE));
+        Pair<String, List<MutableText>> shiftInfo = this.getShiftInfo();
+        if (shiftInfo != null) {
+            if (KEY_MANAGER.shift()) {
+                first.append(Text.literal("[SHIFT %s] ".formatted(shiftInfo.getLeft())).formatted(Formatting.WHITE));
+                infos = shiftInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
+            } else first.append(Text.literal("[SHIFT %s] ".formatted(shiftInfo.getLeft())).formatted(Formatting.GRAY));
         }
-        Pair<String, List<MutableText>> specific = this.getSpecificInfo();
-        if (specific != null) {
-            if (KEY_MANAGER.shift() && !processed) {
-                first.append(Text.literal("[SHIFT %s] ".formatted(specific.getLeft())).formatted(Formatting.GOLD));
-                infos = specific.getRight().stream().map(x -> x.formatted(Formatting.GRAY)).toList();
-            } else first.append(Text.literal("[SHIFT %s] ".formatted(specific.getLeft())).formatted(Formatting.WHITE));
+        Pair<String, List<MutableText>> altInfo = this.getAltInfo();
+        if (altInfo != null) {
+            if (KEY_MANAGER.alt()) {
+                first.append(Text.literal("[ALT %s] ".formatted(altInfo.getLeft())).formatted(Formatting.WHITE));
+                infos = altInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
+            } else first.append(Text.literal("[ALT %s] ".formatted(altInfo.getLeft())).formatted(Formatting.GRAY));
         }
         return ImmutableList.<MutableText>builder().add(first).addAll(infos).build();
     }
 
-    private Pair<String, List<MutableText>> getSpecificInfo() {
-        if (!this.blockTags.isEmpty())
-            return new Pair<>("Block Tags", this.blockTags.stream().map(Text::literal).toList());
+    @Nullable
+    private Pair<String, List<MutableText>> getAltInfo() {
         if (!this.entityInfo.isEmpty())
             return new Pair<>("Mob Info", this.entityInfo);
+        if (!this.nbt.isEmpty())
+            return new Pair<>("NBT", this.nbt);
+        return null;
+    }
+
+    @Nullable
+    private Pair<String, List<MutableText>> getShiftInfo() {
+        if (!this.blockTags.isEmpty())
+            return new Pair<>("Block Tags", this.blockTags.stream().map(Text::literal).toList());
+        if (!this.entityTags.isEmpty())
+            return new Pair<>("Entity Tags", this.entityTags.stream().map(Text::literal).toList());
         if (this.lootTable != null && this.lootTable.left() != null)
             return new Pair<>("Loot Table", List.of(
                     Text.literal("Id: " + this.lootTable.left().toString()),

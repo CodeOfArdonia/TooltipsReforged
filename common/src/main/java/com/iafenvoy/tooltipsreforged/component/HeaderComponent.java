@@ -4,6 +4,8 @@ import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.TooltipProviders;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
 import com.mojang.datafixers.util.Pair;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -13,6 +15,7 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import org.joml.Matrix4f;
 
+@Environment(EnvType.CLIENT)
 public class HeaderComponent implements TooltipComponent {
     private static final int TEXTURE_SIZE = 20;
     private static final int ITEM_MODEL_SIZE = 16;

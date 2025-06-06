@@ -25,7 +25,7 @@
   "rarity.tooltips_reforged.uncommon": "少见",
   "screen.tooltips_reforged.common": "通用",
   "screen.tooltips_reforged.title": "提示框：重铸 配置文件",
-  "text.tooltips_reforged.mob_type": "生物类型",
+  "text.tooltips_reforged.mob_type": "生物类型：",
   "tooltip.tooltips_reforged.durability": "耐久度：",
   "tooltip.tooltips_reforged.hunger": "恢复",
   "tooltip.tooltips_reforged.saturation": "+ %d%% 饱食度",

@@ -1,6 +1,8 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -13,6 +15,7 @@ import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapState;
 
+@Environment(EnvType.CLIENT)
 public class MapComponent implements TooltipComponent {
     private final ItemStack stack;
     private final TooltipReforgedConfig config = TooltipReforgedConfig.INSTANCE;

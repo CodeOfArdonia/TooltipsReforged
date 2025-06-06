@@ -2,9 +2,10 @@ package com.iafenvoy.tooltipsreforged.util;
 
 import it.unimi.dsi.fastutil.objects.ObjectLongImmutablePair;
 import it.unimi.dsi.fastutil.objects.ObjectLongPair;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -32,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+@Environment(EnvType.CLIENT)
 public final class InfoCollectHelper {
     private static final List<EntityAttribute> ATTRIBUTES = List.of(EntityAttributes.GENERIC_MAX_HEALTH, EntityAttributes.GENERIC_MOVEMENT_SPEED, EntityAttributes.GENERIC_ATTACK_DAMAGE, EntityAttributes.GENERIC_ARMOR, EntityAttributes.GENERIC_FOLLOW_RANGE, EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, EntityAttributes.GENERIC_ATTACK_KNOCKBACK);
     private static final Map<EnchantmentTarget, List<Item>> TARGET_ITEMS_MAP = new HashMap<>();
@@ -46,20 +48,23 @@ public final class InfoCollectHelper {
         else return List.of();
     }
 
+    public static List<String> collectEntityTags(ItemStack stack) {
+        if (stack.getItem() instanceof SpawnEggItem eggItem)
+            return Registries.ENTITY_TYPE.getEntry(eggItem.getEntityType(stack.getNbt())).streamTags().map(TagKey::id).map(x -> "#" + x.toString()).toList();
+        else return List.of();
+    }
+
     public static List<MutableText> collectEntityInfo(ItemStack stack) {
         List<MutableText> list = new LinkedList<>();
         World world = MinecraftClient.getInstance().world;
-        if (stack.getItem() instanceof SpawnEggItem eggItem && world != null) {
-            Entity entity = eggItem.getEntityType(stack.getNbt()).create(world);
+        if (stack.getItem() instanceof SpawnEggItem eggItem && world != null && eggItem.getEntityType(stack.getNbt()).create(world) instanceof LivingEntity living) {
             DecimalFormat df = new DecimalFormat("#.##");
-            if (entity instanceof LivingEntity living) {
-                ATTRIBUTES.forEach(attribute -> {
-                    EntityAttributeInstance instance = living.getAttributeInstance(attribute);
-                    if (instance != null)
-                        list.add(Text.translatable(attribute.getTranslationKey()).append(":").append(df.format(instance.getValue())).formatted(Formatting.GRAY));
-                });
-                list.add(Text.translatable("text.tooltips_reforged.mob_type").append(":").append(Text.translatable(getMobType(living.getGroup()))).formatted(Formatting.GRAY));
-            }
+            ATTRIBUTES.forEach(attribute -> {
+                EntityAttributeInstance instance = living.getAttributeInstance(attribute);
+                if (instance != null)
+                    list.add(Text.translatable(attribute.getTranslationKey()).append(": ").append(df.format(instance.getValue())).formatted(Formatting.GRAY));
+            });
+            list.add(Text.translatable("text.tooltips_reforged.mob_type").append(Text.translatable(getMobType(living.getGroup()))).formatted(Formatting.GRAY));
         }
         return list;
     }

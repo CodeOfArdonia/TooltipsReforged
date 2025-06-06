@@ -16,9 +16,4 @@ public class FabricEntryPointLoader extends EntryPointLoader {
     protected List<TooltipsReforgeEntrypoint> loadEntries() {
         return FabricLoader.getInstance().getEntrypoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class);
     }
-
-    @Override
-    public boolean isModLoaded(String modId) {
-        return FabricLoader.getInstance().isModLoaded(modId);
-    }
 }

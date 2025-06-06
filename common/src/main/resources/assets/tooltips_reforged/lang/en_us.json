@@ -25,7 +25,7 @@
   "rarity.tooltips_reforged.uncommon": "Uncommon",
   "screen.tooltips_reforged.common": "Common",
   "screen.tooltips_reforged.title": "Tooltips Reforged Config",
-  "text.tooltips_reforged.mob_type": "Mob Type",
+  "text.tooltips_reforged.mob_type": "Mob Type: ",
   "tooltip.tooltips_reforged.durability": "Durability:",
   "tooltip.tooltips_reforged.hunger": "Recovers",
   "tooltip.tooltips_reforged.saturation": "+ %d%% Saturation",

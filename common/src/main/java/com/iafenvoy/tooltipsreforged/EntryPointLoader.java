@@ -14,6 +14,4 @@ public abstract class EntryPointLoader {
     }
 
     protected abstract List<TooltipsReforgeEntrypoint> loadEntries();
-
-    public abstract boolean isModLoaded(String modId);
 }

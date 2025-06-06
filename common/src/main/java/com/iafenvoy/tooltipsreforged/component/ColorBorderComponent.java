@@ -2,12 +2,15 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.render.TooltipProviders;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Rarity;
 
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 public class ColorBorderComponent extends BackgroundComponent {
     private final ItemStack stack;
 

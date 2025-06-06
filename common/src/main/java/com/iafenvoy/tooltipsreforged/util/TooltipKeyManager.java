@@ -1,8 +1,11 @@
 package com.iafenvoy.tooltipsreforged.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
+@Environment(EnvType.CLIENT)
 public class TooltipKeyManager {
     private boolean pressing;
     private Pressed pressed;

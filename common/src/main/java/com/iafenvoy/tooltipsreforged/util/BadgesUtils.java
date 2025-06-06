@@ -2,6 +2,8 @@ package com.iafenvoy.tooltipsreforged.util;
 
 import com.iafenvoy.tooltipsreforged.Static;
 import com.mojang.datafixers.util.Pair;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -10,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+@Environment(EnvType.CLIENT)
 public final class BadgesUtils {
     private static final Map<String, String> MODS_MAP = Static.getAllMods();
 
