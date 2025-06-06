@@ -24,11 +24,11 @@ features for both players and developers.
 **You need to open advanced tooltip (F3+H) to use**
 
 - Ctrl: Display item tags
-- Alt: Display raw nbt
+- Alt: Display raw nbt & spawn egg entity info
 - Shift: Specific information
 
 For block, it will display block tag.
 
-For spawn egg, it will display target entity info.
+For spawn egg, it will display entity tag.
 
 **If you have any idea, submit on GitHub!**

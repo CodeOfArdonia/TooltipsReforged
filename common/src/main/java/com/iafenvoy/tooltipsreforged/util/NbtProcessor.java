@@ -31,8 +31,8 @@ public final class NbtProcessor {
          */
         int lineStep = 50; // config
         Formatting stringColour = Formatting.GREEN;
-        Formatting quotationColour = Formatting.GRAY;
-        Formatting separationColour = Formatting.GRAY;
+        Formatting quotationColour = Formatting.DARK_GRAY;
+        Formatting separationColour = Formatting.DARK_GRAY;
         Formatting integerColour = Formatting.GOLD;
         Formatting typeColour = Formatting.RED;
         Formatting fieldColour = Formatting.AQUA;

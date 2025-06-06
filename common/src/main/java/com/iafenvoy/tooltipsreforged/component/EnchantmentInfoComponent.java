@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -69,19 +70,28 @@ public class EnchantmentInfoComponent implements TooltipComponent {
         int currentY = y;
         for (EnchantmentInfo info : this.enchantments) {
             int currentX = x;
-            Text name = info.enchantment.getName(info.level);
+            Text name = getEnchantmentName(info.enchantment, info.level);
             context.drawText(textRenderer, name, currentX, currentY, -1, true);
             currentX += textRenderer.getWidth(name) + 2;
             this.drawItem(context, RandomHelper.pick(InfoCollectHelper.getEnchantmentTarget(info.enchantment.target), Items.AIR), currentX, currentY);
             currentX += 12;
             if (MinecraftClient.getInstance().options.advancedItemTooltips)
-                context.drawText(textRenderer, info.id.toString(), currentX, currentY, -1, true);
+                context.drawText(textRenderer, info.id.toString(), currentX, currentY, 5592405, true);
             currentY += 10;
             for (MutableText text : info.descriptions) {
                 context.drawText(textRenderer, text.formatted(Formatting.DARK_GRAY), x, currentY, -1, true);
                 currentY += 10;
             }
         }
+    }
+
+    private static Text getEnchantmentName(Enchantment enchantment, int level) {
+        MutableText mutableText = Text.translatable(enchantment.getTranslationKey());
+        if (enchantment.isCursed()) mutableText.formatted(Formatting.RED);
+        else mutableText.formatted(Formatting.GRAY);
+        if (level != 1 || enchantment.getMaxLevel() != 1)
+            mutableText.append(ScreenTexts.SPACE).append(Text.translatable("enchantment.level." + level)).append(Text.literal("/").append(Text.translatable("enchantment.level." + enchantment.getMaxLevel())).formatted(Formatting.DARK_GRAY));
+        return mutableText;
     }
 
     public void drawItem(DrawContext context, Item item, int x, int y) {
@@ -112,7 +122,7 @@ public class EnchantmentInfoComponent implements TooltipComponent {
         }
 
         public int getWidth(TextRenderer textRenderer) {
-            int width = textRenderer.getWidth(this.enchantment.getName(this.level)) + 14 + (MinecraftClient.getInstance().options.advancedItemTooltips ? textRenderer.getWidth(this.id.toString()) : 0);
+            int width = textRenderer.getWidth(getEnchantmentName(this.enchantment, this.level)) + 14 + (MinecraftClient.getInstance().options.advancedItemTooltips ? textRenderer.getWidth(this.id.toString()) : 0);
             for (MutableText text : this.descriptions) width = Math.max(width, textRenderer.getWidth(text));
             return width;
         }
