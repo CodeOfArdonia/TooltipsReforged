@@ -86,7 +86,7 @@ public class ModelViewerComponent extends ColorBorderComponent {
         Entity entity = entityType.create(MinecraftClient.getInstance().world);
 
         if (entity instanceof Bucketable bucketable && entity instanceof LivingEntity livingEntity) {
-            var nbtComponent = this.stack.getOrCreateNbt();
+            NbtCompound nbtComponent = this.stack.getOrCreateNbt();
             bucketable.copyDataFromNbt(nbtComponent);
             if (entityType == EntityType.TROPICAL_FISH) return;
             if (bucketable instanceof PufferfishEntity pufferfishEntity) pufferfishEntity.setPuffState(2);
@@ -98,16 +98,15 @@ public class ModelViewerComponent extends ColorBorderComponent {
     }
 
     private void renderSpawnEggEntity(DrawContext context, int x, int y, int z, SpawnEggItem spawnEggItem) throws Exception {
-        var entityType = spawnEggItem.getEntityType(null);
-        var entity = entityType.create(MinecraftClient.getInstance().world);
+        EntityType<?> entityType = spawnEggItem.getEntityType(this.stack.getNbt());
+        Entity entity = entityType.create(MinecraftClient.getInstance().world);
         if (entity == null) return;
 
         if (entityType == EntityType.VILLAGER || entityType == EntityType.ZOMBIE_VILLAGER) {
-            var villagerData = new NbtCompound();
+            NbtCompound villagerData = new NbtCompound();
             villagerData.putString("profession", "minecraft:none");
             villagerData.putString("type", "minecraft:plains");
-            var nbt = this.stack.getOrCreateNbt();
-
+            NbtCompound nbt = new NbtCompound();
             nbt.put("VillagerData", villagerData);
             entity.readNbt(nbt);
         }
@@ -117,6 +116,8 @@ public class ModelViewerComponent extends ColorBorderComponent {
         if (entity instanceof SnowGolemEntity snowGolemEntity) snowGolemEntity.setHasPumpkin(false);
 
         if (entity instanceof LivingEntity livingEntity) {
+            NbtCompound nbt = this.stack.getSubNbt("EntityTag");
+            if (nbt != null) livingEntity.readCustomDataFromNbt(nbt);
             super.render(context, x - ENTITY_OFFSET - 70, y, 80, 80, z, -1);
             livingEntity.tick();
             drawEntity(context, x - 67, y + 75, 40, -CURRENT_ROTATION, livingEntity);
