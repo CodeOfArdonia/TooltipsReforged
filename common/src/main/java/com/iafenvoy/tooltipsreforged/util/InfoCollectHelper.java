@@ -1,5 +1,6 @@
 package com.iafenvoy.tooltipsreforged.util;
 
+import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import it.unimi.dsi.fastutil.objects.ObjectLongImmutablePair;
 import it.unimi.dsi.fastutil.objects.ObjectLongPair;
 import net.fabricmc.api.EnvType;
@@ -105,6 +106,10 @@ public final class InfoCollectHelper {
 
     static {
         for (EnchantmentTarget target : EnchantmentTarget.values())
-            TARGET_ITEMS_MAP.put(target, Registries.ITEM.stream().filter(target::isAcceptableItem).toList());
+            try {
+                TARGET_ITEMS_MAP.put(target, Registries.ITEM.stream().filter(target::isAcceptableItem).toList());
+            } catch (Throwable e) {
+                TooltipReforgedClient.LOGGER.error("Failed to load items for enchantment target {}", target.name(), e);
+            }
     }
 }
