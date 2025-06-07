@@ -20,7 +20,6 @@ public class PaintingComponent implements TooltipComponent {
     private final PaintingVariant variant;
     private final int width;
     private final int height;
-    private final TooltipReforgedConfig config = TooltipReforgedConfig.INSTANCE;
 
     public PaintingComponent(ItemStack stack) {
         NbtCompound nbtCompound = stack.getSubNbt("EntityTag");
@@ -39,17 +38,17 @@ public class PaintingComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return this.config.common.paintingTooltip.getValue() ? this.height : 0;
+        return TooltipReforgedConfig.INSTANCE.common.paintingTooltip.getValue() ? this.height : 0;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return this.config.common.paintingTooltip.getValue() ? this.width : 0;
+        return TooltipReforgedConfig.INSTANCE.common.paintingTooltip.getValue() ? this.width : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (this.variant == null || !this.config.common.paintingTooltip.getValue()) return;
+        if (this.variant == null || !TooltipReforgedConfig.INSTANCE.common.paintingTooltip.getValue()) return;
         PaintingManager paintingManager = MinecraftClient.getInstance().getPaintingManager();
         Sprite sprite = paintingManager.getPaintingSprite(this.variant);
         context.drawSprite(x, y, 0, this.width, this.height, sprite);

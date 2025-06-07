@@ -139,9 +139,8 @@ public class TooltipsRenderHelper {
                     component.drawItems(textRenderer, cx, cy, context);
                     cy += component.getHeight();
 
-                    if (p == pageList.get(0) && component == p.components.get(0) && components.size() > 1) {
+                    if (p == pageList.get(0) && component == p.components.get(0) && components.size() > 1)
                         cy += spacing;
-                    }
                 } catch (Exception e) {
                     TooltipReforgedClient.LOGGER.error("{}", TooltipReforgedClient.MOD_ID, e);
                 }

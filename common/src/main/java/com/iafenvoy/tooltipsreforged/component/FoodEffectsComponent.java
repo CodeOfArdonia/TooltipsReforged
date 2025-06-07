@@ -20,11 +20,9 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class FoodEffectsComponent implements TooltipComponent {
     private final ItemStack stack;
-    private final TooltipReforgedConfig config;
 
     public FoodEffectsComponent(ItemStack stack) {
         this.stack = stack;
-        this.config = TooltipReforgedConfig.INSTANCE;
     }
 
     public FoodComponent getFoodComponent() {
@@ -46,15 +44,13 @@ public class FoodEffectsComponent implements TooltipComponent {
     @Override
     public int getHeight() {
         int height = 0;
-
         FoodComponent foodComponent = this.getFoodComponent();
         if (foodComponent != null) {
-            if (this.config.common.hungerTooltip.getValue()) height += 10;
-            if (this.config.common.saturationTooltip.getValue()) height += 10;
-            if (!this.config.common.effectsTooltip.getValue()) return height;
+            if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue()) height += 10;
+            if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue()) height += 10;
+            if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return height;
             height += foodComponent.getStatusEffects().size() * 10;
         }
-
         return height;
     }
 
@@ -64,13 +60,13 @@ public class FoodEffectsComponent implements TooltipComponent {
         FoodComponent foodComponent = this.getFoodComponent();
         int hunger = this.getHunger();
 
-        if (this.config.common.hungerTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue())
             hungerLine = textRenderer.getWidth(Text.translatable("tooltip.%s.hunger".formatted(TooltipReforgedClient.MOD_ID))) + 1 + ((textRenderer.fontHeight - 2) * hunger);
-        if (this.config.common.saturationTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue())
             saturationLine = textRenderer.getWidth(Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID), "100%"));
         foodWidth = Math.max(hungerLine, saturationLine);
 
-        if (!this.config.common.effectsTooltip.getValue()) return foodWidth + 4;
+        if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return foodWidth + 4;
 
         if (foodComponent == null) return 0;
         for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects())
@@ -92,7 +88,7 @@ public class FoodEffectsComponent implements TooltipComponent {
 
         int lineY = y;
 
-        if (this.config.common.hungerTooltip.getValue()) {
+        if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue()) {
             context.drawText(textRenderer, hungerText, x, lineY, 0xffffffff, true);
             float fullHungers = hunger / 2f;
             boolean hasHalfHunger = (hunger % 2) != 0;
@@ -106,11 +102,11 @@ public class FoodEffectsComponent implements TooltipComponent {
             lineY += textRenderer.fontHeight + 1;
         }
 
-        if (this.config.common.saturationTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue())
             context.drawText(textRenderer, saturationText, x, lineY, 0xff00ffff, true);
         else lineY -= textRenderer.fontHeight + 1;
 
-        if (!this.config.common.effectsTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return;
         for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects()) {
             StatusEffectInstance statusEffect = effect.getFirst();
             int c = statusEffect.getEffectType().getColor();
@@ -120,7 +116,7 @@ public class FoodEffectsComponent implements TooltipComponent {
 
             lineY += textRenderer.fontHeight + 1;
 
-            if (this.config.common.effectsIcon.getValue()) {
+            if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
                 context.drawSprite(x - 2, lineY, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
                 context.drawText(textRenderer, effectText, x + textRenderer.fontHeight + 2, lineY, c, true);
             } else

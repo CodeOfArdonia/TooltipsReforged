@@ -13,13 +13,11 @@ import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class BackgroundComponent implements TooltipComponent {
-    protected static final int INNER_PADDING = 4;
-
     public void render(DrawContext context, int x, int y, int width, int height, int z, int page) throws Exception {
-        int i = x - INNER_PADDING;
-        int j = y - INNER_PADDING;
-        int k = width + INNER_PADDING * 2;
-        int l = height + INNER_PADDING * 2;
+        int i = x - 4;
+        int j = y - 4;
+        int k = width + 8;
+        int l = height + 8;
         int bgColor = TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue();
 
         this.renderHorizontalLine(context, i, j - 1, k, z, bgColor);

@@ -34,7 +34,6 @@ public class ModelViewerComponent extends ColorBorderComponent {
     private static final int SHADOW_LIGHT_COLOR = 15728880;
 
     private final ItemStack stack;
-    private final TooltipReforgedConfig config = TooltipReforgedConfig.INSTANCE;
 
     public ModelViewerComponent(ItemStack stack) {
         super(stack);
@@ -48,14 +47,14 @@ public class ModelViewerComponent extends ColorBorderComponent {
         CURRENT_ROTATION = (CURRENT_ROTATION + ROTATION_INCREMENT) % 360;
 
         if (this.stack.getItem() instanceof Equipment) {
-            if (!this.config.common.armorTooltip.getValue()) return;
-            if (this.config.common.usePlayer.getValue()) this.renderPlayer(context, x, y, z);
+            if (!TooltipReforgedConfig.INSTANCE.common.armorTooltip.getValue()) return;
+            if (TooltipReforgedConfig.INSTANCE.common.usePlayer.getValue()) this.renderPlayer(context, x, y, z);
             else this.renderArmorStand(context, x, y, z);
         } else if (this.stack.getItem() instanceof EntityBucketItem bucketItem) {
-            if (!this.config.common.bucketTooltip.getValue()) return;
+            if (!TooltipReforgedConfig.INSTANCE.common.bucketTooltip.getValue()) return;
             this.renderBucketEntity(context, x, y, z, bucketItem);
         } else if (this.stack.getItem() instanceof SpawnEggItem spawnEggItem) {
-            if (!this.config.common.spawnEggTooltip.getValue()) return;
+            if (!TooltipReforgedConfig.INSTANCE.common.spawnEggTooltip.getValue()) return;
             this.renderSpawnEggEntity(context, x, y, z, spawnEggItem);
         }
     }

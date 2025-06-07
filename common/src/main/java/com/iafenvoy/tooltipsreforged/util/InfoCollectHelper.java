@@ -87,8 +87,7 @@ public final class InfoCollectHelper {
         NbtCompound nbt = BlockItem.getBlockEntityNbt(stack);
         if (nbt != null && nbt.contains("LootTable", 8))
             return new ObjectLongImmutablePair<>(Identifier.tryParse(nbt.getString("LootTable")), nbt.getLong("LootTableSeed"));
-        else
-            return null;
+        else return null;
     }
 
     public static List<Item> getEnchantmentTarget(EnchantmentTarget target) {
@@ -99,8 +98,7 @@ public final class InfoCollectHelper {
     public static DefaultedList<ItemStack> collectContainer(ItemStack stack) {
         DefaultedList<ItemStack> stacks = DefaultedList.ofSize(27, ItemStack.EMPTY);
         NbtCompound nbt = BlockItem.getBlockEntityNbt(stack);
-        if (nbt == null)
-            return null;
+        if (nbt == null) return null;
         Inventories.readNbt(nbt, stacks);
         return stacks;
     }

@@ -18,7 +18,6 @@ import net.minecraft.item.map.MapState;
 @Environment(EnvType.CLIENT)
 public class MapComponent implements TooltipComponent {
     private final ItemStack stack;
-    private final TooltipReforgedConfig config = TooltipReforgedConfig.INSTANCE;
 
     public MapComponent(ItemStack stack) {
         this.stack = stack;
@@ -26,17 +25,17 @@ public class MapComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return this.config.common.mapTooltip.getValue() ? 130 : 0;
+        return TooltipReforgedConfig.INSTANCE.common.mapTooltip.getValue() ? 130 : 0;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return this.config.common.mapTooltip.getValue() ? 128 : 0;
+        return TooltipReforgedConfig.INSTANCE.common.mapTooltip.getValue() ? 128 : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (!this.config.common.mapTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.common.mapTooltip.getValue()) return;
         VertexConsumerProvider vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
         MapRenderer mapRenderer = MinecraftClient.getInstance().gameRenderer.getMapRenderer();
 

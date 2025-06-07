@@ -20,12 +20,10 @@ import java.util.List;
 public class PotionEffectsComponent implements TooltipComponent {
     private final ItemStack stack;
     private final float durationMultiplier;
-    private final TooltipReforgedConfig config;
 
     public PotionEffectsComponent(ItemStack stack, float durationMultiplier) {
         this.stack = stack;
         this.durationMultiplier = durationMultiplier;
-        this.config = TooltipReforgedConfig.INSTANCE;
     }
 
     public List<StatusEffectInstance> getPotionEffects() {
@@ -47,7 +45,7 @@ public class PotionEffectsComponent implements TooltipComponent {
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (!this.config.common.effectsTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return;
         int lineY = y - textRenderer.fontHeight - 1;
         for (StatusEffectInstance effect : this.getPotionEffects()) {
             int c = effect.getEffectType().getColor();
@@ -58,7 +56,7 @@ public class PotionEffectsComponent implements TooltipComponent {
             if (!effect.isDurationBelow(20))
                 mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(effect, this.durationMultiplier));
             lineY += textRenderer.fontHeight + 1;
-            if (this.config.common.effectsIcon.getValue()) {
+            if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
                 context.drawSprite(x - 2, lineY, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
                 context.drawText(textRenderer, mutableText, x + textRenderer.fontHeight + 2, lineY, c, true);
             } else
