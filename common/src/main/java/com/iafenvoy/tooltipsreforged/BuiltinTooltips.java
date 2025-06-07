@@ -3,6 +3,7 @@ package com.iafenvoy.tooltipsreforged;
 import com.iafenvoy.tooltipsreforged.component.*;
 import com.iafenvoy.tooltipsreforged.mixin.DecorationItemAccessor;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -46,7 +47,7 @@ public class BuiltinTooltips {
             for (int i = 0; i < components.size(); i++) {
                 TooltipComponent component = components.get(i);
                 if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent)
-                    if (ExtendedTextVisitor.getText(orderedTextTooltipComponent.text).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
+                    if (ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(orderedTextTooltipComponent)).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
                         components.set(i, new DurabilityComponent(stack));
                         break;
                     }

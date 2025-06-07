@@ -1,10 +1,13 @@
 package com.iafenvoy.tooltipsreforged.util;
 
 import com.google.common.collect.Lists;
+import com.iafenvoy.tooltipsreforged.mixin.OrderedTextTooltipComponentAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -12,7 +15,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-public final class ComponentUtil {
+public final class TextUtil {
+    public static OrderedText getTextFromComponent(OrderedTextTooltipComponent component) {
+        return ((OrderedTextTooltipComponentAccessor) component).getText();
+    }
+
     public static List<MutableText> splitText(MutableText text, int chatWidth, TextRenderer fontRenderer) {
         int i = 0;
         MutableText ichatcomponent = Text.literal("");

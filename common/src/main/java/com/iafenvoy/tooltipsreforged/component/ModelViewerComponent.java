@@ -34,12 +34,11 @@ public class ModelViewerComponent extends ColorBorderComponent {
     private static final int SHADOW_LIGHT_COLOR = 15728880;
 
     private final ItemStack stack;
-    private final TooltipReforgedConfig config;
+    private final TooltipReforgedConfig config = TooltipReforgedConfig.INSTANCE;
 
     public ModelViewerComponent(ItemStack stack) {
         super(stack);
         this.stack = stack;
-        this.config = TooltipReforgedConfig.INSTANCE;
     }
 
     @Override

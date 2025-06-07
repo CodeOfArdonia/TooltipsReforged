@@ -9,6 +9,7 @@
     "EntityBucketItemMixin",
     "ItemStackMixin",
     "LingeringPotionItemMixin",
+    "OrderedTextTooltipComponentAccessor",
     "PotionItemMixin",
     "TippedArrowItemMixin"
   ],

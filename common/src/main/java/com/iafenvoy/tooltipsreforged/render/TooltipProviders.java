@@ -2,7 +2,7 @@ package com.iafenvoy.tooltipsreforged.render;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
-import com.iafenvoy.tooltipsreforged.util.ComponentUtil;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ public class TooltipProviders {
     public static int getItemBorderColor(ItemStack stack) {
         Integer color = null;
         if (TooltipReforgedConfig.INSTANCE.common.useNameColor.getValue())
-            color = ComponentUtil.getColorFromTranslation(getDisplayName(stack));
+            color = TextUtil.getColorFromTranslation(getDisplayName(stack));
         if (color == null || color == -1) {
             color = stack.getRarity().formatting.getColorValue();
             if (color == null || color == 0xFFFFFF) color = 0xFFFFFFFF;

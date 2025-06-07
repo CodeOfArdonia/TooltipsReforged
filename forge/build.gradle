@@ -3,10 +3,7 @@ plugins {
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
     forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
         mixinConfig "tooltips_reforged.mixins.json"
     }
 }

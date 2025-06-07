@@ -2,10 +2,6 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-}
-
 architectury {
     platformSetupLoomIde()
     fabric()

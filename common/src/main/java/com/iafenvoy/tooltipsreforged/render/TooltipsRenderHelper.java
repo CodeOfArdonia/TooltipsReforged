@@ -4,6 +4,7 @@ import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.component.BackgroundComponent;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -160,7 +161,7 @@ public class TooltipsRenderHelper {
     private static List<TooltipComponent> wrapComponent(TooltipComponent component, TextRenderer textRenderer, int maxWidth) {
         List<TooltipComponent> wrappedComponents = new ArrayList<>();
         if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent) {
-            Text text = ExtendedTextVisitor.getText(orderedTextTooltipComponent.text);
+            Text text = ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(orderedTextTooltipComponent));
             List<OrderedText> lines = textRenderer.wrapLines(text, maxWidth);
             for (OrderedText line : lines) wrappedComponents.add(TooltipComponent.of(line));
         } else wrappedComponents.add(component);

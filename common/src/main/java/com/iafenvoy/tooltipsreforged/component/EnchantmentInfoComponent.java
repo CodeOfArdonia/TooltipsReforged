@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
-import com.iafenvoy.tooltipsreforged.util.ComponentUtil;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import com.iafenvoy.tooltipsreforged.util.RandomHelper;
 import net.fabricmc.api.EnvType;
@@ -50,7 +50,7 @@ public class EnchantmentInfoComponent implements TooltipComponent {
         for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
             Enchantment enchantment = entry.getKey();
             String descriptionKey = enchantment.getTranslationKey() + ".desc";
-            this.enchantments.add(new EnchantmentInfo(enchantment, entry.getValue(), I18n.hasTranslation(descriptionKey) ? ComponentUtil.splitText(Text.literal(I18n.translate(descriptionKey)), 300, MinecraftClient.getInstance().textRenderer) : List.of()));
+            this.enchantments.add(new EnchantmentInfo(enchantment, entry.getValue(), I18n.hasTranslation(descriptionKey) ? TextUtil.splitText(Text.literal(I18n.translate(descriptionKey)), 300, MinecraftClient.getInstance().textRenderer) : List.of()));
         }
     }
 
