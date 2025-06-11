@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.MutableText;
@@ -99,7 +100,7 @@ public final class InfoCollectHelper {
     public static DefaultedList<ItemStack> collectContainer(ItemStack stack) {
         DefaultedList<ItemStack> stacks = DefaultedList.ofSize(27, ItemStack.EMPTY);
         NbtCompound nbt = BlockItem.getBlockEntityNbt(stack);
-        if (nbt == null) return null;
+        if (nbt == null || !nbt.contains("Items", NbtElement.LIST_TYPE)) return null;
         Inventories.readNbt(nbt, stacks);
         return stacks;
     }

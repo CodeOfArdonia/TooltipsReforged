@@ -57,7 +57,7 @@ public class PotionEffectsComponent implements TooltipComponent {
                 mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(effect, this.durationMultiplier));
             lineY += textRenderer.fontHeight + 1;
             if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
-                context.drawSprite(x - 2, lineY, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
+                context.drawSprite(x - 1, lineY - 1, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
                 context.drawText(textRenderer, mutableText, x + textRenderer.fontHeight + 2, lineY, c, true);
             } else
                 context.drawText(textRenderer, mutableText, x, lineY, c, true);

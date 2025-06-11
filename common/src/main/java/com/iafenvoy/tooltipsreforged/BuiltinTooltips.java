@@ -1,6 +1,7 @@
 package com.iafenvoy.tooltipsreforged;
 
 import com.iafenvoy.tooltipsreforged.component.*;
+import com.iafenvoy.tooltipsreforged.component.FoodComponent;
 import com.iafenvoy.tooltipsreforged.mixin.DecorationItemAccessor;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
 import com.iafenvoy.tooltipsreforged.util.TextUtil;
@@ -28,11 +29,11 @@ public class BuiltinTooltips {
         else if (stack.getItem() instanceof TippedArrowItem)
             components.add(1, new PotionEffectsComponent(stack, 0.125f));
         else if (stack.getItem().getFoodComponent() != null)
-            components.add(1, new FoodEffectsComponent(stack));
+            components.add(1, new FoodComponent(stack));
         else if (stack.getItem() instanceof EnchantedBookItem)
-            components.add(1, new EnchantmentInfoComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
+            components.add(1, new EnchantmentsComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
         else if (stack.getItem().isEnchantable(stack))
-            components.add(1, new EnchantmentInfoComponent(EnchantmentHelper.get(stack)));
+            components.add(1, new EnchantmentsComponent(EnchantmentHelper.get(stack)));
 
         if (stack.getItem() instanceof Equipment || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
             components.add(new ModelViewerComponent(stack));
