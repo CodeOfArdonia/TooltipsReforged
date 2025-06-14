@@ -39,14 +39,14 @@ import java.util.Map;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-public class EnchantmentInfoComponent implements TooltipComponent {
+public class EnchantmentsComponent implements TooltipComponent {
     private final List<EnchantmentInfo> enchantments = new LinkedList<>();
 
-    public EnchantmentInfoComponent(NbtList list) {
+    public EnchantmentsComponent(NbtList list) {
         this(EnchantmentHelper.fromNbt(list));
     }
 
-    public EnchantmentInfoComponent(Map<Enchantment, Integer> map) {
+    public EnchantmentsComponent(Map<Enchantment, Integer> map) {
         for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
             Enchantment enchantment = entry.getKey();
             String descriptionKey = enchantment.getTranslationKey() + ".desc";

@@ -24,7 +24,7 @@ public class ContainerPreviewComponent implements TooltipComponent {
     }
 
     private boolean shouldRender() {
-        return this.stacks != null && !this.stacks.isEmpty() && TooltipReforgedConfig.INSTANCE.common.containerTooltip.getValue();
+        return this.stacks != null && TooltipReforgedConfig.INSTANCE.common.containerTooltip.getValue();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ContainerPreviewComponent implements TooltipComponent {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 9; j++) {
                 int index = i * 9 + j;
-                if (index < this.stacks.size()) {
+                if (this.stacks.size() > index) {
                     ItemStack stack = this.stacks.get(index);
                     context.drawItem(stack, x + 8 + j * 18, y + 8 + i * 18);
                     context.drawItemInSlot(textRenderer, stack, x + 8 + j * 18, y + 8 + i * 18);
