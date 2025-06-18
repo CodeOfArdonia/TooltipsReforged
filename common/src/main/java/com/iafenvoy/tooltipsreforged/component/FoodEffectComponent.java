@@ -12,19 +12,20 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class FoodComponent implements TooltipComponent {
+public class FoodEffectComponent implements TooltipComponent {
     private final ItemStack stack;
 
-    public FoodComponent(ItemStack stack) {
+    public FoodEffectComponent(ItemStack stack) {
         this.stack = stack;
     }
 
-    public net.minecraft.item.FoodComponent getFoodComponent() {
+    public FoodComponent getFoodComponent() {
         return this.stack.getItem().getFoodComponent();
     }
 
@@ -33,7 +34,7 @@ public class FoodComponent implements TooltipComponent {
     }
 
     public int getSaturation() {
-        net.minecraft.item.FoodComponent foodComponent = this.getFoodComponent();
+        FoodComponent foodComponent = this.getFoodComponent();
         int saturation = 0;
         if (foodComponent != null)
             saturation = (int) (foodComponent.getSaturationModifier() * 100);
@@ -43,11 +44,14 @@ public class FoodComponent implements TooltipComponent {
     @Override
     public int getHeight() {
         int height = 0;
-        net.minecraft.item.FoodComponent foodComponent = this.getFoodComponent();
+        FoodComponent foodComponent = this.getFoodComponent();
         if (foodComponent != null) {
-            if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue()) height += 10;
-            if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue()) height += 10;
-            if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return height;
+            if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue() && foodComponent.getHunger() > 0)
+                height += 10;
+            if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue() && foodComponent.getSaturationModifier() > 0)
+                height += 10;
+            if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue())
+                return height;
             height += foodComponent.getStatusEffects().size() * 10;
         }
         return height;
@@ -56,12 +60,12 @@ public class FoodComponent implements TooltipComponent {
     @Override
     public int getWidth(TextRenderer textRenderer) {
         int foodWidth, effectsWidth = 0, hungerLine = 0, saturationLine = 0;
-        net.minecraft.item.FoodComponent foodComponent = this.getFoodComponent();
+        FoodComponent foodComponent = this.getFoodComponent();
         int hunger = this.getHunger();
 
-        if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue() && foodComponent.getHunger() > 0)
             hungerLine = textRenderer.getWidth(Text.translatable("tooltip.%s.hunger".formatted(TooltipReforgedClient.MOD_ID))) + 1 + ((textRenderer.fontHeight - 2) * hunger);
-        if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue() && foodComponent.getSaturationModifier() > 0)
             saturationLine = textRenderer.getWidth(Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID), "100%"));
         foodWidth = Math.max(hungerLine, saturationLine);
 
@@ -76,7 +80,7 @@ public class FoodComponent implements TooltipComponent {
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        net.minecraft.item.FoodComponent foodComponent = this.getFoodComponent();
+        FoodComponent foodComponent = this.getFoodComponent();
         int hunger = this.getHunger();
         int saturation = this.getSaturation();
 
