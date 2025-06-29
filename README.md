@@ -12,7 +12,7 @@ features for both players and developers.
 - New item name render and rarity & item icon
 - Effects for food, potion and tipped arrows
 - New durability bar
-- Map & Paint preview
+- Banner Pattern & Map & Paint preview
 - Armor preview for equipments
 - Entity preview for spawn eggs and bucketed entities
 - Badge displaying which mod provide this item

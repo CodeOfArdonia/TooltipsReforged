@@ -7,7 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.texture.PaintingManager;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
@@ -49,8 +48,7 @@ public class PaintingComponent implements TooltipComponent {
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         if (this.variant == null || !TooltipReforgedConfig.INSTANCE.common.paintingTooltip.getValue()) return;
-        PaintingManager paintingManager = MinecraftClient.getInstance().getPaintingManager();
-        Sprite sprite = paintingManager.getPaintingSprite(this.variant);
+        Sprite sprite = MinecraftClient.getInstance().getPaintingManager().getPaintingSprite(this.variant);
         context.drawSprite(x, y, 0, this.width, this.height, sprite);
     }
 }

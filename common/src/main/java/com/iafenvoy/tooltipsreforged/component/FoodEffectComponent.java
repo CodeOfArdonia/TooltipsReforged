@@ -70,11 +70,9 @@ public class FoodEffectComponent implements TooltipComponent {
         foodWidth = Math.max(hungerLine, saturationLine);
 
         if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return foodWidth + 4;
-
         if (foodComponent == null) return 0;
         for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects())
             effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(Text.translatable(effect.getFirst().getTranslationKey()).append(" (99:99)")));
-
         return Math.max(foodWidth, effectsWidth) + 4;
     }
 

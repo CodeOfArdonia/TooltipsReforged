@@ -12,10 +12,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.passive.*;
-import net.minecraft.item.EntityBucketItem;
-import net.minecraft.item.Equipment;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -46,7 +43,7 @@ public class ModelViewerComponent extends ColorBorderComponent {
         if (page != 0) return;
         CURRENT_ROTATION = (CURRENT_ROTATION + ROTATION_INCREMENT) % 360;
 
-        if (this.stack.getItem() instanceof Equipment) {
+        if (this.stack.getItem() instanceof Equipment || this.stack.getItem() instanceof SkullItem) {
             if (!TooltipReforgedConfig.INSTANCE.common.armorTooltip.getValue()) return;
             if (TooltipReforgedConfig.INSTANCE.common.usePlayer.getValue()) this.renderPlayer(context, x, y, z);
             else this.renderArmorStand(context, x, y, z);

@@ -1,7 +1,6 @@
 package com.iafenvoy.tooltipsreforged;
 
 import com.iafenvoy.tooltipsreforged.component.*;
-import com.iafenvoy.tooltipsreforged.component.FoodEffectComponent;
 import com.iafenvoy.tooltipsreforged.mixin.DecorationItemAccessor;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
 import com.iafenvoy.tooltipsreforged.util.TextUtil;
@@ -35,14 +34,17 @@ public class BuiltinTooltips {
         else if (stack.getItem().isEnchantable(stack))
             components.add(1, new EnchantmentsComponent(EnchantmentHelper.get(stack)));
 
-        if (stack.getItem() instanceof Equipment || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
+        if (stack.getItem() instanceof Equipment || stack.getItem() instanceof SkullItem || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
             components.add(new ModelViewerComponent(stack));
         components.add(new ColorBorderComponent(stack));
 
         components.add(new ContainerPreviewComponent(stack));
-        if (stack.getItem() instanceof FilledMapItem) components.add(new MapComponent(stack));
+        if (stack.getItem() instanceof FilledMapItem)
+            components.add(new MapComponent(stack));
         if (stack.getItem() instanceof DecorationItemAccessor accessor && accessor.getEntityType() == EntityType.PAINTING)
             components.add(new PaintingComponent(stack));
+        if (stack.getItem() instanceof BannerPatternItem)
+            components.add(new BannerPatternComponent(stack));
 
         if (MinecraftClient.getInstance().options.advancedItemTooltips) {
             for (int i = 0; i < components.size(); i++) {
