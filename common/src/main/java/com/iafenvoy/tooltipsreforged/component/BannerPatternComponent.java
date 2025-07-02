@@ -39,7 +39,7 @@ public class BannerPatternComponent implements TooltipComponent {
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         if (this.texture == null || !TooltipReforgedConfig.INSTANCE.common.bannerTooltip.getValue()) return;
-        context.drawTexture(this.texture.getTextureId().withPrefixedPath("textures/").withSuffixedPath(".png"), x, y, 20, 40, 0, 0, 20, 40, 64, 64);
+        context.drawTexture(this.texture.getTextureId().withPrefixedPath("textures/").withSuffixedPath(".png"), x, y, 22, 4244, 0, 0, 22, 42, 64, 64);
     }
 
 
