@@ -49,7 +49,7 @@ public class PotionEffectsComponent implements TooltipComponent {
         int lineY = y - textRenderer.fontHeight - 1;
         for (StatusEffectInstance effect : this.getPotionEffects()) {
             int c = effect.getEffectType().getColor();
-            if (c >> 24 < 0x10) c = 0xFF777777;
+            if (c == 0) c = 0xFF5454FC;
             Sprite effectTexture = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(effect.getEffectType());
             Text mutableText = Text.translatable(effect.getTranslationKey());
             if (effect.getAmplifier() > 0)

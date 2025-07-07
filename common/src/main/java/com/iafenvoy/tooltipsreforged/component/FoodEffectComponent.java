@@ -112,7 +112,7 @@ public class FoodEffectComponent implements TooltipComponent {
             StatusEffectInstance statusEffect = effect.getFirst();
             int c = statusEffect.getEffectType().getColor();
             Sprite effectTexture = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(statusEffect.getEffectType());
-            if (c >> 24 < 0x10) c = 0xFF777777;
+            if (c == 0) c = 0xFF5454FC;
 
             Text effectText = Text.translatable(statusEffect.getTranslationKey()).append(" (").append(StatusEffectUtil.getDurationText(statusEffect, 1.0f)).append(")");
             lineY += textRenderer.fontHeight + 1;
