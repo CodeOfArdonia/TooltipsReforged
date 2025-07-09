@@ -31,4 +31,9 @@ For block, it will display block tag.
 
 For spawn egg, it will display entity tag.
 
+### Known capability issues
+
+- When some EMF resource packs installed (Such as `DetailedAnimations`), the spawn egg preview will meet some issues.
+  You can close it in config.
+
 **If you have any idea, submit on GitHub!**
