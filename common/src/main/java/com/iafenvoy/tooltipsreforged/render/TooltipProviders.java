@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Rarity;
 
 @Environment(EnvType.CLIENT)
 public class TooltipProviders {
@@ -17,7 +19,8 @@ public class TooltipProviders {
     }
 
     public static Text getDisplayName(ItemStack stack) {
-        return Text.empty().append(stack.getName()).formatted(stack.getRarity().formatting);
+        Rarity rarity = stack.getRarity();
+        return Text.empty().formatted(rarity.formatting == Formatting.BLACK ? Formatting.WHITE : rarity.formatting).append(stack.getName());
     }
 
     public static int getItemBorderColor(ItemStack stack) {

@@ -2,6 +2,7 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
@@ -20,11 +21,11 @@ public class BackgroundComponent implements TooltipComponent {
         int l = height + 8;
         int bgColor = TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue();
 
-        this.renderHorizontalLine(context, i, j - 1, k, z, bgColor);
-        this.renderHorizontalLine(context, i, j + l, k, z, bgColor);
-        this.renderRectangle(context, i, j, k, l, z);
-        this.renderVerticalLine(context, i - 1, j, l, z, bgColor, bgColor);
-        this.renderVerticalLine(context, i + k, j, l, z, bgColor, bgColor);
+        TooltipsRenderHelper.renderHorizontalLine(context, i, j - 1, k, z, bgColor);
+        TooltipsRenderHelper.renderHorizontalLine(context, i, j + l, k, z, bgColor);
+        TooltipsRenderHelper.renderRectangle(context, i, j, k, l, z);
+        TooltipsRenderHelper.renderVerticalLine(context, i - 1, j, l, z, bgColor, bgColor);
+        TooltipsRenderHelper.renderVerticalLine(context, i + k, j, l, z, bgColor, bgColor);
         this.renderBorder(context, i, j + 1, k, l, z, page);
     }
 
@@ -32,22 +33,10 @@ public class BackgroundComponent implements TooltipComponent {
         int startColor = Objects.requireNonNullElse(Rarity.COMMON.formatting.getColorValue(), -1);
         int endColor = Static.END_COLOR;
 
-        this.renderVerticalLine(context, x, y, height - 2, z, startColor, endColor);
-        this.renderVerticalLine(context, x + width - 1, y, height - 2, z, startColor, endColor);
-        this.renderHorizontalLine(context, x, y - 1, width, z, startColor);
-        this.renderHorizontalLine(context, x, y - 1 + height - 1, width, z, endColor);
-    }
-
-    protected void renderVerticalLine(DrawContext context, int x, int y, int height, int z, int startColor, int endColor) {
-        context.fillGradient(x, y, x + 1, y + height, z, startColor, endColor);
-    }
-
-    protected void renderHorizontalLine(DrawContext context, int x, int y, int width, int z, int color) {
-        context.fill(x, y, x + width, y + 1, z, color);
-    }
-
-    protected void renderRectangle(DrawContext context, int x, int y, int width, int height, int z) {
-        context.fill(x, y, x + width, y + height, z, TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue());
+        TooltipsRenderHelper.renderVerticalLine(context, x, y, height - 2, z, startColor, endColor);
+        TooltipsRenderHelper.renderVerticalLine(context, x + width - 1, y, height - 2, z, startColor, endColor);
+        TooltipsRenderHelper.renderHorizontalLine(context, x, y - 1, width, z, startColor);
+        TooltipsRenderHelper.renderHorizontalLine(context, x, y - 1 + height - 1, width, z, endColor);
     }
 
     @Override

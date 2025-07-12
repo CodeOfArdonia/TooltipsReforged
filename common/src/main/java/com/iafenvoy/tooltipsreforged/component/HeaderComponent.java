@@ -2,6 +2,7 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.TooltipProviders;
+import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
@@ -32,7 +33,7 @@ public class HeaderComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return TEXTURE_SIZE + 2;
+        return TEXTURE_SIZE + (!TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue() && TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue() ? 6 : 2);
     }
 
     @Override
@@ -70,6 +71,11 @@ public class HeaderComponent implements TooltipComponent {
         int startDrawX = x + (TEXTURE_SIZE - ITEM_MODEL_SIZE) / 2;
         int startDrawY = y + (TEXTURE_SIZE - ITEM_MODEL_SIZE) / 2;
         context.drawItem(this.stack, startDrawX, startDrawY);
+        int color = TooltipReforgedConfig.INSTANCE.common.itemBorderColor.getValue();
+        TooltipsRenderHelper.renderVerticalLine(context, startDrawX - 3, startDrawY - 2, 21, 21, color);
+        TooltipsRenderHelper.renderVerticalLine(context, startDrawX + 19, startDrawY - 2, 21, 0, color);
+        TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY - 3, 21, 0, color);
+        TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY + 19, 21, 0, color);
 
         if (!TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue()) return;
         Pair<Text, Integer> badgeText = BadgesUtils.getBadgeText(this.stack);

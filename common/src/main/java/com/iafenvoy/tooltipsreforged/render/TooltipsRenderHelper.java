@@ -3,20 +3,15 @@ package com.iafenvoy.tooltipsreforged.render;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.component.BackgroundComponent;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
-import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
-import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipBackgroundRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
 import org.joml.Vector2ic;
 
 import java.util.ArrayList;
@@ -63,22 +58,19 @@ public class TooltipsRenderHelper {
             int height = tooltipComponent.getHeight();
 
             if (width > maxWidth) {
-                List<TooltipComponent> wrappedComponents = wrapComponent(tooltipComponent, textRenderer, maxWidth);
-                for (TooltipComponent wrappedComponent : wrappedComponents) {
-                    int wrappedWidth = wrappedComponent.getWidth(textRenderer);
-                    int wrappedHeight = wrappedComponent.getHeight();
+                int wrappedWidth = tooltipComponent.getWidth(textRenderer);
+                int wrappedHeight = tooltipComponent.getHeight();
 
-                    if (pageHeight + wrappedHeight > maxHeight) {
-                        pageList.add(page);
-                        totalWidth += page.width;
-                        page = new TooltipPage();
-                        pageHeight = -2;
-                    }
-
-                    page.components.add(wrappedComponent);
-                    page.height = pageHeight += wrappedHeight;
-                    page.width = Math.max(page.width, wrappedWidth);
+                if (pageHeight + wrappedHeight > maxHeight) {
+                    pageList.add(page);
+                    totalWidth += page.width;
+                    page = new TooltipPage();
+                    pageHeight = -2;
                 }
+
+                page.components.add(tooltipComponent);
+                page.height = pageHeight += wrappedHeight;
+                page.width = Math.max(page.width, wrappedWidth);
             } else {
                 if (pageHeight + height > maxHeight) {
                     pageList.add(page);
@@ -157,14 +149,20 @@ public class TooltipsRenderHelper {
         return null;
     }
 
-    private static List<TooltipComponent> wrapComponent(TooltipComponent component, TextRenderer textRenderer, int maxWidth) {
-        List<TooltipComponent> wrappedComponents = new ArrayList<>();
-        if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent) {
-            Text text = ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(orderedTextTooltipComponent));
-            List<OrderedText> lines = textRenderer.wrapLines(text, maxWidth);
-            for (OrderedText line : lines) wrappedComponents.add(TooltipComponent.of(line));
-        } else wrappedComponents.add(component);
-        return wrappedComponents;
+    public static void renderVerticalLine(DrawContext context, int x, int y, int height, int z, int startColor, int endColor) {
+        context.fillGradient(x, y, x + 1, y + height, z, startColor, endColor);
+    }
+
+    public static void renderVerticalLine(DrawContext context, int x, int y, int height, int z, int color) {
+        context.fill(x, y, x + 1, y + height, z, color);
+    }
+
+    public static void renderHorizontalLine(DrawContext context, int x, int y, int width, int z, int color) {
+        context.fill(x, y, x + width, y + 1, z, color);
+    }
+
+    public static void renderRectangle(DrawContext context, int x, int y, int width, int height, int z) {
+        context.fill(x, y, x + width, y + height, z, TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue());
     }
 
     private static class TooltipPage {

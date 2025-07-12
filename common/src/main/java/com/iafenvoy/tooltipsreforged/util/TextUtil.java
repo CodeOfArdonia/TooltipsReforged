@@ -6,10 +6,13 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.StringHelper;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 import java.util.Objects;
@@ -114,6 +117,15 @@ public final class TextUtil {
             }
         }
         return 0xFFFFFFFF;
+    }
+
+    public static Text getDurationText(StatusEffectInstance effect, float multiplier) {
+        if (effect.isInfinite() || effect.getDuration() >= 60 * 100) {
+            return Text.translatable("effect.duration.infinite");
+        } else {
+            int i = MathHelper.floor((float) effect.getDuration() * multiplier);
+            return Text.literal(StringHelper.formatTicks(i));
+        }
     }
 }
 

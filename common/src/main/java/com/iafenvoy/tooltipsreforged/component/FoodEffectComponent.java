@@ -2,6 +2,7 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,7 +12,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -50,9 +50,8 @@ public class FoodEffectComponent implements TooltipComponent {
                 height += 10;
             if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue() && foodComponent.getSaturationModifier() > 0)
                 height += 10;
-            if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue())
-                return height;
-            height += foodComponent.getStatusEffects().size() * 10;
+            if (TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue())
+                height += foodComponent.getStatusEffects().size() * 10;
         }
         return height;
     }
@@ -72,24 +71,20 @@ public class FoodEffectComponent implements TooltipComponent {
         if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return foodWidth + 4;
         if (foodComponent == null) return 0;
         for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects())
-            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(Text.translatable(effect.getFirst().getTranslationKey()).append(" (99:99)")));
+            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(Text.translatable(effect.getFirst().getTranslationKey()).append(" ").append(TextUtil.getDurationText(effect.getFirst(), 1.0f))) + 10);
         return Math.max(foodWidth, effectsWidth) + 4;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         FoodComponent foodComponent = this.getFoodComponent();
-        int hunger = this.getHunger();
-        int saturation = this.getSaturation();
-
         if (foodComponent == null) return;
-
+        int hunger = this.getHunger();
         Text hungerText = Text.translatable("tooltip.%s.hunger".formatted(TooltipReforgedClient.MOD_ID));
-        Text saturationText = Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID), saturation);
-
+        Text saturationText = Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID), this.getSaturation());
         int lineY = y;
 
-        if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue()) {
+        if (TooltipReforgedConfig.INSTANCE.common.hungerTooltip.getValue() && foodComponent.getHunger() > 0) {
             context.drawText(textRenderer, hungerText, x, lineY, 0xffffffff, true);
             float fullHungers = hunger / 2f;
             boolean hasHalfHunger = (hunger % 2) != 0;
@@ -103,9 +98,10 @@ public class FoodEffectComponent implements TooltipComponent {
             lineY += textRenderer.fontHeight + 1;
         }
 
-        if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.common.saturationTooltip.getValue() && foodComponent.getSaturationModifier() > 0) {
             context.drawText(textRenderer, saturationText, x, lineY, 0xff00ffff, true);
-        else lineY -= textRenderer.fontHeight + 1;
+            lineY += textRenderer.fontHeight + 1;
+        }
 
         if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return;
         for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects()) {
@@ -114,13 +110,13 @@ public class FoodEffectComponent implements TooltipComponent {
             Sprite effectTexture = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(statusEffect.getEffectType());
             if (c == 0) c = 0xFF5454FC;
 
-            Text effectText = Text.translatable(statusEffect.getTranslationKey()).append(" (").append(StatusEffectUtil.getDurationText(statusEffect, 1.0f)).append(")");
-            lineY += textRenderer.fontHeight + 1;
+            Text effectText = Text.translatable(statusEffect.getTranslationKey()).append(" (").append(TextUtil.getDurationText(statusEffect, 1.0f)).append(")");
             if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
                 context.drawSprite(x - 1, lineY - 1, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
                 context.drawText(textRenderer, effectText, x + textRenderer.fontHeight + 2, lineY, c, true);
             } else
                 context.drawText(textRenderer, effectText, x, lineY, c, true);
+            lineY += textRenderer.fontHeight + 1;
         }
     }
 }

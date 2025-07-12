@@ -1,6 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -9,7 +10,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.text.Text;
@@ -39,7 +39,7 @@ public class PotionEffectsComponent implements TooltipComponent {
     public int getWidth(TextRenderer textRenderer) {
         int effectsWidth = 0;
         for (StatusEffectInstance effect : this.getPotionEffects())
-            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(Text.translatable(effect.getTranslationKey()).append(" (99:99)")));
+            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(Text.translatable(effect.getTranslationKey()).append(" ").append(TextUtil.getDurationText(effect, this.durationMultiplier))) + 10);
         return effectsWidth + 4;
     }
 
@@ -55,7 +55,7 @@ public class PotionEffectsComponent implements TooltipComponent {
             if (effect.getAmplifier() > 0)
                 mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + effect.getAmplifier()));
             if (!effect.isDurationBelow(20))
-                mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(effect, this.durationMultiplier));
+                mutableText = Text.translatable("potion.withDuration", mutableText, TextUtil.getDurationText(effect, this.durationMultiplier));
             lineY += textRenderer.fontHeight + 1;
             if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
                 context.drawSprite(x - 1, lineY - 1, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);

@@ -2,6 +2,7 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.render.TooltipProviders;
+import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
@@ -22,12 +23,13 @@ public class ColorBorderComponent extends BackgroundComponent {
     protected void renderBorder(DrawContext context, int x, int y, int width, int height, int z, int page) {
         int stackColor = TooltipProviders.getItemBorderColor(this.stack);
         int startColor = 0xff000000 | stackColor;
-        if (stackColor == -1) startColor = Objects.requireNonNullElse(Rarity.COMMON.formatting.getColorValue(), -1);
+        if (stackColor == -1 || stackColor == 0)
+            startColor = Objects.requireNonNullElse(Rarity.COMMON.formatting.getColorValue(), -1);
         int endColor = Static.END_COLOR;
 
-        this.renderVerticalLine(context, x, y, height - 2, z, startColor, endColor);
-        this.renderVerticalLine(context, x + width - 1, y, height - 2, z, startColor, endColor);
-        this.renderHorizontalLine(context, x, y - 1, width, z, startColor);
-        this.renderHorizontalLine(context, x, y - 1 + height - 1, width, z, endColor);
+        TooltipsRenderHelper.renderVerticalLine(context, x, y, height - 2, z, startColor, endColor);
+        TooltipsRenderHelper.renderVerticalLine(context, x + width - 1, y, height - 2, z, startColor, endColor);
+        TooltipsRenderHelper.renderHorizontalLine(context, x, y - 1, width, z, startColor);
+        TooltipsRenderHelper.renderHorizontalLine(context, x, y - 1 + height - 1, width, z, endColor);
     }
 }

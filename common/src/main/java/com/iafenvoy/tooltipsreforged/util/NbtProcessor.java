@@ -74,7 +74,7 @@ public final class NbtProcessor {
              *  4). Now we check for the colon.
              *  5). And lastly we check for the double quotation marks.
              */
-            if (singleQuotationMark == Boolean.FALSE) {
+            if (!singleQuotationMark) {
 
                 /*  2). We check if the char that is found is an opening bracket.
                         Adds the found char and gives it the "separationColour"

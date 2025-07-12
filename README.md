@@ -18,6 +18,7 @@ features for both players and developers.
 - Badge displaying which mod provide this item
 - Enchantment targets and descriptions
 - Container preview
+- Scrollable
 
 ### Features for developers
 
@@ -35,5 +36,10 @@ For spawn egg, it will display entity tag.
 
 - When some EMF resource packs installed (Such as `DetailedAnimations`), the spawn egg preview will meet some issues.
   You can close it in config.
+
+### Developer Usage
+
+Create a class implement `TooltipsReforgeEntrypoint`, then annotate with `@TooltipsProvider`(forge) or write into
+entrypoint `tooltips_reforged`(fabric)
 
 **If you have any idea, submit on GitHub!**
