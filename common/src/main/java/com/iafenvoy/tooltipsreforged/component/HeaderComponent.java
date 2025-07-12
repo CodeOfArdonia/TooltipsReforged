@@ -33,7 +33,7 @@ public class HeaderComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return TEXTURE_SIZE + (!TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue() && TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue() ? 6 : 2);
+        return TEXTURE_SIZE + 4;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class HeaderComponent implements TooltipComponent {
     public void drawText(TextRenderer textRenderer, int x, int y, Matrix4f matrix, VertexConsumerProvider.Immediate vertexConsumers) {
         float startDrawX = (float) x + this.getTitleOffset();
         float startDrawY = y + 1;
-        textRenderer.draw(this.nameText, startDrawX, startDrawY, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
+        textRenderer.draw(this.nameText, startDrawX, startDrawY - 2, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
 
         if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue()) {
             startDrawY += textRenderer.fontHeight + SPACING;
@@ -79,7 +79,7 @@ public class HeaderComponent implements TooltipComponent {
 
         if (!TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue()) return;
         Pair<Text, Integer> badgeText = BadgesUtils.getBadgeText(this.stack);
-        this.drawBadge(textRenderer, badgeText.getFirst(), x, y, context, badgeText.getSecond());
+        this.drawBadge(textRenderer, badgeText.getFirst(), x, y - 2, context, badgeText.getSecond());
     }
 
     private void drawBadge(TextRenderer textRenderer, Text text, int x, int y, DrawContext context, int fillColor) {
