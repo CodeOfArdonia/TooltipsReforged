@@ -33,7 +33,7 @@ public class HeaderComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return TEXTURE_SIZE + 4;
+        return TEXTURE_SIZE + 2;
     }
 
     @Override
@@ -45,9 +45,9 @@ public class HeaderComponent implements TooltipComponent {
         if (TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue())
             badgeWidth = textRenderer.getWidth(badgeText) + SPACING * 2;
         if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue())
-            titleWidth = textRenderer.getWidth(this.nameText) + badgeWidth;
+            titleWidth = textRenderer.getWidth(this.nameText) + badgeWidth + 2;
         else titleWidth = Math.max(textRenderer.getWidth(this.nameText), badgeWidth);
-        return Math.max(titleWidth, rarityWidth) + this.getTitleOffset() + (this.getTitleOffset() - TEXTURE_SIZE) / 2 + 2;
+        return Math.max(titleWidth, rarityWidth) + this.getTitleOffset() + (this.getTitleOffset() - TEXTURE_SIZE) / 2 - 3;
     }
 
     public int getTitleOffset() {
@@ -58,10 +58,10 @@ public class HeaderComponent implements TooltipComponent {
     public void drawText(TextRenderer textRenderer, int x, int y, Matrix4f matrix, VertexConsumerProvider.Immediate vertexConsumers) {
         float startDrawX = (float) x + this.getTitleOffset();
         float startDrawY = y + 1;
-        textRenderer.draw(this.nameText, startDrawX, startDrawY - 2, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
+        textRenderer.draw(this.nameText, startDrawX, startDrawY - 1, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
 
         if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue()) {
-            startDrawY += textRenderer.fontHeight + SPACING;
+            startDrawY += textRenderer.fontHeight + 2;
             textRenderer.draw(this.rarityName, startDrawX, startDrawY, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
         }
     }
@@ -72,10 +72,10 @@ public class HeaderComponent implements TooltipComponent {
         int startDrawY = y + (TEXTURE_SIZE - ITEM_MODEL_SIZE) / 2;
         context.drawItem(this.stack, startDrawX, startDrawY);
         int color = TooltipReforgedConfig.INSTANCE.common.itemBorderColor.getValue();
-        TooltipsRenderHelper.renderVerticalLine(context, startDrawX - 3, startDrawY - 2, 21, 21, color);
-        TooltipsRenderHelper.renderVerticalLine(context, startDrawX + 19, startDrawY - 2, 21, 0, color);
-        TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY - 3, 21, 0, color);
-        TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY + 19, 21, 0, color);
+        TooltipsRenderHelper.renderVerticalLine(context, startDrawX - 3, startDrawY - 2, 20, 21, color);
+        TooltipsRenderHelper.renderVerticalLine(context, startDrawX + 18, startDrawY - 2, 20, 0, color);
+        TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY - 3, 20, 0, color);
+        TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY + 18, 20, 0, color);
 
         if (!TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue()) return;
         Pair<Text, Integer> badgeText = BadgesUtils.getBadgeText(this.stack);
@@ -84,11 +84,11 @@ public class HeaderComponent implements TooltipComponent {
 
     private void drawBadge(TextRenderer textRenderer, Text text, int x, int y, DrawContext context, int fillColor) {
         int textWidth = textRenderer.getWidth(text);
-        int textHeight = textRenderer.fontHeight;
+        int textHeight = textRenderer.fontHeight - 2;
         int textX = x + this.getTitleOffset() + (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue() ? textRenderer.getWidth(this.nameText) + SPACING + 2 : 4);
-        int textY = (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue() ? y : y + 12) - textRenderer.fontHeight + SPACING * 2 + 3;
+        int textY = (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue() ? y : y + 12) - textRenderer.fontHeight + SPACING * 2 + 4;
         context.fill(textX - SPACING, textY - SPACING / 2, textX + textWidth + SPACING, textY + textHeight, BadgesUtils.darkenColor(fillColor, 0.9f));
-        context.drawText(textRenderer, text, textX, textY, 0xffffffff, true);
+        context.drawText(textRenderer, text, textX, textY - 1, 0xffffffff, true);
         BadgesUtils.drawFrame(context, textX - SPACING, textY - SPACING / 2, textWidth + SPACING * 2, textHeight + SPACING, 400, BadgesUtils.darkenColor(fillColor, 0.8f));
     }
 }

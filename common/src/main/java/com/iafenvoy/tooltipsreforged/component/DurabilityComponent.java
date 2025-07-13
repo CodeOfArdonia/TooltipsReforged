@@ -42,17 +42,24 @@ public class DurabilityComponent implements TooltipComponent {
     @Override
     public int getHeight() {
         if (this.isDurabilityDisabled()) return 0;
-        return TooltipReforgedConfig.INSTANCE.common.durabilityTooltip.getValue() ? 14 : 9;
+        return TooltipReforgedConfig.INSTANCE.common.durabilityTooltip.getValue() ? 13 : 9;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
         if (this.isDurabilityDisabled()) return 0;
         int durabilityTextWidth = textRenderer.getWidth(Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID)));
-        if (TooltipReforgedConfig.INSTANCE.common.durabilityTooltip.getValue())
-            return durabilityTextWidth + SPACING + WIDTH + 1;
-        Text durability = this.getDurabilityText();
-        return durabilityTextWidth + textRenderer.getWidth(durability);
+        if (TooltipReforgedConfig.INSTANCE.common.durabilityTooltip.getValue()) {
+            if (TooltipReforgedConfig.INSTANCE.common.durabilityBackground.getValue()) {
+                return durabilityTextWidth + SPACING + WIDTH - 5;
+            } else {
+                Text durability = this.getDurabilityText();
+                return durabilityTextWidth + SPACING + textRenderer.getWidth(durability) - 9;
+            }
+        } else {
+            Text durability = this.getDurabilityText();
+            return durabilityTextWidth + textRenderer.getWidth(durability);
+        }
     }
 
     @Override
@@ -63,19 +70,19 @@ public class DurabilityComponent implements TooltipComponent {
         int textHeight = textRenderer.fontHeight;
         int textY = TooltipReforgedConfig.INSTANCE.common.durabilityTooltip.getValue() ? y - textHeight + SPACING * 2 + 2 : y;
         context.drawText(textRenderer, Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID)), x, textY, 0xffffffff, true);
-        x += textRenderer.getWidth(Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID))) + SPACING;
+        x += textRenderer.getWidth(Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID))) + SPACING - 4;
 
         int damaged = this.stack.getMaxDamage() - this.stack.getDamage();
         Text durabilityText = this.getDurabilityText();
         int color = BadgesUtils.darkenColor(0xff000000 | this.stack.getItemBarColor(), 0.9f);
         boolean enhanced = TooltipReforgedConfig.INSTANCE.common.durabilityTooltip.getValue() && TooltipReforgedConfig.INSTANCE.common.durabilityBackground.getValue();
         if (enhanced) {
-            context.fill(x, textY - SPACING / 2, x + (damaged * WIDTH) / this.stack.getMaxDamage(), textY + textHeight, color);
-            BadgesUtils.drawFrame(context, x, textY - SPACING / 2, WIDTH, textHeight + SPACING, 400, BadgesUtils.darkenColor(0xff000000 | this.stack.getItemBarColor(), 0.8f));
+            context.fill(x, textY - SPACING / 2 + 1, x + (damaged * WIDTH) / this.stack.getMaxDamage(), textY + textHeight - 1, color);
+            BadgesUtils.drawFrame(context, x, textY - SPACING / 2 + 1, WIDTH, textHeight + SPACING - 2, 400, BadgesUtils.darkenColor(0xff000000 | this.stack.getItemBarColor(), 0.8f));
         } else
             durabilityText = durabilityText.copy().setStyle(Style.EMPTY.withColor(color));
         if (!durabilityText.equals(Text.empty())) {
-            int textX = enhanced ? x + ((WIDTH - textRenderer.getWidth(durabilityText)) / 2) : x - SPACING;
+            int textX = enhanced ? x + ((WIDTH - textRenderer.getWidth(durabilityText)) / 2) - 1 : x - 4;
             context.drawText(textRenderer, durabilityText, textX, textY, 0xFFFFFFFF, true);
         }
     }
