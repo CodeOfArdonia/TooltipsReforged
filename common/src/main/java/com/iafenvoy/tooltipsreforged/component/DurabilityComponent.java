@@ -14,8 +14,7 @@ import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
 public class DurabilityComponent implements TooltipComponent {
-    private static final int SPACING = 4;
-    private static final int WIDTH = 80;
+    private static final int SPACING = 4, WIDTH = 80;
     private final ItemStack stack;
 
     public DurabilityComponent(ItemStack stack) {

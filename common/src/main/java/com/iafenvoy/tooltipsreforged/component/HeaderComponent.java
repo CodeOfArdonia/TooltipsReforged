@@ -18,17 +18,16 @@ import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
 public class HeaderComponent implements TooltipComponent {
-    private static final int TEXTURE_SIZE = 20;
-    private static final int ITEM_MODEL_SIZE = 16;
-    private static final int SPACING = 4;
+    private static final int TEXTURE_SIZE = 20, ITEM_MODEL_SIZE = 16, SPACING = 4;
     private final ItemStack stack;
-    private final OrderedText nameText;
-    private final OrderedText rarityName;
+    private final OrderedText nameText, rarityName;
+    private final Pair<Text, Integer> badgePair;
 
     public HeaderComponent(ItemStack stack) {
         this.stack = stack;
         this.nameText = TooltipProviders.getDisplayName(stack).asOrderedText();
         this.rarityName = TooltipProviders.getRarityName(stack).asOrderedText();
+        this.badgePair = BadgesUtils.getBadgeText(this.stack);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class HeaderComponent implements TooltipComponent {
         int rarityWidth = 0, badgeWidth = 0, titleWidth;
         if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue())
             rarityWidth = textRenderer.getWidth(this.rarityName);
-        Text badgeText = BadgesUtils.getBadgeText(this.stack).getFirst();
+        Text badgeText = this.badgePair.getFirst();
         if (TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue())
             badgeWidth = textRenderer.getWidth(badgeText) + SPACING * 2;
         if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue())
@@ -78,8 +77,7 @@ public class HeaderComponent implements TooltipComponent {
         TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY + 18, 20, 0, color);
 
         if (!TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue()) return;
-        Pair<Text, Integer> badgeText = BadgesUtils.getBadgeText(this.stack);
-        this.drawBadge(textRenderer, badgeText.getFirst(), x, y - 2, context, badgeText.getSecond());
+        this.drawBadge(textRenderer, this.badgePair.getFirst(), x, y - 2, context, this.badgePair.getSecond());
     }
 
     private void drawBadge(TextRenderer textRenderer, Text text, int x, int y, DrawContext context, int fillColor) {

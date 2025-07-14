@@ -17,8 +17,7 @@ import net.minecraft.nbt.NbtCompound;
 @Environment(EnvType.CLIENT)
 public class PaintingComponent implements TooltipComponent {
     private final PaintingVariant variant;
-    private final int width;
-    private final int height;
+    private final int width, height;
 
     public PaintingComponent(ItemStack stack) {
         NbtCompound nbtCompound = stack.getSubNbt("EntityTag");

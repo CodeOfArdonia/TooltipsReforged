@@ -20,32 +20,28 @@ import java.util.List;
 public class PotionEffectsComponent implements TooltipComponent {
     private final ItemStack stack;
     private final float durationMultiplier;
+    private final List<StatusEffectInstance> effects;
 
     public PotionEffectsComponent(ItemStack stack, float durationMultiplier) {
         this.stack = stack;
         this.durationMultiplier = durationMultiplier;
-    }
-
-    public List<StatusEffectInstance> getPotionEffects() {
-        return PotionUtil.getPotionEffects(this.stack);
+        this.effects = PotionUtil.getPotionEffects(this.stack);
     }
 
     @Override
     public int getHeight() {
-        return this.getPotionEffects().size() * 10;
+        return this.effects.size() * 10;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
         int effectsWidth = 0;
-        for (StatusEffectInstance effect : this.getPotionEffects()) {
+        for (StatusEffectInstance effect : this.effects) {
             String text = Text.translatable(effect.getTranslationKey()).getString();
-            if (effect.getAmplifier() > 0) {
+            if (effect.getAmplifier() > 0)
                 text = Text.translatable("potion.withAmplifier", text, Text.translatable("potion.potency." + effect.getAmplifier()).getString()).getString();
-            }
-            if (!effect.isDurationBelow(20)) {
+            if (!effect.isDurationBelow(20))
                 text += " " + TextUtil.getDurationText(effect, this.durationMultiplier).getString();
-            }
             effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(text) + 14);
         }
         return effectsWidth + 4;
@@ -55,7 +51,7 @@ public class PotionEffectsComponent implements TooltipComponent {
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return;
         int lineY = y - textRenderer.fontHeight - 1;
-        for (StatusEffectInstance effect : this.getPotionEffects()) {
+        for (StatusEffectInstance effect : this.effects) {
             int c = effect.getEffectType().getColor();
             if (c == 0) c = 0xFF5454FC;
             Sprite effectTexture = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(effect.getEffectType());

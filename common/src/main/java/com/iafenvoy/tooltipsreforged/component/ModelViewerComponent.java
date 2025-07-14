@@ -26,9 +26,7 @@ public class ModelViewerComponent extends ColorBorderComponent {
     public static final Map<EntityBucketItem, Supplier<? extends EntityType<?>>> ENTITY_BUCKET_MAP = new HashMap<>();
     private static final float ROTATION_INCREMENT = 0.2f;
     private static float CURRENT_ROTATION = 0f;
-
-    private static final int ENTITY_OFFSET = 40;
-    private static final int SHADOW_LIGHT_COLOR = 15728880;
+    private static final int ENTITY_OFFSET = 40, SHADOW_LIGHT_COLOR = 15728880;
 
     private final ItemStack stack;
 

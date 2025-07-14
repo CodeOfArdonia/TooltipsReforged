@@ -16,7 +16,7 @@ features for both players and developers.
 - Armor preview for equipments
 - Entity preview for spawn eggs and bucketed entities
 - Badge displaying which mod provide this item
-- Enchantment targets and descriptions
+- Enchantment targets and descriptions (Capable with Enchantment Description Mod)
 - Container preview
 - Scrollable
 
