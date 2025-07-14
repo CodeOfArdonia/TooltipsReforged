@@ -1,5 +1,6 @@
 package com.iafenvoy.tooltipsreforged.mixin;
 
+import com.iafenvoy.tooltipsreforged.config.EffectsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LingeringPotionItemMixin {
     @Inject(method = "appendTooltip", at = @At("HEAD"), cancellable = true)
     private void wrapTooltip(CallbackInfo ci) {
-        if (TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) ci.cancel();
+        if (TooltipReforgedConfig.INSTANCE.tooltip.effectsTooltip.getValue() != EffectsRenderMode.NONE)
+            ci.cancel();
     }
 }

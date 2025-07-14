@@ -36,17 +36,17 @@ public class PaintingComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return TooltipReforgedConfig.INSTANCE.common.paintingTooltip.getValue() ? this.height : 0;
+        return TooltipReforgedConfig.INSTANCE.tooltip.paintingTooltip.getValue() ? this.height : 0;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return TooltipReforgedConfig.INSTANCE.common.paintingTooltip.getValue() ? this.width : 0;
+        return TooltipReforgedConfig.INSTANCE.tooltip.paintingTooltip.getValue() ? this.width : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (this.variant == null || !TooltipReforgedConfig.INSTANCE.common.paintingTooltip.getValue()) return;
+        if (this.variant == null || !TooltipReforgedConfig.INSTANCE.tooltip.paintingTooltip.getValue()) return;
         Sprite sprite = MinecraftClient.getInstance().getPaintingManager().getPaintingSprite(this.variant);
         context.drawSprite(x, y, 0, this.width, this.height, sprite);
     }

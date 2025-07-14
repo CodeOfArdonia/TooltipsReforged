@@ -1,5 +1,6 @@
 package com.iafenvoy.tooltipsreforged.component;
 
+import com.iafenvoy.tooltipsreforged.config.ArmorRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -41,15 +42,16 @@ public class ModelViewerComponent extends ColorBorderComponent {
         if (page != 0) return;
         CURRENT_ROTATION = (CURRENT_ROTATION + ROTATION_INCREMENT) % 360;
 
-        if (this.stack.getItem() instanceof Equipment || this.stack.getItem() instanceof SkullItem) {
-            if (!TooltipReforgedConfig.INSTANCE.common.armorTooltip.getValue()) return;
-            if (TooltipReforgedConfig.INSTANCE.common.usePlayer.getValue()) this.renderPlayer(context, x, y, z);
-            else this.renderArmorStand(context, x, y, z);
-        } else if (this.stack.getItem() instanceof EntityBucketItem bucketItem) {
-            if (!TooltipReforgedConfig.INSTANCE.common.bucketTooltip.getValue()) return;
+        if (this.stack.getItem() instanceof Equipment || this.stack.getItem() instanceof SkullItem)
+            switch ((ArmorRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.armorTooltip.getValue()) {
+                case PLAYER -> this.renderPlayer(context, x, y, z);
+                case ARMOR_STAND -> this.renderArmorStand(context, x, y, z);
+            }
+        else if (this.stack.getItem() instanceof EntityBucketItem bucketItem) {
+            if (!TooltipReforgedConfig.INSTANCE.tooltip.bucketTooltip.getValue()) return;
             this.renderBucketEntity(context, x, y, z, bucketItem);
         } else if (this.stack.getItem() instanceof SpawnEggItem spawnEggItem) {
-            if (!TooltipReforgedConfig.INSTANCE.common.spawnEggTooltip.getValue()) return;
+            if (!TooltipReforgedConfig.INSTANCE.tooltip.spawnEggTooltip.getValue()) return;
             this.renderSpawnEggEntity(context, x, y, z, spawnEggItem);
         }
     }
@@ -157,4 +159,5 @@ public class ModelViewerComponent extends ColorBorderComponent {
         matrices.pop();
         DiffuseLighting.enableGuiDepthLighting();
     }
+
 }

@@ -28,20 +28,19 @@ public class BannerPatternComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return this.texture != null && TooltipReforgedConfig.INSTANCE.common.bannerTooltip.getValue() ? 50 : 0;
+        return this.texture != null && TooltipReforgedConfig.INSTANCE.tooltip.bannerTooltip.getValue() ? 50 : 0;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return this.texture != null && TooltipReforgedConfig.INSTANCE.common.bannerTooltip.getValue() ? 20 : 0;
+        return this.texture != null && TooltipReforgedConfig.INSTANCE.tooltip.bannerTooltip.getValue() ? 20 : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (this.texture == null || !TooltipReforgedConfig.INSTANCE.common.bannerTooltip.getValue()) return;
+        if (this.texture == null || !TooltipReforgedConfig.INSTANCE.tooltip.bannerTooltip.getValue()) return;
         context.drawTexture(this.texture.getTextureId().withPrefixedPath("textures/").withSuffixedPath(".png"), x, y, 22, 4244, 0, 0, 22, 42, 64, 64);
     }
-
 
     private static List<RegistryEntry<BannerPattern>> getPatternsFor(ItemStack stack) {
         if (stack.isEmpty())

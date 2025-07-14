@@ -38,12 +38,12 @@ public class HeaderComponent implements TooltipComponent {
     @Override
     public int getWidth(TextRenderer textRenderer) {
         int rarityWidth = 0, badgeWidth = 0, titleWidth;
-        if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.tooltip.rarityTooltip.getValue())
             rarityWidth = textRenderer.getWidth(this.rarityName);
         Text badgeText = this.badgePair.getFirst();
-        if (TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.tooltip.itemGroupTooltip.getValue())
             badgeWidth = textRenderer.getWidth(badgeText) + SPACING * 2;
-        if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue())
+        if (TooltipReforgedConfig.INSTANCE.tooltip.rarityTooltip.getValue())
             titleWidth = textRenderer.getWidth(this.nameText) + badgeWidth + 2;
         else titleWidth = Math.max(textRenderer.getWidth(this.nameText), badgeWidth);
         return Math.max(titleWidth, rarityWidth) + this.getTitleOffset() + (this.getTitleOffset() - TEXTURE_SIZE) / 2 - 3;
@@ -59,7 +59,7 @@ public class HeaderComponent implements TooltipComponent {
         float startDrawY = y + 1;
         textRenderer.draw(this.nameText, startDrawX, startDrawY - 1, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
 
-        if (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue()) {
+        if (TooltipReforgedConfig.INSTANCE.tooltip.rarityTooltip.getValue()) {
             startDrawY += textRenderer.fontHeight + 2;
             textRenderer.draw(this.rarityName, startDrawX, startDrawY, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
         }
@@ -70,21 +70,21 @@ public class HeaderComponent implements TooltipComponent {
         int startDrawX = x + (TEXTURE_SIZE - ITEM_MODEL_SIZE) / 2;
         int startDrawY = y + (TEXTURE_SIZE - ITEM_MODEL_SIZE) / 2;
         context.drawItem(this.stack, startDrawX, startDrawY);
-        int color = TooltipReforgedConfig.INSTANCE.common.itemBorderColor.getValue();
+        int color = TooltipReforgedConfig.INSTANCE.misc.itemBorderColor.getValue();
         TooltipsRenderHelper.renderVerticalLine(context, startDrawX - 3, startDrawY - 2, 20, 21, color);
         TooltipsRenderHelper.renderVerticalLine(context, startDrawX + 18, startDrawY - 2, 20, 0, color);
         TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY - 3, 20, 0, color);
         TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY + 18, 20, 0, color);
 
-        if (!TooltipReforgedConfig.INSTANCE.common.itemGroupTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.tooltip.itemGroupTooltip.getValue()) return;
         this.drawBadge(textRenderer, this.badgePair.getFirst(), x, y - 2, context, this.badgePair.getSecond());
     }
 
     private void drawBadge(TextRenderer textRenderer, Text text, int x, int y, DrawContext context, int fillColor) {
         int textWidth = textRenderer.getWidth(text);
         int textHeight = textRenderer.fontHeight - 2;
-        int textX = x + this.getTitleOffset() + (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue() ? textRenderer.getWidth(this.nameText) + SPACING + 2 : 4);
-        int textY = (TooltipReforgedConfig.INSTANCE.common.rarityTooltip.getValue() ? y : y + 12) - textRenderer.fontHeight + SPACING * 2 + 4;
+        int textX = x + this.getTitleOffset() + (TooltipReforgedConfig.INSTANCE.tooltip.rarityTooltip.getValue() ? textRenderer.getWidth(this.nameText) + SPACING + 2 : 4);
+        int textY = (TooltipReforgedConfig.INSTANCE.tooltip.rarityTooltip.getValue() ? y : y + 12) - textRenderer.fontHeight + SPACING * 2 + 4;
         context.fill(textX - SPACING, textY - SPACING / 2, textX + textWidth + SPACING, textY + textHeight, BadgesUtils.darkenColor(fillColor, 0.9f));
         context.drawText(textRenderer, text, textX, textY - 1, 0xffffffff, true);
         BadgesUtils.drawFrame(context, textX - SPACING, textY - SPACING / 2, textWidth + SPACING * 2, textHeight + SPACING, 400, BadgesUtils.darkenColor(fillColor, 0.8f));

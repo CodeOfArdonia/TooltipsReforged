@@ -25,17 +25,17 @@ public class MapComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return TooltipReforgedConfig.INSTANCE.common.mapTooltip.getValue() ? 130 : 0;
+        return TooltipReforgedConfig.INSTANCE.tooltip.mapTooltip.getValue() ? 130 : 0;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return TooltipReforgedConfig.INSTANCE.common.mapTooltip.getValue() ? 128 : 0;
+        return TooltipReforgedConfig.INSTANCE.tooltip.mapTooltip.getValue() ? 128 : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (!TooltipReforgedConfig.INSTANCE.common.mapTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.tooltip.mapTooltip.getValue()) return;
         VertexConsumerProvider vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
         MapRenderer mapRenderer = MinecraftClient.getInstance().gameRenderer.getMapRenderer();
 

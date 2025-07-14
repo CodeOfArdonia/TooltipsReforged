@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MouseMixin {
     @Inject(method = "onMouseScroll(JDD)V", at = @At("HEAD"))
     private void trackWheel(long window, double horizontal, double vertical, CallbackInfo info) {
-        if (!TooltipReforgedConfig.INSTANCE.common.mouseScrollTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.misc.mouseScrollTooltip.getValue()) return;
         if (vertical > 0) TooltipScrollTracker.scrollDown();
         if (vertical < 0) TooltipScrollTracker.scrollUp();
     }

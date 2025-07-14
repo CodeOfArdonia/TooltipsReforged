@@ -1,5 +1,6 @@
 package com.iafenvoy.tooltipsreforged.component;
 
+import com.iafenvoy.tooltipsreforged.config.EffectsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
@@ -18,14 +19,14 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class PotionEffectsComponent implements TooltipComponent {
-    private final ItemStack stack;
     private final float durationMultiplier;
     private final List<StatusEffectInstance> effects;
+    private final EffectsRenderMode effectsMode;
 
     public PotionEffectsComponent(ItemStack stack, float durationMultiplier) {
-        this.stack = stack;
         this.durationMultiplier = durationMultiplier;
-        this.effects = PotionUtil.getPotionEffects(this.stack);
+        this.effects = PotionUtil.getPotionEffects(stack);
+        this.effectsMode = (EffectsRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.effectsTooltip.getValue();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class PotionEffectsComponent implements TooltipComponent {
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return;
+        if (!this.effectsMode.shouldRender()) return;
         int lineY = y - textRenderer.fontHeight - 1;
         for (StatusEffectInstance effect : this.effects) {
             int c = effect.getEffectType().getColor();
@@ -63,11 +64,10 @@ public class PotionEffectsComponent implements TooltipComponent {
                 mutableText = Text.literal(mutableText.getString() + " (" + durationText + ")");
             }
             lineY += textRenderer.fontHeight + 1;
-            if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
+            if (this.effectsMode.shouldRenderIcon()) {
                 context.drawSprite(x - 1, lineY - 1, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
                 context.drawText(textRenderer, mutableText, x + textRenderer.fontHeight + 2, lineY, c, true);
-            } else
-                context.drawText(textRenderer, mutableText, x, lineY, c, true);
+            } else context.drawText(textRenderer, mutableText, x, lineY, c, true);
         }
     }
 }

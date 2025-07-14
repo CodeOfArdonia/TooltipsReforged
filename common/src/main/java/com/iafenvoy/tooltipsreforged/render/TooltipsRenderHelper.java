@@ -40,7 +40,7 @@ public class TooltipsRenderHelper {
         MatrixStack matrices = context.getMatrices();
         List<TooltipPage> pageList = new ArrayList<>();
 
-        double scale = TooltipReforgedConfig.INSTANCE.common.scaleFactor.getValue();
+        double scale = TooltipReforgedConfig.INSTANCE.misc.scaleFactor.getValue();
 
         int maxWidth = (int) (getMaxWidth() / scale);
         int totalWidth = 0;
@@ -90,7 +90,7 @@ public class TooltipsRenderHelper {
             totalWidth += page.width;
         }
 
-        int scaledOffset = ((int) (12 * TooltipReforgedConfig.INSTANCE.common.scaleFactor.getValue())) - 12;
+        int scaledOffset = ((int) (12 * TooltipReforgedConfig.INSTANCE.misc.scaleFactor.getValue())) - 12;
         Vector2ic vector2ic = positioner.getPosition(context.getScaledWindowWidth(), context.getScaledWindowHeight(), x + scaledOffset, y - scaledOffset, (int) (totalWidth * scale), (int) (pageList.get(0).height * scale));
         int n = vector2ic.x();
         int o = vector2ic.y();
@@ -162,7 +162,7 @@ public class TooltipsRenderHelper {
     }
 
     public static void renderRectangle(DrawContext context, int x, int y, int width, int height, int z) {
-        context.fill(x, y, x + width, y + height, z, TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue());
+        context.fill(x, y, x + width, y + height, z, TooltipReforgedConfig.INSTANCE.misc.backgroundColor.getValue());
     }
 
     private static class TooltipPage {

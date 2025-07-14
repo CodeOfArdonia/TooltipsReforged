@@ -19,7 +19,7 @@ public class BackgroundComponent implements TooltipComponent {
         int j = y - 4;
         int k = width + 8;
         int l = height + 8;
-        int bgColor = TooltipReforgedConfig.INSTANCE.common.backgroundColor.getValue();
+        int bgColor = TooltipReforgedConfig.INSTANCE.misc.backgroundColor.getValue();
 
         TooltipsRenderHelper.renderHorizontalLine(context, i, j - 1, k, z, bgColor);
         TooltipsRenderHelper.renderHorizontalLine(context, i, j + l, k, z, bgColor);

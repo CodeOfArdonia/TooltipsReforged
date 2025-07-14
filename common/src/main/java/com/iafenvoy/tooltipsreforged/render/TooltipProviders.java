@@ -25,7 +25,7 @@ public class TooltipProviders {
 
     public static int getItemBorderColor(ItemStack stack) {
         Integer color = null;
-        if (TooltipReforgedConfig.INSTANCE.common.useNameColor.getValue())
+        if (TooltipReforgedConfig.INSTANCE.misc.useNameColor.getValue())
             color = TextUtil.getColorFromTranslation(getDisplayName(stack));
         if (color == null || color == -1) {
             color = stack.getRarity().formatting.getColorValue();

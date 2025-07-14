@@ -56,17 +56,17 @@ public class EnchantmentsComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return TooltipReforgedConfig.INSTANCE.common.enchantmentTooltip.getValue() ? this.enchantments.stream().reduce(0, (p, c) -> p + c.getHeight(), Integer::sum) : 0;
+        return TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue() ? this.enchantments.stream().reduce(0, (p, c) -> p + c.getHeight(), Integer::sum) : 0;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return TooltipReforgedConfig.INSTANCE.common.enchantmentTooltip.getValue() ? this.enchantments.stream().reduce(0, (p, c) -> Math.max(p, c.getWidth(textRenderer)), Math::max) : 0;
+        return TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue() ? this.enchantments.stream().reduce(0, (p, c) -> Math.max(p, c.getWidth(textRenderer)), Math::max) : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (!TooltipReforgedConfig.INSTANCE.common.enchantmentTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue()) return;
         int currentY = y;
         for (EnchantmentInfo info : this.enchantments) {
             int currentX = x;

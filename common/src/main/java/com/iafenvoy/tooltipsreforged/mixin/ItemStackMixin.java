@@ -26,6 +26,6 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "appendEnchantments", at = @At("HEAD"), cancellable = true)
     private static void cancelVanillaEnchantmentTooltips(CallbackInfo ci) {
-        if (TooltipReforgedConfig.INSTANCE.common.enchantmentTooltip.getValue()) ci.cancel();
+        if (TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue()) ci.cancel();
     }
 }

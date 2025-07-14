@@ -24,7 +24,7 @@ public class ContainerPreviewComponent implements TooltipComponent {
     }
 
     private boolean shouldRender() {
-        return this.stacks != null && TooltipReforgedConfig.INSTANCE.common.containerTooltip.getValue();
+        return this.stacks != null && TooltipReforgedConfig.INSTANCE.tooltip.containerTooltip.getValue();
     }
 
     @Override

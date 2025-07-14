@@ -40,7 +40,7 @@ public class DebugInfoComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return TooltipReforgedConfig.INSTANCE.common.debugInfoTooltip.getValue() ? this.getDisplayTexts().size() * 10 : 0;
+        return TooltipReforgedConfig.INSTANCE.tooltip.debugInfoTooltip.getValue() ? this.getDisplayTexts().size() * 10 : 0;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class DebugInfoComponent implements TooltipComponent {
 
     @Override
     public void drawText(TextRenderer textRenderer, int x, int y, Matrix4f matrix, VertexConsumerProvider.Immediate vertexConsumers) {
-        if (!TooltipReforgedConfig.INSTANCE.common.debugInfoTooltip.getValue()) return;
+        if (!TooltipReforgedConfig.INSTANCE.tooltip.debugInfoTooltip.getValue()) return;
         float currentY = y + 1;
         for (Text text : this.getDisplayTexts()) {
             textRenderer.draw(text, x, currentY, -1, true, matrix, vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
