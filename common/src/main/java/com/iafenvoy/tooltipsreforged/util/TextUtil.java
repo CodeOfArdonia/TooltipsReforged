@@ -120,7 +120,7 @@ public final class TextUtil {
     }
 
     public static Text getDurationText(StatusEffectInstance effect, float multiplier) {
-        if (effect.isInfinite() || effect.getDuration() >= 60 * 100) {
+        if (effect.isInfinite() || effect.getDuration() >= 60 * 1200) {
             return Text.translatable("effect.duration.infinite");
         } else {
             int i = MathHelper.floor((float) effect.getDuration() * multiplier);

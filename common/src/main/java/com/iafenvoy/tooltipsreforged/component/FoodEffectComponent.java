@@ -70,8 +70,17 @@ public class FoodEffectComponent implements TooltipComponent {
 
         if (!TooltipReforgedConfig.INSTANCE.common.effectsTooltip.getValue()) return foodWidth + 4;
         if (foodComponent == null) return 0;
-        for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects())
-            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(Text.translatable(effect.getFirst().getTranslationKey()).append(" ").append(TextUtil.getDurationText(effect.getFirst(), 1.0f))) + 10);
+        for (Pair<StatusEffectInstance, Float> effect : foodComponent.getStatusEffects()) {
+            StatusEffectInstance statusEffect = effect.getFirst();
+            String text = Text.translatable(statusEffect.getTranslationKey()).getString();
+            if (statusEffect.getAmplifier() > 0) {
+                text = Text.translatable("potion.withAmplifier",text,Text.translatable("potion.potency." + statusEffect.getAmplifier()).getString()).getString();
+            }
+            if (!statusEffect.isDurationBelow(20)) {
+                text += " " + TextUtil.getDurationText(statusEffect, 1.0f).getString();
+            }
+            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(text) + 14);
+        }
         return Math.max(foodWidth, effectsWidth) + 4;
     }
 
@@ -110,12 +119,21 @@ public class FoodEffectComponent implements TooltipComponent {
             Sprite effectTexture = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(statusEffect.getEffectType());
             if (c == 0) c = 0xFF5454FC;
 
-            Text effectText = Text.translatable(statusEffect.getTranslationKey()).append(" (").append(TextUtil.getDurationText(statusEffect, 1.0f)).append(")");
+            String effectName = Text.translatable(statusEffect.getTranslationKey()).getString();
+            if (statusEffect.getAmplifier() > 0) {
+                effectName = Text.translatable("potion.withAmplifier", effectName, Text.translatable("potion.potency." + statusEffect.getAmplifier()).getString()).getString();
+            }
+            String fullText = effectName;
+            if (!statusEffect.isDurationBelow(20)) {
+                fullText += " (" + TextUtil.getDurationText(statusEffect, 1.0f).getString() + ")";
+            }
+            Text renderText = Text.literal(fullText);
             if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
                 context.drawSprite(x - 1, lineY - 1, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
-                context.drawText(textRenderer, effectText, x + textRenderer.fontHeight + 2, lineY, c, true);
-            } else
-                context.drawText(textRenderer, effectText, x, lineY, c, true);
+                context.drawText(textRenderer, renderText, x + textRenderer.fontHeight + 2, lineY, c, true);
+            } else {
+                context.drawText(textRenderer, renderText, x, lineY, c, true);
+            }
             lineY += textRenderer.fontHeight + 1;
         }
     }

@@ -38,8 +38,16 @@ public class PotionEffectsComponent implements TooltipComponent {
     @Override
     public int getWidth(TextRenderer textRenderer) {
         int effectsWidth = 0;
-        for (StatusEffectInstance effect : this.getPotionEffects())
-            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(Text.translatable(effect.getTranslationKey()).append(" ").append(TextUtil.getDurationText(effect, this.durationMultiplier))) + 10);
+        for (StatusEffectInstance effect : this.getPotionEffects()) {
+            String text = Text.translatable(effect.getTranslationKey()).getString();
+            if (effect.getAmplifier() > 0) {
+                text = Text.translatable("potion.withAmplifier", text, Text.translatable("potion.potency." + effect.getAmplifier()).getString()).getString();
+            }
+            if (!effect.isDurationBelow(20)) {
+                text += " " + TextUtil.getDurationText(effect, this.durationMultiplier).getString();
+            }
+            effectsWidth = Math.max(effectsWidth, textRenderer.getWidth(text) + 14);
+        }
         return effectsWidth + 4;
     }
 
@@ -54,8 +62,10 @@ public class PotionEffectsComponent implements TooltipComponent {
             Text mutableText = Text.translatable(effect.getTranslationKey());
             if (effect.getAmplifier() > 0)
                 mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + effect.getAmplifier()));
-            if (!effect.isDurationBelow(20))
-                mutableText = Text.translatable("potion.withDuration", mutableText, TextUtil.getDurationText(effect, this.durationMultiplier));
+            if (!effect.isDurationBelow(20)) {
+                String durationText = TextUtil.getDurationText(effect, this.durationMultiplier).getString();
+                mutableText = Text.literal(mutableText.getString() + " (" + durationText + ")");
+            }
             lineY += textRenderer.fontHeight + 1;
             if (TooltipReforgedConfig.INSTANCE.common.effectsIcon.getValue()) {
                 context.drawSprite(x - 1, lineY - 1, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
