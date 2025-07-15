@@ -7,30 +7,29 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public enum EffectsRenderMode implements IConfigEnumEntry {
+public enum EnchantmentsRenderMode implements IConfigEnumEntry {
     NONE(false, false),
-    WITH_ICON(true, true),
-    WITHOUT_ICON(true, false);
+    SHIFT_DETAIL(true, false),
+    ALL(true, true);
 
-    private final boolean render, renderIcon;
+    private final boolean render, alwaysDescription;
 
-    EffectsRenderMode(boolean render, boolean renderIcon) {
+    EnchantmentsRenderMode(boolean render, boolean alwaysDescription) {
         this.render = render;
-        this.renderIcon = renderIcon;
+        this.alwaysDescription = alwaysDescription;
     }
 
     public boolean shouldRender() {
         return this.render;
     }
 
-    public boolean shouldRenderIcon() {
-        return this.renderIcon;
+    public boolean shouldAlwaysDescription() {
+        return this.alwaysDescription;
     }
-
 
     @Override
     public Text getDisplayText() {
-        return Text.translatable("config.%s.effects.render_mode.%s".formatted(TooltipReforgedClient.MOD_ID, this.name().toLowerCase(Locale.ROOT)));
+        return Text.translatable("config.%s.enchantments.render_mode.%s".formatted(TooltipReforgedClient.MOD_ID, this.name().toLowerCase(Locale.ROOT)));
     }
 
     @Override
@@ -45,7 +44,7 @@ public enum EffectsRenderMode implements IConfigEnumEntry {
 
     @Override
     public IConfigEnumEntry cycle(boolean b) {
-        EffectsRenderMode[] types = values();
+        EnchantmentsRenderMode[] types = values();
         return types[(this.ordinal() + (b ? 1 : -1)) % types.length];
     }
 }

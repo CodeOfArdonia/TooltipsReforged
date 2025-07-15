@@ -2,6 +2,7 @@ package com.iafenvoy.tooltipsreforged.config;
 
 import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -34,9 +35,15 @@ public enum DurabilityRenderMode implements IConfigEnumEntry {
         return this.renderBackground;
     }
 
+
+    @Override
+    public Text getDisplayText() {
+        return Text.translatable("config.%s.durability.render_mode.%s".formatted(TooltipReforgedClient.MOD_ID, this.name().toLowerCase(Locale.ROOT)));
+    }
+
     @Override
     public String getName() {
-        return "config.%s.durability.render_mode.%s".formatted(TooltipReforgedClient.MOD_ID, this.name().toLowerCase(Locale.ROOT));
+        return this.name();
     }
 
     @Override

@@ -1,9 +1,10 @@
 package com.iafenvoy.tooltipsreforged.component;
 
+import com.iafenvoy.tooltipsreforged.config.EnchantmentsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
-import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import com.iafenvoy.tooltipsreforged.util.RandomHelper;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -15,6 +16,7 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -41,12 +43,14 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 public class EnchantmentsComponent implements TooltipComponent {
     private final List<EnchantmentInfo> enchantments = new LinkedList<>();
+    private final EnchantmentsRenderMode mode;
 
     public EnchantmentsComponent(NbtList list) {
         this(EnchantmentHelper.fromNbt(list));
     }
 
     public EnchantmentsComponent(Map<Enchantment, Integer> map) {
+        this.mode = (EnchantmentsRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue();
         for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
             Enchantment enchantment = entry.getKey();
             String descriptionKey = enchantment.getTranslationKey() + ".desc";
@@ -54,19 +58,25 @@ public class EnchantmentsComponent implements TooltipComponent {
         }
     }
 
+    private boolean shouldDisplayDetail() {
+        return this.mode.shouldAlwaysDescription() || InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), InputUtil.GLFW_KEY_LEFT_SHIFT);
+    }
+
     @Override
     public int getHeight() {
-        return TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue() ? this.enchantments.stream().reduce(0, (p, c) -> p + c.getHeight(), Integer::sum) : 0;
+        boolean includeDetail = this.shouldDisplayDetail();
+        return this.mode.shouldRender() ? this.enchantments.stream().reduce(0, (p, c) -> p + c.getHeight(includeDetail), Integer::sum) : 0;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue() ? this.enchantments.stream().reduce(0, (p, c) -> Math.max(p, c.getWidth(textRenderer)), Math::max) : 0;
+        boolean includeDetail = this.shouldDisplayDetail();
+        return this.mode.shouldRender() ? this.enchantments.stream().reduce(0, (p, c) -> Math.max(p, c.getWidth(textRenderer, includeDetail)), Math::max) : 0;
     }
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
-        if (!TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue()) return;
+        if (!this.mode.shouldRender()) return;
         int currentY = y;
         for (EnchantmentInfo info : this.enchantments) {
             int currentX = x;
@@ -78,10 +88,11 @@ public class EnchantmentsComponent implements TooltipComponent {
             if (MinecraftClient.getInstance().options.advancedItemTooltips)
                 context.drawText(textRenderer, info.id.toString(), currentX, currentY, 5592405, true);
             currentY += 10;
-            for (MutableText text : info.descriptions) {
-                context.drawText(textRenderer, text.formatted(Formatting.DARK_GRAY), x, currentY, -1, true);
-                currentY += 10;
-            }
+            if (this.shouldDisplayDetail())
+                for (MutableText text : info.descriptions) {
+                    context.drawText(textRenderer, text.formatted(Formatting.DARK_GRAY), x, currentY, -1, true);
+                    currentY += 10;
+                }
         }
     }
 
@@ -121,14 +132,15 @@ public class EnchantmentsComponent implements TooltipComponent {
             this(enchantment, level, Objects.requireNonNullElse(Registries.ENCHANTMENT.getId(enchantment), Identifier.of("", "")), description);
         }
 
-        public int getWidth(TextRenderer textRenderer) {
+        public int getWidth(TextRenderer textRenderer, boolean includeDetail) {
             int width = textRenderer.getWidth(getEnchantmentName(this.enchantment, this.level)) + 14 + (MinecraftClient.getInstance().options.advancedItemTooltips ? textRenderer.getWidth(this.id.toString()) : 0);
-            for (MutableText text : this.descriptions) width = Math.max(width, textRenderer.getWidth(text));
+            if (includeDetail)
+                for (MutableText text : this.descriptions) width = Math.max(width, textRenderer.getWidth(text));
             return width;
         }
 
-        public int getHeight() {
-            return 10 + this.descriptions.size() * 10;
+        public int getHeight(boolean includeDetail) {
+            return 10 + (includeDetail ? this.descriptions.size() * 10 : 0);
         }
     }
 }

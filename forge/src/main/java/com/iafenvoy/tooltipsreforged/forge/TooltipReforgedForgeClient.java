@@ -3,6 +3,8 @@ package com.iafenvoy.tooltipsreforged.forge;
 import com.iafenvoy.jupiter.render.screen.ClientConfigScreen;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.hook.RarityHook;
+import net.minecraft.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -20,5 +22,7 @@ public class TooltipReforgedForgeClient {
         event.enqueueWork(TooltipReforgedClient::init);
         ForgeEntryPointLoader.init();
         FMLJavaModLoadingContext.get().getContainer().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(parent -> new ClientConfigScreen(parent, TooltipReforgedConfig.INSTANCE)));
+        //Register Hooks
+        RarityHook.register((text, rarity) -> text.fillStyle(rarity.getStyleModifier().apply(Style.EMPTY)));
     }
 }

@@ -35,7 +35,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         public final IConfigEntry<Boolean> mapTooltip = new BooleanEntry("config.tooltips_reforged.mapTooltip", true).json("mapTooltip");
         public final IConfigEntry<Boolean> itemGroupTooltip = new BooleanEntry("config.tooltips_reforged.itemGroupTooltip", true).json("itemGroupTooltip");
         public final IConfigEntry<Boolean> debugInfoTooltip = new BooleanEntry("config.tooltips_reforged.debugInfoTooltip", true).json("debugInfoTooltip");
-        public final IConfigEntry<Boolean> enchantmentTooltip = new BooleanEntry("config.tooltips_reforged.enchantmentTooltip", true).json("enchantmentTooltip");
+        public final IConfigEntry<IConfigEnumEntry> enchantmentTooltip = new EnumEntry("config.tooltips_reforged.enchantmentTooltip", EnchantmentsRenderMode.SHIFT_DETAIL).json("enchantmentTooltip");
 
         public TooltipConfig() {
             super("common", "screen.%s.tooltip".formatted(TooltipReforgedClient.MOD_ID));
