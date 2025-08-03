@@ -27,19 +27,19 @@ public class DurabilityComponent implements TooltipComponent {
         this.mode = (DurabilityRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.durabilityTooltip.getValue();
         this.enabled = this.stack.isDamageable();
         this.color = stack.getItemBarColor();
-        this.text = getDurabilityText(stack, this.mode);
+        this.text = this.enabled ? getDurabilityText(stack, this.mode) : Text.literal("");
     }
 
     private static Text getDurabilityText(ItemStack stack, DurabilityRenderMode mode) {
-        int damaged = stack.getMaxDamage() - stack.getDamage();
+        int maxDamage = stack.getMaxDamage(), damaged = maxDamage - stack.getDamage();
         if (mode.shouldInPercentage()) {
-            Text percentageText = Text.literal(" " + (damaged * 100 / stack.getMaxDamage()) + "%");
+            Text percentageText = Text.literal(" " + (damaged * 100 / maxDamage) + "%");
             return mode.shouldColorText() ? percentageText.getWithStyle(Style.EMPTY.withColor(stack.getItemBarColor())).get(0) : percentageText;
         } else return mode.shouldColorText() ? Text.literal(" ")
                 .append(Text.literal(String.valueOf(damaged)).setStyle(Style.EMPTY.withColor(stack.getItemBarColor())))
                 .append(Text.literal(" / ").setStyle(Style.EMPTY.withColor(-8355712)))
-                .append(Text.literal(String.valueOf(stack.getMaxDamage())).setStyle(Style.EMPTY.withColor(0xFF00FF00)))
-                : Text.literal(" " + damaged + " / " + stack.getMaxDamage());
+                .append(Text.literal(String.valueOf(maxDamage)).setStyle(Style.EMPTY.withColor(0xFF00FF00)))
+                : Text.literal(" " + damaged + " / " + maxDamage);
     }
 
     @Override
@@ -50,11 +50,9 @@ public class DurabilityComponent implements TooltipComponent {
     @Override
     public int getWidth(TextRenderer textRenderer) {
         if (!this.enabled) return 0;
-        int durabilityTextWidth = textRenderer.getWidth(Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID)));
-        if (this.mode.shouldRenderBackground()) {
-            if (this.mode.shouldInPercentage()) return durabilityTextWidth + SPACING + WIDTH - 5;
-            else return durabilityTextWidth + SPACING + textRenderer.getWidth(this.text) - 9;
-        } else return durabilityTextWidth + textRenderer.getWidth(this.text);
+        int width = textRenderer.getWidth(Text.translatable("tooltip.%s.durability".formatted(TooltipReforgedClient.MOD_ID)));
+        if (this.mode.shouldRenderBackground()) return width + SPACING + WIDTH - 5;
+        else return width + textRenderer.getWidth(this.text);
     }
 
     @Override
