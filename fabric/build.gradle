@@ -33,7 +33,7 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
-    modImplementation "maven.modrinth:jupiter:vKuJs0fZ"
+    modImplementation "maven.modrinth:jupiter:VYBZUMOv"
 
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
