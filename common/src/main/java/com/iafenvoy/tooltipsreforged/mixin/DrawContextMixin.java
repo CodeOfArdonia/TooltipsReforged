@@ -5,6 +5,8 @@ import com.iafenvoy.tooltipsreforged.EntryPointLoader;
 import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
 import com.iafenvoy.tooltipsreforged.util.TooltipScrollTracker;
+import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
@@ -26,19 +28,21 @@ import java.util.List;
 @Mixin(DrawContext.class)
 public abstract class DrawContextMixin {
     @Unique
-    private static ItemStack tooltips_reforged$prevStack;
+    private static final Long2ObjectMap<ItemStack> PREV_STACK = new Long2ObjectArrayMap<>();
 
     @Inject(method = "drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V", at = @At("HEAD"), cancellable = true)
     private void injectDrawTooltip(TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner, CallbackInfo ci) {
         List<TooltipComponent> mutable = new ArrayList<>(components);
-        if (Static.CACHE != null && EntryPointLoader.INSTANCE != null) {
-            if (tooltips_reforged$prevStack != Static.CACHE) TooltipScrollTracker.resetScroll();
+        long threadId = Thread.currentThread().getId();
+        if (Static.CACHE.containsKey(threadId) && EntryPointLoader.INSTANCE != null) {
+            if (PREV_STACK.get(threadId) != Static.CACHE.get(threadId))
+                TooltipScrollTracker.resetScroll();
             else TooltipScrollTracker.tick();
-            BuiltinTooltips.appendTooltip(Static.CACHE, mutable);
-            EntryPointLoader.INSTANCE.getEntries().forEach(e -> e.appendTooltip(Static.CACHE, mutable));
+            BuiltinTooltips.appendTooltip(Static.CACHE.get(threadId), mutable);
+            EntryPointLoader.INSTANCE.getEntries().forEach(e -> e.appendTooltip(Static.CACHE.get(threadId), mutable));
             TooltipsRenderHelper.drawTooltip((DrawContext) (Object) this, textRenderer, mutable, x + TooltipScrollTracker.getXOffset(), y + TooltipScrollTracker.getYOffset(), HoveredTooltipPositioner.INSTANCE);
-            tooltips_reforged$prevStack = Static.CACHE;
-            Static.CACHE = null;
+            PREV_STACK.put(threadId, Static.CACHE.get(threadId));
+            Static.CACHE.remove(threadId);
             ci.cancel();
         }
     }

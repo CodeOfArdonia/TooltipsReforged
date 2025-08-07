@@ -23,6 +23,6 @@ public class HandledScreenMixin {
     @Inject(method = "drawMouseoverTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;getTooltipFromItem(Lnet/minecraft/item/ItemStack;)Ljava/util/List;"))
     private void beforeRenderTooltip(DrawContext context, int x, int y, CallbackInfo ci) {
         assert this.focusedSlot != null;
-        Static.CACHE = this.focusedSlot.getStack();
+        Static.CACHE.put(Thread.currentThread().getId(), this.focusedSlot.getStack());
     }
 }

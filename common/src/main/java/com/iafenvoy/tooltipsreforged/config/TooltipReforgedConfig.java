@@ -47,7 +47,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         public final IConfigEntry<Boolean> useNameColor = new BooleanEntry("config.tooltips_reforged.useNameColor", false).json("useNameColor");
         public final IConfigEntry<Integer> backgroundColor = new IntegerEntry("config.tooltips_reforged.backgroundColor", 0xF0100010).json("backgroundColor");
         public final IConfigEntry<Integer> itemBorderColor = new IntegerEntry("config.tooltips_reforged.itemBorderColor", 0xFFAAAAAA).json("itemBorderColor");
-        public final IConfigEntry<Boolean> mouseScrollTooltip = new BooleanEntry("config.tooltips_reforged.mouseScrollTooltip", true).json("mouseScrollTooltip");
+        public final IConfigEntry<Boolean> mouseScrollTooltip = new BooleanEntry("config.tooltips_reforged.mouseScrollTooltip", false).json("mouseScrollTooltip");
 
         public MiscConfig() {
             super("misc", "screen.%s.misc".formatted(TooltipReforgedClient.MOD_ID));
