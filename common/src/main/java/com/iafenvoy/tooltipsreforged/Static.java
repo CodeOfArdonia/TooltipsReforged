@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class Static {
     public static final int END_COLOR = 0x505000FF;
-    public static final Long2ObjectMap<ItemStack> CACHE = new Long2ObjectArrayMap<>();
+    public static final ThreadLocal<ItemStack> CACHE = new ThreadLocal<>();
 
     @ExpectPlatform
     public static Map<String, String> getAllMods() {

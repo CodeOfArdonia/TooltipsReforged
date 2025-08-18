@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class ItemStackMixin {
     @Inject(method = "getTooltip", at = @At("RETURN"))
     private void onGetTooltip(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
-        Static.CACHE.put(Thread.currentThread().getId(), (ItemStack) (Object) this);
+        Static.CACHE.set((ItemStack) (Object) this);
     }
 
     @Inject(method = "appendEnchantments", at = @At("HEAD"), cancellable = true)

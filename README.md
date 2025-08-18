@@ -16,7 +16,8 @@ features for both players and developers.
 - Armor preview for equipments
 - Entity preview for spawn eggs and bucketed entities
 - Badge displaying which mod provide this item
-- Enchantment targets and descriptions (Capable with Enchantment Description Mod)
+- Enchantment targets and descriptions (You need to install `Enchantment Description` to display for vanilla
+  enchantments)
 - Container preview
 - Scrollable
 
@@ -39,7 +40,7 @@ For spawn egg, it will display entity tag.
 
 ### Developer Usage
 
-Create a class implement `TooltipsReforgeEntrypoint`, then annotate with `@TooltipsProvider`(forge) or write into
-entrypoint `tooltips_reforged`(fabric)
+Create a class implement `TooltipsReforgeEntrypoint`, then annotate with
+`@EntryPointProvider(slug="tooltips_reforged")`(forge) or write into entrypoint `tooltips_reforged`(fabric)
 
 **If you have any idea, submit on GitHub!**

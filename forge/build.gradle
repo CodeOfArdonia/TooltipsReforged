@@ -37,6 +37,7 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 
     modImplementation "maven.modrinth:jupiter:ZmYt4jjp"
+    modImplementation(include("com.github.IAFEnvoy.Integration:integration-forge:$integration_version"))
 }
 
 processResources {
