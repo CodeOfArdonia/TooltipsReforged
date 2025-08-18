@@ -1,6 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
+import com.iafenvoy.tooltipsreforged.config.ContainerPreviewRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import net.fabricmc.api.EnvType;
@@ -24,7 +25,7 @@ public class ContainerPreviewComponent implements TooltipComponent {
     }
 
     private boolean shouldRender() {
-        return this.stacks != null && TooltipReforgedConfig.INSTANCE.tooltip.containerTooltip.getValue();
+        return this.stacks != null && ((ContainerPreviewRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.containerTooltip.getValue()).shouldRenderImage();
     }
 
     @Override

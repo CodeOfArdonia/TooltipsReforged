@@ -13,6 +13,7 @@
     "MouseMixin",
     "OrderedTextTooltipComponentAccessor",
     "PotionItemMixin",
+    "ShulkerBoxBlockMixin",
     "TippedArrowItemMixin"
   ],
   "injectors": {

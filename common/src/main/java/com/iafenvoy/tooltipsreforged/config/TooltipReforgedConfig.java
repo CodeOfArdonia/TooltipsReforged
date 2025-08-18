@@ -29,7 +29,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         public final IConfigEntry<Boolean> bucketTooltip = new BooleanEntry("config.tooltips_reforged.bucketTooltip", true).json("bucketTooltip");
         public final IConfigEntry<Boolean> spawnEggTooltip = new BooleanEntry("config.tooltips_reforged.spawnEggTooltip", true).json("spawnEggTooltip");
         public final IConfigEntry<IConfigEnumEntry> durabilityTooltip = new EnumEntry("config.tooltips_reforged.durabilityTooltip", DurabilityRenderMode.VANILLA_BACKGROUND).json("durabilityTooltip");
-        public final IConfigEntry<Boolean> containerTooltip = new BooleanEntry("config.tooltips_reforged.containerTooltip", true).json("containerTooltip");
+        public final IConfigEntry<IConfigEnumEntry> containerTooltip = new EnumEntry("config.tooltips_reforged.containerTooltip", ContainerPreviewRenderMode.IMAGE).json("containerTooltip");
         public final IConfigEntry<Boolean> paintingTooltip = new BooleanEntry("config.tooltips_reforged.paintingTooltip", true).json("paintingTooltip");
         public final IConfigEntry<Boolean> bannerTooltip = new BooleanEntry("config.tooltips_reforged.bannerTooltip", true).json("bannerTooltip");
         public final IConfigEntry<Boolean> mapTooltip = new BooleanEntry("config.tooltips_reforged.mapTooltip", true).json("mapTooltip");
