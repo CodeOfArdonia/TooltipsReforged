@@ -58,8 +58,13 @@ public class EnchantmentsComponent implements TooltipComponent {
         }
     }
 
+    private static boolean isShiftDown() {
+        long handle = MinecraftClient.getInstance().getWindow().getHandle();
+        return InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(handle, InputUtil.GLFW_KEY_RIGHT_SHIFT);
+    }
+
     private boolean shouldDisplayDetail() {
-        return this.mode.shouldAlwaysDescription() || InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), InputUtil.GLFW_KEY_LEFT_SHIFT);
+        return this.mode.shouldAlwaysDescription() || isShiftDown();
     }
 
     @Override
