@@ -67,21 +67,24 @@ public class DebugInfoComponent implements TooltipComponent {
             if (KEY_MANAGER.ctrl()) {
                 first.append(Text.literal("[CTRL %s] ".formatted(I18n.translate(ctrlInfo.getLeft()))).formatted(Formatting.WHITE));
                 infos = ctrlInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
-            } else first.append(Text.literal("[CTRL %s] ".formatted(I18n.translate(ctrlInfo.getLeft()))).formatted(Formatting.GRAY));
+            } else
+                first.append(Text.literal("[CTRL %s] ".formatted(I18n.translate(ctrlInfo.getLeft()))).formatted(Formatting.GRAY));
         }
         Pair<String, List<MutableText>> shiftInfo = this.getShiftInfo();
         if (shiftInfo != null) {
             if (KEY_MANAGER.shift()) {
                 first.append(Text.literal("[SHIFT %s] ".formatted(I18n.translate(shiftInfo.getLeft()))).formatted(Formatting.WHITE));
                 infos = shiftInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
-            } else first.append(Text.literal("[SHIFT %s] ".formatted(I18n.translate(shiftInfo.getLeft()))).formatted(Formatting.GRAY));
+            } else
+                first.append(Text.literal("[SHIFT %s] ".formatted(I18n.translate(shiftInfo.getLeft()))).formatted(Formatting.GRAY));
         }
         Pair<String, List<MutableText>> altInfo = this.getAltInfo();
         if (altInfo != null) {
             if (KEY_MANAGER.alt()) {
                 first.append(Text.literal("[ALT %s] ".formatted(I18n.translate(altInfo.getLeft()))).formatted(Formatting.WHITE));
                 infos = altInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
-            } else first.append(Text.literal("[ALT %s] ".formatted(I18n.translate(altInfo.getLeft()))).formatted(Formatting.GRAY));
+            } else
+                first.append(Text.literal("[ALT %s] ".formatted(I18n.translate(altInfo.getLeft()))).formatted(Formatting.GRAY));
         }
         return ImmutableList.<MutableText>builder().add(first).addAll(infos).build();
     }
