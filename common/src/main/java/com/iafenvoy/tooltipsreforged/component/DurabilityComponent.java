@@ -3,6 +3,7 @@ package com.iafenvoy.tooltipsreforged.component;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.DurabilityRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,8 +15,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
-public class DurabilityComponent implements TooltipComponent {
-    private static final int SPACING = 4, WIDTH = 80;
+public class DurabilityComponent implements TooltipComponent, RenderHelper {
+    private static final int WIDTH = 80;
     private final ItemStack stack;
     private final DurabilityRenderMode mode;
     private final boolean enabled;

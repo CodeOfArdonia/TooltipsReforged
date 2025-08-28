@@ -2,6 +2,7 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.config.EnchantmentsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import com.iafenvoy.tooltipsreforged.util.RandomHelper;
 import com.iafenvoy.tooltipsreforged.util.TextUtil;
@@ -11,17 +12,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
@@ -31,9 +25,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +32,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-public class EnchantmentsComponent implements TooltipComponent {
+public class EnchantmentsComponent implements TooltipComponent, RenderHelper {
     private final List<EnchantmentInfo> enchantments = new LinkedList<>();
     private final EnchantmentsRenderMode mode;
 
@@ -88,7 +79,7 @@ public class EnchantmentsComponent implements TooltipComponent {
             Text name = getEnchantmentName(info.enchantment, info.level);
             context.drawText(textRenderer, name, currentX, currentY, -1, true);
             currentX += textRenderer.getWidth(name) + 2;
-            this.drawItem(context, RandomHelper.pick(InfoCollectHelper.getEnchantmentTarget(info.enchantment.target), Items.AIR), currentX, currentY);
+            this.drawStack(context, new ItemStack(RandomHelper.pick(InfoCollectHelper.getEnchantmentTarget(info.enchantment.target), Items.AIR)), currentX, currentY, 10);
             currentX += 12;
             if (MinecraftClient.getInstance().options.advancedItemTooltips)
                 context.drawText(textRenderer, info.id.toString(), currentX, currentY, 5592405, true);
@@ -108,28 +99,6 @@ public class EnchantmentsComponent implements TooltipComponent {
         if (level != 1 || enchantment.getMaxLevel() != 1)
             mutableText.append(ScreenTexts.SPACE).append(Text.translatable("enchantment.level." + level)).append(Text.literal("/").append(Text.translatable("enchantment.level." + enchantment.getMaxLevel())).formatted(Formatting.DARK_GRAY));
         return mutableText;
-    }
-
-    public void drawItem(DrawContext context, Item item, int x, int y) {
-        this.drawItem(context, MinecraftClient.getInstance().player, MinecraftClient.getInstance().world, item, x, y);
-    }
-
-    private void drawItem(DrawContext context, @Nullable LivingEntity entity, @Nullable World world, Item item, int x, int y) {
-        if (item == Items.AIR) return;
-        ItemStack stack = new ItemStack(item);
-        MinecraftClient client = MinecraftClient.getInstance();
-        BakedModel bakedModel = client.getItemRenderer().getModel(stack, world, entity, 0);
-        MatrixStack matrices = context.getMatrices();
-        matrices.push();
-        matrices.translate(x + 5, y + 4, 150);
-        matrices.multiplyPositionMatrix((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
-        matrices.scale(10, 10, 10);
-        boolean bl = !bakedModel.isSideLit();
-        if (bl) DiffuseLighting.disableGuiDepthLighting();
-        client.getItemRenderer().renderItem(stack, ModelTransformationMode.GUI, false, matrices, context.getVertexConsumers(), 15728880, OverlayTexture.DEFAULT_UV, bakedModel);
-        context.draw();
-        if (bl) DiffuseLighting.enableGuiDepthLighting();
-        matrices.pop();
     }
 
     private record EnchantmentInfo(Enchantment enchantment, int level, Identifier id, List<MutableText> descriptions) {

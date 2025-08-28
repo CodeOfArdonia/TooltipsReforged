@@ -13,31 +13,38 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class BuiltinTooltips {
     public static void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
         if (!components.isEmpty()) components.remove(0);
-        components.add(0, new HeaderComponent(stack));
-
+        List<TooltipComponent> headers = new LinkedList<>();
+        //Header
+        headers.add(new HeaderComponent(stack));
+        //Effects
         if (stack.getItem() instanceof LingeringPotionItem)
-            components.add(1, new PotionEffectsComponent(stack, 0.25f));
+            headers.add(new PotionEffectsComponent(stack, 0.25f));
         else if (stack.getItem() instanceof PotionItem)
-            components.add(1, new PotionEffectsComponent(stack, 1));
+            headers.add(new PotionEffectsComponent(stack, 1));
         else if (stack.getItem() instanceof TippedArrowItem)
-            components.add(1, new PotionEffectsComponent(stack, 0.125f));
-        else if (stack.getItem().getFoodComponent() != null)
-            components.add(1, new FoodEffectComponent(stack));
-        else if (stack.getItem() instanceof EnchantedBookItem)
-            components.add(1, new EnchantmentsComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
-        else if (stack.getItem().isEnchantable(stack))
-            components.add(1, new EnchantmentsComponent(EnchantmentHelper.get(stack)));
+            headers.add(new PotionEffectsComponent(stack, 0.125f));
+        //Food
+        if (stack.getItem().getFoodComponent() != null)
+            headers.add(new FoodEffectComponent(stack));
+        //Enchantments
+        if (stack.getItem() instanceof EnchantedBookItem)
+            headers.add(new EnchantmentsComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
+        if (stack.getItem().isEnchantable(stack))
+            headers.add(new EnchantmentsComponent(EnchantmentHelper.get(stack)));
+        components.addAll(0, headers);
 
+        //Equipments
         if (stack.getItem() instanceof Equipment || stack.getItem() instanceof SkullItem || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
             components.add(new ModelViewerComponent(stack));
         components.add(new ColorBorderComponent(stack));
-
+        //Misc
         components.add(new ContainerPreviewComponent(stack));
         if (stack.getItem() instanceof FilledMapItem)
             components.add(new MapComponent(stack));

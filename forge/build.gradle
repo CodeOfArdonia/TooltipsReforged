@@ -38,6 +38,8 @@ dependencies {
 
     modImplementation "maven.modrinth:jupiter:ZmYt4jjp"
     modImplementation(include("com.github.IAFEnvoy.Integration:integration-forge:$integration_version"))
+
+    modCompileOnly "curse.maven:celestial-enchantments-988897:6835447"
 }
 
 processResources {

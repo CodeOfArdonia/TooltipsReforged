@@ -48,11 +48,11 @@ public class ModelViewerComponent extends ColorBorderComponent {
                 case ARMOR_STAND -> this.renderArmorStand(context, x, y, z);
             }
         else if (this.stack.getItem() instanceof EntityBucketItem bucketItem) {
-            if (!TooltipReforgedConfig.INSTANCE.tooltip.bucketTooltip.getValue()) return;
-            this.renderBucketEntity(context, x, y, z, bucketItem);
+            if (TooltipReforgedConfig.INSTANCE.tooltip.bucketTooltip.getValue())
+                this.renderBucketEntity(context, x, y, z, bucketItem);
         } else if (this.stack.getItem() instanceof SpawnEggItem spawnEggItem) {
-            if (!TooltipReforgedConfig.INSTANCE.tooltip.spawnEggTooltip.getValue()) return;
-            this.renderSpawnEggEntity(context, x, y, z, spawnEggItem);
+            if (TooltipReforgedConfig.INSTANCE.tooltip.spawnEggTooltip.getValue())
+                this.renderSpawnEggEntity(context, x, y, z, spawnEggItem);
         }
     }
 
