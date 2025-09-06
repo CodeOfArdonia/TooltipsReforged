@@ -29,11 +29,8 @@ public class ModelViewerComponent extends ColorBorderComponent {
     private static float CURRENT_ROTATION = 0f;
     private static final int ENTITY_OFFSET = 40, SHADOW_LIGHT_COLOR = 15728880;
 
-    private final ItemStack stack;
-
     public ModelViewerComponent(ItemStack stack) {
         super(stack);
-        this.stack = stack;
     }
 
     @Override

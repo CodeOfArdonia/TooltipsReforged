@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class FoodEffectComponent implements TooltipComponent {
-    private final ItemStack stack;
+    protected final ItemStack stack;
     private final EffectsRenderMode effectsMode;
 
     public FoodEffectComponent(ItemStack stack) {

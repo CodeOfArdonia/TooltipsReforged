@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class ColorBorderComponent extends BackgroundComponent {
-    private final ItemStack stack;
+    protected final ItemStack stack;
 
     public ColorBorderComponent(ItemStack stack) {
         this.stack = stack;

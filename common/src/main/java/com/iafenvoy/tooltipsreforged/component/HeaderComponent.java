@@ -20,7 +20,7 @@ import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
 public class HeaderComponent implements TooltipComponent, RenderHelper {
-    private final ItemStack stack;
+    protected final ItemStack stack;
     private final ItemDisplayMode itemDisplayMode;
     private final OrderedText nameText, rarityName;
     private final Pair<Text, Integer> badgePair;

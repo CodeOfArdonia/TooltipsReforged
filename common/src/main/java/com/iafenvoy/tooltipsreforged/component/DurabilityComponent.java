@@ -17,7 +17,7 @@ import net.minecraft.text.Text;
 @Environment(EnvType.CLIENT)
 public class DurabilityComponent implements TooltipComponent, RenderHelper {
     private static final int WIDTH = 80;
-    private final ItemStack stack;
+    protected final ItemStack stack;
     private final DurabilityRenderMode mode;
     private final boolean enabled;
     private final int color;

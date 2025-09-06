@@ -17,7 +17,7 @@ import net.minecraft.item.map.MapState;
 
 @Environment(EnvType.CLIENT)
 public class MapComponent implements TooltipComponent {
-    private final ItemStack stack;
+    protected final ItemStack stack;
 
     public MapComponent(ItemStack stack) {
         this.stack = stack;

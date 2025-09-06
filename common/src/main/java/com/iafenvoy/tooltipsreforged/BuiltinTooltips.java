@@ -56,8 +56,8 @@ public class BuiltinTooltips {
         if (MinecraftClient.getInstance().options.advancedItemTooltips) {
             for (int i = 0; i < components.size(); i++) {
                 TooltipComponent component = components.get(i);
-                if (component instanceof OrderedTextTooltipComponent orderedTextTooltipComponent)
-                    if (ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(orderedTextTooltipComponent)).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
+                if (component instanceof OrderedTextTooltipComponent ordered)
+                    if (ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(ordered)).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
                         components.set(i, new DurabilityComponent(stack));
                         break;
                     }
