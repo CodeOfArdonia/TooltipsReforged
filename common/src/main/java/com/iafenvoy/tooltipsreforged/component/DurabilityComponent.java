@@ -26,14 +26,14 @@ public class DurabilityComponent implements TooltipComponent, RenderHelper {
     public DurabilityComponent(ItemStack stack) {
         this.stack = stack;
         this.mode = (DurabilityRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.durabilityTooltip.getValue();
-        this.enabled = this.stack.isDamageable();
+        this.enabled = this.stack.isDamageable() && this.stack.getMaxDamage() > 0;
         this.color = stack.getItemBarColor();
         this.text = this.enabled ? getDurabilityText(stack, this.mode) : Text.literal("");
     }
 
     private static Text getDurabilityText(ItemStack stack, DurabilityRenderMode mode) {
         int maxDamage = stack.getMaxDamage(), damaged = maxDamage - stack.getDamage();
-        if (mode.shouldInPercentage()) {
+        if (mode.shouldInPercentage() && maxDamage > 0) {
             Text percentageText = Text.literal(" " + (damaged * 100 / maxDamage) + "%");
             return mode.shouldColorText() ? percentageText.getWithStyle(Style.EMPTY.withColor(stack.getItemBarColor())).get(0) : percentageText;
         } else return mode.shouldColorText() ? Text.literal(" ")
