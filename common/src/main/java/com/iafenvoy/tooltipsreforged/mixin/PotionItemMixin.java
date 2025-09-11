@@ -1,6 +1,6 @@
 package com.iafenvoy.tooltipsreforged.mixin;
 
-import com.iafenvoy.tooltipsreforged.config.EffectsRenderMode;
+import com.iafenvoy.tooltipsreforged.config.mode.EffectsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

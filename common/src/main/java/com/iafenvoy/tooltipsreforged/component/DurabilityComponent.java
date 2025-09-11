@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
-import com.iafenvoy.tooltipsreforged.config.DurabilityRenderMode;
+import com.iafenvoy.tooltipsreforged.config.mode.DurabilityRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;

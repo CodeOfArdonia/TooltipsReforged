@@ -5,6 +5,7 @@ import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
+import com.iafenvoy.tooltipsreforged.config.mode.*;
 import net.minecraft.util.Identifier;
 
 public class TooltipReforgedConfig extends AutoInitConfigContainer {
@@ -55,6 +56,9 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         public final IConfigEntry<Integer> itemZoomSize = new IntegerEntry("config.tooltips_reforged.itemZoomSize", 100, 0, 2048).json("itemZoomSize");
         public final IConfigEntry<Integer> itemZoomXOffset = new IntegerEntry("config.tooltips_reforged.itemZoomXOffset", 0).json("itemZoomXOffset");
         public final IConfigEntry<Integer> itemZoomYOffset = new IntegerEntry("config.tooltips_reforged.itemZoomYOffset", 0).json("itemZoomYOffset");
+        public final SeparatorEntry s3 = new SeparatorEntry();
+        public final IConfigEntry<IConfigEnumEntry> enchantmentSort = new EnumEntry("config.tooltips_reforged.enchantmentSort", EnchantmentSortMode.DEFAULT).json("enchantmentSort");
+        public final IConfigEntry<Boolean> advancedEnchantmentColor = new BooleanEntry("config.tooltips_reforged.advancedEnchantmentColor", false).json("advancedEnchantmentColor");
 
         public MiscConfig() {
             super("misc", "screen.%s.misc".formatted(TooltipReforgedClient.MOD_ID));

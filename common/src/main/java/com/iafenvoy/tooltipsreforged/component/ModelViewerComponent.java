@@ -1,6 +1,6 @@
 package com.iafenvoy.tooltipsreforged.component;
 
-import com.iafenvoy.tooltipsreforged.config.ArmorRenderMode;
+import com.iafenvoy.tooltipsreforged.config.mode.ArmorRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

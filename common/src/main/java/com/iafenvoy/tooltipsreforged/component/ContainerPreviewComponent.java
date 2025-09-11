@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
-import com.iafenvoy.tooltipsreforged.config.ContainerPreviewRenderMode;
+import com.iafenvoy.tooltipsreforged.config.mode.ContainerPreviewRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import net.fabricmc.api.EnvType;

@@ -1,7 +1,8 @@
 package com.iafenvoy.tooltipsreforged.component;
 
-import com.iafenvoy.tooltipsreforged.config.EnchantmentsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.config.mode.EnchantmentSortMode;
+import com.iafenvoy.tooltipsreforged.config.mode.EnchantmentsRenderMode;
 import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.util.InfoCollectHelper;
 import com.iafenvoy.tooltipsreforged.util.RandomHelper;
@@ -35,6 +36,7 @@ import java.util.Objects;
 public class EnchantmentsComponent implements TooltipComponent, RenderHelper {
     private final List<EnchantmentInfo> enchantments = new LinkedList<>();
     private final EnchantmentsRenderMode mode;
+    private final boolean extraColor;
 
     public EnchantmentsComponent(NbtList list) {
         this(EnchantmentHelper.fromNbt(list));
@@ -47,6 +49,8 @@ public class EnchantmentsComponent implements TooltipComponent, RenderHelper {
             String descriptionKey = enchantment.getTranslationKey() + ".desc";
             this.enchantments.add(new EnchantmentInfo(enchantment, entry.getValue(), I18n.hasTranslation(descriptionKey) ? TextUtil.splitText(Text.literal(I18n.translate(descriptionKey)), 300, MinecraftClient.getInstance().textRenderer) : List.of()));
         }
+        this.enchantments.sort(((EnchantmentSortMode) TooltipReforgedConfig.INSTANCE.misc.enchantmentSort.getValue()).getComparator());
+        this.extraColor = TooltipReforgedConfig.INSTANCE.misc.advancedEnchantmentColor.getValue();
     }
 
     private static boolean isShiftDown() {
@@ -76,7 +80,7 @@ public class EnchantmentsComponent implements TooltipComponent, RenderHelper {
         int currentY = y;
         for (EnchantmentInfo info : this.enchantments) {
             int currentX = x;
-            Text name = getEnchantmentName(info.enchantment, info.level);
+            Text name = getEnchantmentName(info.enchantment, info.level, this.extraColor);
             context.drawText(textRenderer, name, currentX, currentY, -1, true);
             currentX += textRenderer.getWidth(name) + 2;
             this.drawStack(context, new ItemStack(RandomHelper.pick(InfoCollectHelper.getEnchantmentTarget(info.enchantment.target), Items.AIR)), currentX, currentY, 10);
@@ -92,22 +96,24 @@ public class EnchantmentsComponent implements TooltipComponent, RenderHelper {
         }
     }
 
-    private static Text getEnchantmentName(Enchantment enchantment, int level) {
+    private static Text getEnchantmentName(Enchantment enchantment, int level, boolean extraColor) {
         MutableText mutableText = Text.translatable(enchantment.getTranslationKey());
         if (enchantment.isCursed()) mutableText.formatted(Formatting.RED);
+        else if (extraColor && enchantment.getMaxLevel() < level) mutableText.formatted(Formatting.LIGHT_PURPLE);
+        else if (extraColor) mutableText.formatted(Formatting.GREEN);
         else mutableText.formatted(Formatting.GRAY);
         if (level != 1 || enchantment.getMaxLevel() != 1)
             mutableText.append(ScreenTexts.SPACE).append(Text.translatable("enchantment.level." + level)).append(Text.literal("/").append(Text.translatable("enchantment.level." + enchantment.getMaxLevel())).formatted(Formatting.DARK_GRAY));
         return mutableText;
     }
 
-    private record EnchantmentInfo(Enchantment enchantment, int level, Identifier id, List<MutableText> descriptions) {
+    public record EnchantmentInfo(Enchantment enchantment, int level, Identifier id, List<MutableText> descriptions) {
         public EnchantmentInfo(Enchantment enchantment, int level, List<MutableText> description) {
             this(enchantment, level, Objects.requireNonNullElse(Registries.ENCHANTMENT.getId(enchantment), Identifier.of("", "")), description);
         }
 
         public int getWidth(TextRenderer textRenderer, boolean includeDetail) {
-            int width = textRenderer.getWidth(getEnchantmentName(this.enchantment, this.level)) + 14 + (MinecraftClient.getInstance().options.advancedItemTooltips ? textRenderer.getWidth(this.id.toString()) : 0);
+            int width = textRenderer.getWidth(getEnchantmentName(this.enchantment, this.level, false)) + 14 + (MinecraftClient.getInstance().options.advancedItemTooltips ? textRenderer.getWidth(this.id.toString()) : 0);
             if (includeDetail)
                 for (MutableText text : this.descriptions) width = Math.max(width, textRenderer.getWidth(text));
             return width;

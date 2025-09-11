@@ -1,4 +1,4 @@
-package com.iafenvoy.tooltipsreforged.config;
+package com.iafenvoy.tooltipsreforged.config.mode;
 
 import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;

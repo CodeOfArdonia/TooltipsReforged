@@ -1,6 +1,6 @@
 package com.iafenvoy.tooltipsreforged.component;
 
-import com.iafenvoy.tooltipsreforged.config.ItemDisplayMode;
+import com.iafenvoy.tooltipsreforged.config.mode.ItemDisplayMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.render.TooltipProviders;

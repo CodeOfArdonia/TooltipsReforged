@@ -1,5 +1,6 @@
 {
   "category.tooltips_reforged.keys": "提示框：重铸",
+  "config.tooltips_reforged.advancedEnchantmentColor": "额外附魔颜色",
   "config.tooltips_reforged.armor.render_mode.armor_stand": "使用盔甲架渲染",
   "config.tooltips_reforged.armor.render_mode.none": "关闭",
   "config.tooltips_reforged.armor.render_mode.player": "使用玩家渲染",
@@ -22,6 +23,11 @@
   "config.tooltips_reforged.effects.render_mode.with_icon": "带效果图标显示",
   "config.tooltips_reforged.effects.render_mode.without_icon": "不带效果图标显示",
   "config.tooltips_reforged.effectsTooltip": "效果提示框",
+  "config.tooltips_reforged.enchantment.sort.default": "默认",
+  "config.tooltips_reforged.enchantment.sort.level": "等级",
+  "config.tooltips_reforged.enchantment.sort.name": "名称",
+  "config.tooltips_reforged.enchantment.sort.type": "类型",
+  "config.tooltips_reforged.enchantmentSort": "附魔排序方式",
   "config.tooltips_reforged.enchantmentTooltip": "增强版附魔显示",
   "config.tooltips_reforged.enchantments.render_mode.all": "完整显示",
   "config.tooltips_reforged.enchantments.render_mode.none": "关闭",

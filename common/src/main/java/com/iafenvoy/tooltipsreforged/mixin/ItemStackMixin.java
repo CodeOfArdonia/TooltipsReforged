@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.mixin;
 
 import com.iafenvoy.tooltipsreforged.Static;
-import com.iafenvoy.tooltipsreforged.config.EnchantmentsRenderMode;
+import com.iafenvoy.tooltipsreforged.config.mode.EnchantmentsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
