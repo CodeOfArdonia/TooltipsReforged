@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 @Mixin(DrawContext.class)
@@ -33,13 +34,17 @@ public abstract class DrawContextMixin {
     @Inject(method = "drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V", at = @At("HEAD"), cancellable = true)
     private void injectDrawTooltip(TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner, CallbackInfo ci) {
         List<TooltipComponent> mutable = new ArrayList<>(components);
-        if (Static.CACHE.get() != null) {
-            if (PREV_STACK.get() != Static.CACHE.get()) TooltipScrollTracker.resetScroll();
+        ItemStack stack = Static.CACHE.get();
+        if (stack != null) {
+            if (PREV_STACK.get() != stack) TooltipScrollTracker.resetScroll();
             else TooltipScrollTracker.tick();
-            BuiltinTooltips.appendTooltip(Static.CACHE.get(), mutable);
-            EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(Static.CACHE.get(), mutable));
+            TooltipComponent component = Static.getExtraComponent(stack);
+            if (component != null) mutable.add(component);
+            BuiltinTooltips.appendTooltip(stack, mutable);
+            EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(stack, mutable));
+            mutable.removeIf(Objects::isNull);
             TooltipsRenderHelper.drawTooltip((DrawContext) (Object) this, textRenderer, mutable, x + TooltipScrollTracker.getXOffset(), y + TooltipScrollTracker.getYOffset(), HoveredTooltipPositioner.INSTANCE);
-            PREV_STACK.set(Static.CACHE.get());
+            PREV_STACK.set(stack);
             Static.CACHE.remove();
             ci.cancel();
         }
