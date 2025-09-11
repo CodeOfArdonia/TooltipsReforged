@@ -7,6 +7,7 @@
   "config.tooltips_reforged.armorTooltip": "装备渲染提示框",
   "config.tooltips_reforged.backgroundColor": "背景颜色",
   "config.tooltips_reforged.bannerTooltip": "旗帜图案浏览提示框",
+  "config.tooltips_reforged.blacklist": "渲染黑名单",
   "config.tooltips_reforged.bucketTooltip": "桶装生物渲染提示框",
   "config.tooltips_reforged.container.render_mode.image": "图片",
   "config.tooltips_reforged.container.render_mode.none": "不显示",

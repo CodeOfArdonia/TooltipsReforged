@@ -5,6 +5,7 @@ import com.iafenvoy.tooltipsreforged.BuiltinTooltips;
 import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.api.TooltipsReforgeEntrypoint;
+import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
 import com.iafenvoy.tooltipsreforged.util.TooltipScrollTracker;
 import net.fabricmc.api.EnvType;
@@ -15,6 +16,7 @@ import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,7 +37,7 @@ public abstract class DrawContextMixin {
     private void injectDrawTooltip(TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner, CallbackInfo ci) {
         List<TooltipComponent> mutable = new ArrayList<>(components);
         ItemStack stack = Static.CACHE.get();
-        if (stack != null) {
+        if (stack != null && !TooltipReforgedConfig.INSTANCE.misc.blacklist.getValue().contains(Registries.ITEM.getId(stack.getItem()).toString())) {
             if (PREV_STACK.get() != stack) TooltipScrollTracker.resetScroll();
             else TooltipScrollTracker.tick();
             TooltipComponent component = Static.getExtraComponent(stack);
