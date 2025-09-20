@@ -40,14 +40,12 @@ public abstract class DrawContextMixin {
         if (stack != null && !TooltipReforgedConfig.INSTANCE.misc.blacklist.getValue().contains(Registries.ITEM.getId(stack.getItem()).toString())) {
             if (PREV_STACK.get() != stack) TooltipScrollTracker.resetScroll();
             else TooltipScrollTracker.tick();
-            TooltipComponent component = Static.getExtraComponent(stack);
-            if (component != null) mutable.add(component);
+            PREV_STACK.set(stack);
+            Static.CACHE.remove();
             BuiltinTooltips.appendTooltip(stack, mutable);
             EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(stack, mutable));
             mutable.removeIf(Objects::isNull);
             TooltipsRenderHelper.drawTooltip((DrawContext) (Object) this, textRenderer, mutable, x + TooltipScrollTracker.getXOffset(), y + TooltipScrollTracker.getYOffset(), HoveredTooltipPositioner.INSTANCE);
-            PREV_STACK.set(stack);
-            Static.CACHE.remove();
             ci.cancel();
         }
     }
