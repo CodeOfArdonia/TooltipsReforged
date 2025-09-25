@@ -20,6 +20,7 @@ features for both players and developers.
   enchantments)
 - Container preview
 - Scrollable
+- Backport 1.21.2+ texture features.
 
 ### Features for developers
 
