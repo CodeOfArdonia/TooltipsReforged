@@ -54,6 +54,8 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         public final IConfigEntry<Boolean> mouseScrollTooltip = new BooleanEntry("config.tooltips_reforged.mouseScrollTooltip", false).json("mouseScrollTooltip");
         public final SeparatorEntry s2 = new SeparatorEntry();
         public final IConfigEntry<Boolean> useNameColor = new BooleanEntry("config.tooltips_reforged.useNameColor", false).json("useNameColor");
+        public final IConfigEntry<Boolean> useImageBackground = new BooleanEntry("config.tooltips_reforged.useImageBackground", false).json("useImageBackground");
+        public final IConfigEntry<Boolean> useImageBorder = new BooleanEntry("config.tooltips_reforged.useImageBorder", false).json("useImageBorder");
         public final IConfigEntry<Integer> backgroundColor = new IntegerEntry("config.tooltips_reforged.backgroundColor", 0xF0100010).json("backgroundColor");
         public final IConfigEntry<Integer> itemBorderColor = new IntegerEntry("config.tooltips_reforged.itemBorderColor", 0xFFAAAAAA).json("itemBorderColor");
         public final SeparatorEntry s3 = new SeparatorEntry();

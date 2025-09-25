@@ -51,6 +51,8 @@
   "config.tooltips_reforged.saturationTooltip": "饱食度提示框",
   "config.tooltips_reforged.scaleFactor": "提示框缩放比例",
   "config.tooltips_reforged.spawnEggTooltip": "刷怪蛋生物渲染提示框",
+  "config.tooltips_reforged.useImageBackground": "使用贴图背景（类似1.21.2+特性）",
+  "config.tooltips_reforged.useImageBorder": "使用贴图边框（类似1.21.2+特性）",
   "config.tooltips_reforged.useNameColor": "使用物品名称颜色作为提示框颜色",
   "config.tooltips_reforged.usePlayer": "使用玩家取代盔甲架进行装备渲染",
   "rarity.tooltips_reforged.common": "常见",

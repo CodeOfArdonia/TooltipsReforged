@@ -51,6 +51,8 @@
   "config.tooltips_reforged.saturationTooltip": "Saturation Tooltip",
   "config.tooltips_reforged.scaleFactor": "Tooltip Scale Factor",
   "config.tooltips_reforged.spawnEggTooltip": "Spawn Egg Tooltip",
+  "config.tooltips_reforged.useImageBackground": "Use Image Background (Like 1.21.2+)",
+  "config.tooltips_reforged.useImageBorder": "Use Image Border (Like 1.21.2+)",
   "config.tooltips_reforged.useNameColor": "Use Name Color As Tooltip Border Color",
   "config.tooltips_reforged.usePlayer": "Use Player Instead Of Armor Stand",
   "rarity.tooltips_reforged.common": "Common",

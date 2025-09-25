@@ -4,7 +4,6 @@ import com.iafenvoy.tooltipsreforged.config.mode.ItemDisplayMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.render.TooltipProviders;
-import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
@@ -69,10 +68,10 @@ public class HeaderComponent implements TooltipComponent, RenderHelper {
         if (this.itemDisplayMode.shouldRenderHeader()) {
             context.drawItem(this.stack, startDrawX, startDrawY);
             int color = TooltipReforgedConfig.INSTANCE.misc.itemBorderColor.getValue();
-            TooltipsRenderHelper.renderVerticalLine(context, startDrawX - 3, startDrawY - 2, 20, 21, color);
-            TooltipsRenderHelper.renderVerticalLine(context, startDrawX + 18, startDrawY - 2, 20, 0, color);
-            TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY - 3, 20, 0, color);
-            TooltipsRenderHelper.renderHorizontalLine(context, startDrawX - 2, startDrawY + 18, 20, 0, color);
+            context.fill(startDrawX - 3, startDrawY - 2, startDrawX - 3 + 1, startDrawY - 2 + 20, 21, color);
+            context.fill(startDrawX + 18, startDrawY - 2, startDrawX + 18 + 1, startDrawY - 2 + 20, 0, color);
+            context.fill(startDrawX - 2, startDrawY - 3, startDrawX - 2 + 20, startDrawY - 3 + 1, 0, color);
+            context.fill(startDrawX - 2, startDrawY + 18, startDrawX - 2 + 20, startDrawY + 18 + 1, 0, color);
         }
         if (this.itemDisplayMode.shouldRenderZoom()) {
             int size = TooltipReforgedConfig.INSTANCE.misc.itemZoomSize.getValue();

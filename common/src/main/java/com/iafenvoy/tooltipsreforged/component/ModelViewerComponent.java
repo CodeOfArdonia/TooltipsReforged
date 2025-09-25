@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
-import com.iafenvoy.tooltipsreforged.config.mode.ArmorRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.config.mode.ArmorRenderMode;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class ModelViewerComponent extends ColorBorderComponent {
+public class ModelViewerComponent extends BackgroundComponent {
     public static final Map<EntityBucketItem, Supplier<? extends EntityType<?>>> ENTITY_BUCKET_MAP = new HashMap<>();
     private static final float ROTATION_INCREMENT = 0.2f;
     private static float CURRENT_ROTATION = 0f;

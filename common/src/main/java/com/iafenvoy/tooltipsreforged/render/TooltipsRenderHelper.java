@@ -3,6 +3,7 @@ package com.iafenvoy.tooltipsreforged.render;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.component.BackgroundComponent;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -12,6 +13,9 @@ import net.minecraft.client.gui.tooltip.TooltipBackgroundRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Divider;
+import net.minecraft.util.math.MathHelper;
 import org.joml.Vector2ic;
 
 import java.util.ArrayList;
@@ -149,20 +153,31 @@ public class TooltipsRenderHelper {
         return null;
     }
 
-    public static void renderVerticalLine(DrawContext context, int x, int y, int height, int z, int startColor, int endColor) {
-        context.fillGradient(x, y, x + 1, y + height, z, startColor, endColor);
+
+    public static void drawNineSlicedTexture(DrawContext context, Identifier texture, int x, int y, int width, int height, int border, int textureWidth, int textureHeight) {
+        context.drawTexture(texture, x, y, 0, 0, border, border, textureWidth, textureHeight);
+        drawRepeatingTexture(context, texture, x + border, y, width - border * 2, border, border, 0, textureWidth - border * 2, border, textureWidth, textureHeight);
+        context.drawTexture(texture, x + width - border, y, textureWidth - border, 0, border, border, textureWidth, textureHeight);
+
+        drawRepeatingTexture(context, texture, x, y + border, border, height - border * 2, 0, border, border, textureHeight - border * 2, textureWidth, textureHeight);
+        drawRepeatingTexture(context, texture, x + border, y + border, width - border * 2, height - border * 2, border, border, textureWidth - border * 2, textureHeight - border * 2, textureWidth, textureHeight);
+        drawRepeatingTexture(context, texture, x + width - border, y + border, border, height - border * 2, textureWidth - border, border, border, textureHeight - border * 2, textureWidth, textureHeight);
+
+        context.drawTexture(texture, x, y + height - border, 0, textureHeight - border, border, border, textureWidth, textureHeight);
+        drawRepeatingTexture(context, texture, x + border, y + height - border, width - border * 2, border, border, textureHeight - border, textureWidth - border * 2, border, textureWidth, textureHeight);
+        context.drawTexture(texture, x + width - border, y + height - border, textureWidth - border, textureHeight - border, border, border, textureWidth, textureHeight);
     }
 
-    public static void renderVerticalLine(DrawContext context, int x, int y, int height, int z, int color) {
-        context.fill(x, y, x + 1, y + height, z, color);
-    }
-
-    public static void renderHorizontalLine(DrawContext context, int x, int y, int width, int z, int color) {
-        context.fill(x, y, x + width, y + 1, z, color);
-    }
-
-    public static void renderRectangle(DrawContext context, int x, int y, int width, int height, int z) {
-        context.fill(x, y, x + width, y + height, z, TooltipReforgedConfig.INSTANCE.misc.backgroundColor.getValue());
+    public static void drawRepeatingTexture(DrawContext context, Identifier texture, int x, int y, int width, int height, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
+        int i, j;
+        for (i = 0; i + regionWidth < width; i += regionWidth) {
+            for (j = 0; j + regionHeight < height; j += regionHeight)
+                context.drawTexture(texture, x + i, y + j, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
+            context.drawTexture(texture, x + i, y + j, u, v, regionWidth, height - j, textureWidth, textureHeight);
+        }
+        for (j = 0; j + regionHeight < height; j += regionHeight)
+            context.drawTexture(texture, x + i, y + j, u, v, width - i, regionHeight, textureWidth, textureHeight);
+        context.drawTexture(texture, x + i, y + j, u, v, width - i, height - j, textureWidth, textureHeight);
     }
 
     private static class TooltipPage {

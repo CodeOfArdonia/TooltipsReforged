@@ -43,7 +43,7 @@ public class BuiltinTooltips {
         //Equipments
         if (stack.getItem() instanceof Equipment || stack.getItem() instanceof SkullItem || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
             components.add(new ModelViewerComponent(stack));
-        components.add(new ColorBorderComponent(stack));
+        components.add(new BackgroundComponent(stack));
         //Misc
         components.add(new ContainerPreviewComponent(stack));
         if (stack.getItem() instanceof FilledMapItem)
