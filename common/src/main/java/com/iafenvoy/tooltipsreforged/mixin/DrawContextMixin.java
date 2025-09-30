@@ -1,10 +1,6 @@
 package com.iafenvoy.tooltipsreforged.mixin;
 
-import com.iafenvoy.integration.entrypoint.EntryPointManager;
-import com.iafenvoy.tooltipsreforged.BuiltinTooltips;
 import com.iafenvoy.tooltipsreforged.Static;
-import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
-import com.iafenvoy.tooltipsreforged.api.TooltipsReforgeEntrypoint;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
 import com.iafenvoy.tooltipsreforged.util.TooltipScrollTracker;
@@ -12,7 +8,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
 import net.minecraft.item.ItemStack;
@@ -25,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 @Mixin(DrawContext.class)
@@ -42,10 +36,7 @@ public abstract class DrawContextMixin {
             else TooltipScrollTracker.tick();
             PREV_STACK.set(stack);
             Static.CACHE.remove();
-            BuiltinTooltips.appendTooltip(stack, mutable);
-            EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(stack, mutable));
-            mutable.removeIf(Objects::isNull);
-            TooltipsRenderHelper.drawTooltip(stack, (DrawContext) (Object) this, textRenderer, mutable, x + TooltipScrollTracker.getXOffset(), y + TooltipScrollTracker.getYOffset(), HoveredTooltipPositioner.INSTANCE);
+            TooltipsRenderHelper.render(stack, mutable, (DrawContext) (Object) this, textRenderer, x, y, positioner);
             ci.cancel();
         }
     }

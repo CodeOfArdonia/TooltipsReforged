@@ -49,13 +49,16 @@
   "config.tooltips_reforged.mouseScrollTooltip": "Mouse Scroll Tooltip",
   "config.tooltips_reforged.paintingTooltip": "Painting Tooltip",
   "config.tooltips_reforged.rarityTooltip": "Rarity Tooltip",
+  "config.tooltips_reforged.removeEmptyLines": "Remove Empty Lines",
   "config.tooltips_reforged.saturationTooltip": "Saturation Tooltip",
-  "config.tooltips_reforged.scaleFactor": "Tooltip Scale Factor",
   "config.tooltips_reforged.spawnEggTooltip": "Spawn Egg Tooltip",
   "config.tooltips_reforged.useImageBackground": "Use Image Background (Like 1.21.2+)",
   "config.tooltips_reforged.useImageBorder": "Use Image Border (Like 1.21.2+)",
   "config.tooltips_reforged.useNameColor": "Use Name Color As Tooltip Border Color",
   "config.tooltips_reforged.usePlayer": "Use Player Instead Of Armor Stand",
+  "keybinding.tooltips_reforged.show_item_tag": "Toggle Display Item Tags",
+  "keybinding.tooltips_reforged.show_nbt_spawn_egg": "Toggle Display NBT / Spawn Egg Info",
+  "keybinding.tooltips_reforged.show_specific_info": "Toggle Display Specific Info",
   "rarity.tooltips_reforged.common": "Common",
   "rarity.tooltips_reforged.epic": "Epic",
   "rarity.tooltips_reforged.rare": "Rare",
@@ -79,8 +82,5 @@
   "type.tooltips_reforged.arthropod": "Arthropod",
   "type.tooltips_reforged.default": "Default",
   "type.tooltips_reforged.illager": "Illager",
-  "type.tooltips_reforged.undead": "Undead",
-  "keybinding.tooltips_reforged.show_item_tag": "Toggle Display Item Tags",
-  "keybinding.tooltips_reforged.show_nbt_spawn_egg": "Toggle Display NBT / Spawn Egg Info",
-  "keybinding.tooltips_reforged.show_specific_info": "Toggle Display Specific Info"
+  "type.tooltips_reforged.undead": "Undead"
 }

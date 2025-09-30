@@ -1,57 +1,52 @@
 package com.iafenvoy.tooltipsreforged.render;
 
+import com.iafenvoy.integration.entrypoint.EntryPointManager;
+import com.iafenvoy.tooltipsreforged.BuiltinTooltips;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
+import com.iafenvoy.tooltipsreforged.api.TooltipsReforgeEntrypoint;
 import com.iafenvoy.tooltipsreforged.component.StandaloneComponent;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
+import com.iafenvoy.tooltipsreforged.util.TooltipScrollTracker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.joml.Vector2ic;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class TooltipsRenderHelper {
     private static final int EDGE_SPACING = 32;
     private static final int PAGE_SPACING = 12;
 
-    private static int getMaxHeight() {
-        return MinecraftClient.getInstance().getWindow().getScaledHeight() - EDGE_SPACING * 2;
+    public static void render(ItemStack stack, List<TooltipComponent> components, DrawContext context, TextRenderer textRenderer, int mouseX, int mouseY, TooltipPositioner positioner) {
+        BuiltinTooltips.appendTooltip(stack, components);
+        EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(stack, components));
+        components.removeIf(Objects::isNull);
+        if (TooltipReforgedConfig.INSTANCE.misc.removeEmptyLines.getValue())
+            components.removeIf(x -> x instanceof OrderedTextTooltipComponent ordered && ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(ordered)).getString().isEmpty());
+        TooltipsRenderHelper.drawTooltip(stack, context, textRenderer, components, mouseX + TooltipScrollTracker.getXOffset(), mouseY + TooltipScrollTracker.getYOffset(), positioner);
     }
 
-    private static int getMaxWidth() {
-        return MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - EDGE_SPACING;
-    }
-
-    public static void drawTooltip(ItemStack stack, DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner) {
+    public static void drawTooltip(ItemStack stack, DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int mouseX, int mouseY, TooltipPositioner positioner) {
         if (components.isEmpty()) return;
-
-        MatrixStack matrices = context.getMatrices();
         List<TooltipPage> pageList = new LinkedList<>();
         List<StandaloneComponent> standaloneComponents = new LinkedList<>();
-
-        double scale = TooltipReforgedConfig.INSTANCE.misc.scaleFactor.getValue();
-
-        int maxWidth = (int) (getMaxWidth() / scale);
-        int totalWidth = 0;
-
-        int pageHeight = -2;
-        int maxHeight = (int) (getMaxHeight() / scale);
-
-        int spacing = components.size() > 1 ? 4 : 0;
-        pageHeight += spacing;
-
-        TooltipPage page = new TooltipPage();
-
+        int maxWidth = getMaxWidth(), maxHeight = getMaxHeight();
+        int totalWidth = 0, pageHeight = -2;
+        //Collect pages
+        TooltipPage p = new TooltipPage();
         for (TooltipComponent component : components) {
             if (component instanceof StandaloneComponent standalone) {
                 standaloneComponents.add(standalone);
@@ -65,79 +60,72 @@ public class TooltipsRenderHelper {
                 int wrappedHeight = component.getHeight();
 
                 if (pageHeight + wrappedHeight > maxHeight) {
-                    pageList.add(page);
-                    totalWidth += page.width;
-                    page = new TooltipPage();
+                    pageList.add(p);
+                    totalWidth += p.width;
+                    p = new TooltipPage();
                     pageHeight = -2;
                 }
 
-                page.components.add(component);
-                page.height = pageHeight += wrappedHeight;
-                page.width = Math.max(page.width, wrappedWidth);
+                p.components.add(component);
+                p.height = pageHeight += wrappedHeight;
+                p.width = Math.max(p.width, wrappedWidth);
             } else {
                 if (pageHeight + height > maxHeight) {
-                    pageList.add(page);
-                    totalWidth += page.width;
-                    page = new TooltipPage();
+                    pageList.add(p);
+                    totalWidth += p.width;
+                    p = new TooltipPage();
                     pageHeight = -2;
                 }
 
-                page.components.add(component);
-                page.height = pageHeight += height;
-                page.width = Math.max(page.width, width);
+                p.components.add(component);
+                p.height = pageHeight += height;
+                p.width = Math.max(p.width, width);
             }
         }
-
-        if (!page.components.isEmpty()) {
-            pageList.add(page);
-            totalWidth += page.width;
+        if (!p.components.isEmpty()) {
+            pageList.add(p);
+            totalWidth += p.width;
         }
-
-        int scaledOffset = ((int) (12 * TooltipReforgedConfig.INSTANCE.misc.scaleFactor.getValue())) - 12;
-        Vector2ic vector2ic = positioner.getPosition(context.getScaledWindowWidth(), context.getScaledWindowHeight(), x + scaledOffset, y - scaledOffset, (int) (totalWidth * scale), (int) (pageList.get(0).height * scale));
-        int n = vector2ic.x();
-        int o = vector2ic.y();
-
+        //Set actual position
+        Vector2ic position = positioner.getPosition(context.getScaledWindowWidth(), context.getScaledWindowHeight(), mouseX, mouseY, totalWidth, pageList.get(0).height);
+        int currentX = position.x();
         for (TooltipPage tooltipPage : pageList) {
-            tooltipPage.x = n;
-            tooltipPage.y = (pageList.size() > 1) ? o - EDGE_SPACING : o - 6;
-            n += tooltipPage.width + PAGE_SPACING;
+            tooltipPage.x = currentX;
+            tooltipPage.y = position.y() - (pageList.size() > 1 ? EDGE_SPACING : 6);
+            currentX += tooltipPage.width + PAGE_SPACING;
         }
-
-        matrices.push();
-        matrices.scale((float) scale, (float) scale, (float) scale);
-        matrices.translate(0, 0, 400.0f);
-
-        for (int i = 0; i < pageList.size(); i++) {
-            TooltipPage p = pageList.get(i);
-            ExtendedTooltipBackgroundRenderer.render(stack, context, p.x, p.y, p.width, p.height, 400);
-            int cx = (int) (p.x / scale);
-            int cy = (int) (p.y / scale);
-
-            for (TooltipComponent component : p.components) {
+        //Render start
+        context.getMatrices().push();
+        context.getMatrices().translate(0, 0, 400);
+        for (TooltipPage page : pageList) {
+            ExtendedTooltipBackgroundRenderer.render(stack, context, page.x, page.y, page.width, page.height, 0);
+            int currentY = page.y;
+            for (TooltipComponent component : page.components) {
                 try {
-                    component.drawText(textRenderer, cx, cy, matrices.peek().getPositionMatrix(), context.getVertexConsumers());
-                    component.drawItems(textRenderer, cx, cy, context);
-                    cy += component.getHeight();
-
-                    if (i == 0 && component == p.components.get(0) && components.size() > 1)
-                        cy += spacing;
+                    component.drawText(textRenderer, page.x, currentY, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers());
+                    component.drawItems(textRenderer, page.x, currentY, context);
+                    currentY += component.getHeight();
                 } catch (Exception e) {
                     TooltipReforgedClient.LOGGER.error("{}", TooltipReforgedClient.MOD_ID, e);
                 }
             }
         }
-
         for (StandaloneComponent component : standaloneComponents)
             try {
-                component.render(context, x, y, 0);
+                component.render(context, position.x(), position.y(), 0);
             } catch (Exception e) {
                 TooltipReforgedClient.LOGGER.error("{}", TooltipReforgedClient.MOD_ID, e);
             }
-
-        matrices.pop();
+        context.getMatrices().pop();
     }
 
+    private static int getMaxHeight() {
+        return MinecraftClient.getInstance().getWindow().getScaledHeight() - EDGE_SPACING * 2;
+    }
+
+    private static int getMaxWidth() {
+        return MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - EDGE_SPACING;
+    }
 
     public static void drawNineSlicedTexture(DrawContext context, Identifier texture, int x, int y, int width, int height, int border, int textureWidth, int textureHeight) {
         context.drawTexture(texture, x, y, 0, 0, border, border, textureWidth, textureHeight);
@@ -173,7 +161,7 @@ public class TooltipsRenderHelper {
         private final List<TooltipComponent> components;
 
         private TooltipPage() {
-            this(0, 0, 0, 0, new ArrayList<>());
+            this(0, 0, 0, 0, new LinkedList<>());
         }
 
         private TooltipPage(int x, int y, int width, int height, List<TooltipComponent> components) {

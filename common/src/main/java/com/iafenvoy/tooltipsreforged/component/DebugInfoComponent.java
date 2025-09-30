@@ -61,10 +61,12 @@ public class DebugInfoComponent implements TooltipComponent {
 
     private List<MutableText> getDisplayTexts() {
         MutableText first = Text.empty();
+        boolean hasInfo = false;
         List<MutableText> infos = List.of();
         Pair<String, List<MutableText>> itemTagInfo = this.getItemTagInfo();
         TooltipKeyManager.PressState itemTagState = KEY_MANAGER.itemTag();
         if (itemTagInfo != null && itemTagState.show()) {
+            hasInfo = true;
             if (itemTagState.showDetail()) {
                 first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.itemTagKeyTranslation(), I18n.translate(itemTagInfo.getLeft()))).formatted(Formatting.WHITE));
                 infos = itemTagInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
@@ -74,6 +76,7 @@ public class DebugInfoComponent implements TooltipComponent {
         Pair<String, List<MutableText>> specificInfo = this.getSpecificInfo();
         TooltipKeyManager.PressState specificState = KEY_MANAGER.specific();
         if (specificInfo != null && specificState.show()) {
+            hasInfo = true;
             if (specificState.showDetail()) {
                 first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.specificKeyTranslation(), I18n.translate(specificInfo.getLeft()))).formatted(Formatting.WHITE));
                 infos = specificInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
@@ -83,13 +86,14 @@ public class DebugInfoComponent implements TooltipComponent {
         Pair<String, List<MutableText>> nbtInfo = this.getNbtInfo();
         TooltipKeyManager.PressState nbtState = KEY_MANAGER.nbt();
         if (nbtInfo != null && nbtState.show()) {
+            hasInfo = true;
             if (nbtState.showDetail()) {
                 first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.nbtKeyTranslation(), I18n.translate(nbtInfo.getLeft()))).formatted(Formatting.WHITE));
                 infos = nbtInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
             } else
                 first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.nbtKeyTranslation(), I18n.translate(nbtInfo.getLeft()))).formatted(Formatting.GRAY));
         }
-        return ImmutableList.<MutableText>builder().add(first).addAll(infos).build();
+        return hasInfo ? ImmutableList.<MutableText>builder().add(first).addAll(infos).build() : List.of();
     }
 
     @Nullable

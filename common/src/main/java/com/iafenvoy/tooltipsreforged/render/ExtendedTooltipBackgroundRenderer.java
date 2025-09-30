@@ -25,13 +25,13 @@ public class ExtendedTooltipBackgroundRenderer {
         //Background
         int bgColor = TooltipReforgedConfig.INSTANCE.misc.backgroundColor.getValue();
         if (TooltipReforgedConfig.INSTANCE.misc.useImageBackground.getValue()) {
-            context.getMatrices().translate(0.0F, 0.0F, (float) z);
+            context.getMatrices().translate(0, 0, z);
             TooltipsRenderHelper.drawNineSlicedTexture(context, getBackgroundTexture(texture), i - 9, j - 9, k + 18, l + 18, 10, 100, 100);
         } else {
-            context.fill(i, j - 1, i + k, j - 1 + 1, z, bgColor);
+            context.fill(i, j - 1, i + k, j, z, bgColor);
             context.fill(i, j + l, i + k, j + l + 1, z, bgColor);
             context.fill(i, j, i + k, j + l, z, TooltipReforgedConfig.INSTANCE.misc.backgroundColor.getValue());
-            context.fillGradient(i - 1, j, i - 1 + 1, j + l, z, bgColor, bgColor);
+            context.fillGradient(i - 1, j, i, j + l, z, bgColor, bgColor);
             context.fillGradient(i + k, j, i + k + 1, j + l, z, bgColor, bgColor);
         }
         //Border
@@ -42,12 +42,12 @@ public class ExtendedTooltipBackgroundRenderer {
         int endColor = Static.END_COLOR;
 
         if (TooltipReforgedConfig.INSTANCE.misc.useImageBorder.getValue())
-            TooltipsRenderHelper.drawNineSlicedTexture(context, getFrameTexture(texture), i - 10, j + 1 - 11, k + 20, l + 20, 10, 100, 100);
+            TooltipsRenderHelper.drawNineSlicedTexture(context, getFrameTexture(texture), i - 10, j - 10, k + 20, l + 20, 10, 100, 100);
         else {
-            context.fillGradient(i, j + 1, i + 1, j + 1 + l - 2, z, startColor, endColor);
-            context.fillGradient(i + k - 1, j + 1, i + k - 1 + 1, j + 1 + l - 2, z, startColor, endColor);
-            context.fill(i, j + 1 - 1, i + k, j + 1 - 1 + 1, z, startColor);
-            context.fill(i, j + 1 - 1 + l - 1, i + k, j + 1 - 1 + l - 1 + 1, z, endColor);
+            context.fillGradient(i, j + 1, i + 1, j + l - 1, z, startColor, endColor);
+            context.fillGradient(i + k - 1, j + 1, i + k, j + l - 1, z, startColor, endColor);
+            context.fill(i, j, i + k, j + 1, z, startColor);
+            context.fill(i, j + l - 1, i + k, j + l, z, endColor);
         }
         context.getMatrices().pop();
     }

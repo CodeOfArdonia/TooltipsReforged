@@ -20,6 +20,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         super(Identifier.of(TooltipReforgedClient.MOD_ID, TooltipReforgedClient.MOD_ID), "screen.%s.title".formatted(TooltipReforgedClient.MOD_ID), "./config/tooltips_reforged.json");
     }
 
+    @SuppressWarnings("unused")
     public static class TooltipConfig extends AutoInitConfigCategoryBase {
         public final IConfigEntry<IConfigEnumEntry> itemDisplayTooltip = new EnumEntry("config.tooltips_reforged.itemDisplayTooltip", ItemDisplayMode.HEADER).json("itemDisplayTooltip");
         public final IConfigEntry<Boolean> rarityTooltip = new BooleanEntry("config.tooltips_reforged.rarityTooltip", false).json("rarityTooltip");
@@ -47,22 +48,22 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
         }
     }
 
+    @SuppressWarnings("unused")
     public static class MiscConfig extends AutoInitConfigCategoryBase {
         public final IConfigEntry<List<String>> blacklist = new ListStringEntry("config.tooltips_reforged.blacklist", List.of()).json("blacklist");
         public final SeparatorEntry s1 = new SeparatorEntry();
-        public final IConfigEntry<Double> scaleFactor = new DoubleEntry("config.tooltips_reforged.scaleFactor", 1.0).json("scaleFactor");
         public final IConfigEntry<Boolean> mouseScrollTooltip = new BooleanEntry("config.tooltips_reforged.mouseScrollTooltip", false).json("mouseScrollTooltip");
-        public final SeparatorEntry s2 = new SeparatorEntry();
         public final IConfigEntry<Boolean> useNameColor = new BooleanEntry("config.tooltips_reforged.useNameColor", false).json("useNameColor");
         public final IConfigEntry<Boolean> useImageBackground = new BooleanEntry("config.tooltips_reforged.useImageBackground", false).json("useImageBackground");
         public final IConfigEntry<Boolean> useImageBorder = new BooleanEntry("config.tooltips_reforged.useImageBorder", false).json("useImageBorder");
         public final IConfigEntry<Integer> backgroundColor = new IntegerEntry("config.tooltips_reforged.backgroundColor", 0xF0100010).json("backgroundColor");
         public final IConfigEntry<Integer> itemBorderColor = new IntegerEntry("config.tooltips_reforged.itemBorderColor", 0xFFAAAAAA).json("itemBorderColor");
-        public final SeparatorEntry s3 = new SeparatorEntry();
+        public final SeparatorEntry s2 = new SeparatorEntry();
         public final IConfigEntry<Integer> itemZoomSize = new IntegerEntry("config.tooltips_reforged.itemZoomSize", 100, 0, 2048).json("itemZoomSize");
         public final IConfigEntry<Integer> itemZoomXOffset = new IntegerEntry("config.tooltips_reforged.itemZoomXOffset", 0).json("itemZoomXOffset");
         public final IConfigEntry<Integer> itemZoomYOffset = new IntegerEntry("config.tooltips_reforged.itemZoomYOffset", 0).json("itemZoomYOffset");
-        public final SeparatorEntry s4 = new SeparatorEntry();
+        public final SeparatorEntry s3 = new SeparatorEntry();
+        public final IConfigEntry<Boolean> removeEmptyLines = new BooleanEntry("config.tooltips_reforged.removeEmptyLines", true).json("removeEmptyLines");
         public final IConfigEntry<IConfigEnumEntry> enchantmentSort = new EnumEntry("config.tooltips_reforged.enchantmentSort", EnchantmentSortMode.DEFAULT).json("enchantmentSort");
         public final IConfigEntry<Boolean> advancedEnchantmentColor = new BooleanEntry("config.tooltips_reforged.advancedEnchantmentColor", false).json("advancedEnchantmentColor");
 

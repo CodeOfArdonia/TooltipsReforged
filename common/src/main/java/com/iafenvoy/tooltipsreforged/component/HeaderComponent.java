@@ -34,7 +34,7 @@ public class HeaderComponent implements TooltipComponent, RenderHelper {
 
     @Override
     public int getHeight() {
-        return 22;
+        return 24;
     }
 
     @Override
