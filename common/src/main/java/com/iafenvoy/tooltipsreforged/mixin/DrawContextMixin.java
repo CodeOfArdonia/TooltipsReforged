@@ -45,7 +45,7 @@ public abstract class DrawContextMixin {
             BuiltinTooltips.appendTooltip(stack, mutable);
             EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(stack, mutable));
             mutable.removeIf(Objects::isNull);
-            TooltipsRenderHelper.drawTooltip((DrawContext) (Object) this, textRenderer, mutable, x + TooltipScrollTracker.getXOffset(), y + TooltipScrollTracker.getYOffset(), HoveredTooltipPositioner.INSTANCE);
+            TooltipsRenderHelper.drawTooltip(stack, (DrawContext) (Object) this, textRenderer, mutable, x + TooltipScrollTracker.getXOffset(), y + TooltipScrollTracker.getYOffset(), HoveredTooltipPositioner.INSTANCE);
             ci.cancel();
         }
     }

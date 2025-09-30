@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class ModelViewerComponent extends BackgroundComponent {
+public class ModelViewerComponent extends StandaloneComponent {
     public static final Map<EntityBucketItem, Supplier<? extends EntityType<?>>> ENTITY_BUCKET_MAP = new HashMap<>();
     private static final float ROTATION_INCREMENT = 0.2f;
     private static float CURRENT_ROTATION = 0f;
@@ -34,9 +34,7 @@ public class ModelViewerComponent extends BackgroundComponent {
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int width, int height, int z, int page) throws Exception {
-        super.render(context, x, y, width, height, z, page);
-        if (page != 0) return;
+    public void render(DrawContext context, int x, int y, int z) {
         CURRENT_ROTATION = (CURRENT_ROTATION + ROTATION_INCREMENT) % 360;
 
         if (this.stack.getItem() instanceof Equipment || this.stack.getItem() instanceof SkullItem)
@@ -53,26 +51,26 @@ public class ModelViewerComponent extends BackgroundComponent {
         }
     }
 
-    private void renderPlayer(DrawContext context, int x, int y, int z) throws Exception {
+    private void renderPlayer(DrawContext context, int x, int y, int z) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
         EquipmentSlot slot = LivingEntity.getPreferredEquipmentSlot(this.stack);
         ItemStack original = player.getEquippedStack(slot);
         player.equipStack(slot, this.stack);
-        super.render(context, x - ENTITY_OFFSET - 25, y, 40, 70, z, -1);
+        this.renderBackground(context, x - ENTITY_OFFSET - 25, y, 40, 70, z);
         drawEntity(context, x - 45, y + 65, 35, -CURRENT_ROTATION, player);
         player.equipStack(slot, original);
     }
 
-    private void renderArmorStand(DrawContext context, int x, int y, int z) throws Exception {
+    private void renderArmorStand(DrawContext context, int x, int y, int z) {
         ArmorStandEntity armorStand = new ArmorStandEntity(EntityType.ARMOR_STAND, MinecraftClient.getInstance().world);
         armorStand.equipStack(LivingEntity.getPreferredEquipmentSlot(this.stack), this.stack);
-        super.render(context, x - ENTITY_OFFSET - 25, y, 40, 70, z, -1);
+        this.renderBackground(context, x - ENTITY_OFFSET - 25, y, 40, 70, z);
         armorStand.tick();
         drawEntity(context, x - 45, y + 65, 35, -CURRENT_ROTATION, armorStand);
     }
 
-    private void renderBucketEntity(DrawContext context, int x, int y, int z, EntityBucketItem bucketItem) throws Exception {
+    private void renderBucketEntity(DrawContext context, int x, int y, int z, EntityBucketItem bucketItem) {
         if (!ENTITY_BUCKET_MAP.containsKey(bucketItem)) return;
         EntityType<?> entityType = ENTITY_BUCKET_MAP.get(bucketItem).get();
         Entity entity = entityType.create(MinecraftClient.getInstance().world);
@@ -83,13 +81,13 @@ public class ModelViewerComponent extends BackgroundComponent {
             if (entityType == EntityType.TROPICAL_FISH) return;
             if (bucketable instanceof PufferfishEntity pufferfishEntity) pufferfishEntity.setPuffState(2);
 
-            super.render(context, x - ENTITY_OFFSET - 70, y, 80, 40, z, -1);
+            this.renderBackground(context, x - ENTITY_OFFSET - 70, y, 80, 40, z);
             livingEntity.tick();
             drawEntity(context, x - 67, y + 40, 30, -CURRENT_ROTATION, livingEntity);
         }
     }
 
-    private void renderSpawnEggEntity(DrawContext context, int x, int y, int z, SpawnEggItem spawnEggItem) throws Exception {
+    private void renderSpawnEggEntity(DrawContext context, int x, int y, int z, SpawnEggItem spawnEggItem) {
         EntityType<?> entityType = spawnEggItem.getEntityType(this.stack.getNbt());
         Entity entity = entityType.create(MinecraftClient.getInstance().world);
         if (entity == null) return;
@@ -110,7 +108,7 @@ public class ModelViewerComponent extends BackgroundComponent {
         if (entity instanceof LivingEntity livingEntity) {
             NbtCompound nbt = this.stack.getSubNbt("EntityTag");
             if (nbt != null) livingEntity.readCustomDataFromNbt(nbt);
-            super.render(context, x - ENTITY_OFFSET - 70, y, 80, 80, z, -1);
+            this.renderBackground(context, x - ENTITY_OFFSET - 70, y, 80, 80, z);
             livingEntity.tick();
             drawEntity(context, x - 67, y + 75, 40, -CURRENT_ROTATION, livingEntity);
         }

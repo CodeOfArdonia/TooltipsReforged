@@ -1,24 +1,22 @@
 package com.iafenvoy.tooltipsreforged.render;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
-import com.iafenvoy.tooltipsreforged.component.BackgroundComponent;
+import com.iafenvoy.tooltipsreforged.component.StandaloneComponent;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
-import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.tooltip.TooltipBackgroundRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Divider;
-import net.minecraft.util.math.MathHelper;
 import org.joml.Vector2ic;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
@@ -34,15 +32,12 @@ public class TooltipsRenderHelper {
         return MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - EDGE_SPACING;
     }
 
-    @SuppressWarnings("deprecation")
-    public static void drawTooltip(DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner) {
+    public static void drawTooltip(ItemStack stack, DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner) {
         if (components.isEmpty()) return;
 
-        BackgroundComponent backgroundComponent = getBackgroundComponent(components);
-        components.removeIf(component -> component.getHeight() == 0 || component.getWidth(textRenderer) == 0);
-
         MatrixStack matrices = context.getMatrices();
-        List<TooltipPage> pageList = new ArrayList<>();
+        List<TooltipPage> pageList = new LinkedList<>();
+        List<StandaloneComponent> standaloneComponents = new LinkedList<>();
 
         double scale = TooltipReforgedConfig.INSTANCE.misc.scaleFactor.getValue();
 
@@ -57,13 +52,17 @@ public class TooltipsRenderHelper {
 
         TooltipPage page = new TooltipPage();
 
-        for (TooltipComponent tooltipComponent : components) {
-            int width = tooltipComponent.getWidth(textRenderer);
-            int height = tooltipComponent.getHeight();
+        for (TooltipComponent component : components) {
+            if (component instanceof StandaloneComponent standalone) {
+                standaloneComponents.add(standalone);
+                continue;
+            }
+            int width = component.getWidth(textRenderer);
+            int height = component.getHeight();
 
             if (width > maxWidth) {
-                int wrappedWidth = tooltipComponent.getWidth(textRenderer);
-                int wrappedHeight = tooltipComponent.getHeight();
+                int wrappedWidth = component.getWidth(textRenderer);
+                int wrappedHeight = component.getHeight();
 
                 if (pageHeight + wrappedHeight > maxHeight) {
                     pageList.add(page);
@@ -72,7 +71,7 @@ public class TooltipsRenderHelper {
                     pageHeight = -2;
                 }
 
-                page.components.add(tooltipComponent);
+                page.components.add(component);
                 page.height = pageHeight += wrappedHeight;
                 page.width = Math.max(page.width, wrappedWidth);
             } else {
@@ -83,7 +82,7 @@ public class TooltipsRenderHelper {
                     pageHeight = -2;
                 }
 
-                page.components.add(tooltipComponent);
+                page.components.add(component);
                 page.height = pageHeight += height;
                 page.width = Math.max(page.width, width);
             }
@@ -107,27 +106,13 @@ public class TooltipsRenderHelper {
 
         matrices.push();
         matrices.scale((float) scale, (float) scale, (float) scale);
+        matrices.translate(0, 0, 400.0f);
 
-        for (TooltipPage p : pageList) {
-            if (pageList.get(0) == p) p.x = (int) (p.x / scale);
-            p.y = (int) (p.y / scale);
-
-            if (backgroundComponent == null)
-                context.draw(() -> TooltipBackgroundRenderer.render(context, p.x, p.y, p.width, p.height, 400));
-            else context.draw(() -> {
-                try {
-                    backgroundComponent.render(context, p.x, p.y, p.width, p.height, (int) (400 / scale), pageList.indexOf(p));
-                } catch (Exception e) {
-                    TooltipReforgedClient.LOGGER.error("[{}]", TooltipReforgedClient.MOD_ID, e);
-                }
-            });
-        }
-
-        matrices.translate(0.0f, 0.0f, 400.0f / scale);
-
-        for (TooltipPage p : pageList) {
-            int cx = p.x;
-            int cy = p.y;
+        for (int i = 0; i < pageList.size(); i++) {
+            TooltipPage p = pageList.get(i);
+            ExtendedTooltipBackgroundRenderer.render(stack, context, p.x, p.y, p.width, p.height, 400);
+            int cx = (int) (p.x / scale);
+            int cy = (int) (p.y / scale);
 
             for (TooltipComponent component : p.components) {
                 try {
@@ -135,7 +120,7 @@ public class TooltipsRenderHelper {
                     component.drawItems(textRenderer, cx, cy, context);
                     cy += component.getHeight();
 
-                    if (p == pageList.get(0) && component == p.components.get(0) && components.size() > 1)
+                    if (i == 0 && component == p.components.get(0) && components.size() > 1)
                         cy += spacing;
                 } catch (Exception e) {
                     TooltipReforgedClient.LOGGER.error("{}", TooltipReforgedClient.MOD_ID, e);
@@ -143,14 +128,14 @@ public class TooltipsRenderHelper {
             }
         }
 
-        matrices.pop();
-    }
+        for (StandaloneComponent component : standaloneComponents)
+            try {
+                component.render(context, x, y, 0);
+            } catch (Exception e) {
+                TooltipReforgedClient.LOGGER.error("{}", TooltipReforgedClient.MOD_ID, e);
+            }
 
-    private static BackgroundComponent getBackgroundComponent(List<TooltipComponent> components) {
-        for (TooltipComponent component : components)
-            if (component instanceof BackgroundComponent backgroundComponent)
-                return backgroundComponent;
-        return null;
+        matrices.pop();
     }
 
 
