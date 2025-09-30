@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.component;
 
-import com.iafenvoy.tooltipsreforged.config.mode.ItemDisplayMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.config.mode.ItemDisplayMode;
 import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.render.TooltipProviders;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
@@ -68,16 +68,10 @@ public class HeaderComponent implements TooltipComponent, RenderHelper {
         if (this.itemDisplayMode.shouldRenderHeader()) {
             context.drawItem(this.stack, startDrawX, startDrawY);
             int color = TooltipReforgedConfig.INSTANCE.misc.itemBorderColor.getValue();
-            context.fill(startDrawX - 3, startDrawY - 2, startDrawX - 3 + 1, startDrawY - 2 + 20, 21, color);
+            context.fill(startDrawX - 3, startDrawY - 2, startDrawX - 3 + 1, startDrawY - 2 + 20, 0, color);
             context.fill(startDrawX + 18, startDrawY - 2, startDrawX + 18 + 1, startDrawY - 2 + 20, 0, color);
             context.fill(startDrawX - 2, startDrawY - 3, startDrawX - 2 + 20, startDrawY - 3 + 1, 0, color);
             context.fill(startDrawX - 2, startDrawY + 18, startDrawX - 2 + 20, startDrawY + 18 + 1, 0, color);
-        }
-        if (this.itemDisplayMode.shouldRenderZoom()) {
-            int size = TooltipReforgedConfig.INSTANCE.misc.itemZoomSize.getValue();
-            int zoomX = context.getScaledWindowWidth() / 2 - size / 2 - 170 + TooltipReforgedConfig.INSTANCE.misc.itemZoomXOffset.getValue();
-            int zoomY = context.getScaledWindowHeight() / 2 - size / 2 + TooltipReforgedConfig.INSTANCE.misc.itemZoomYOffset.getValue();
-            this.drawStack(context, this.stack, zoomX, zoomY, size);
         }
         if (TooltipReforgedConfig.INSTANCE.tooltip.itemGroupTooltip.getValue()) {
             Text text = this.badgePair.getFirst();

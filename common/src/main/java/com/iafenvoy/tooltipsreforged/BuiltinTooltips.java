@@ -23,6 +23,7 @@ public class BuiltinTooltips {
         List<TooltipComponent> headers = new LinkedList<>();
         //Header
         headers.add(new HeaderComponent(stack));
+        headers.add(new ItemZoomComponent(stack));
         //Effects
         if (stack.getItem() instanceof LingeringPotionItem)
             headers.add(new PotionEffectsComponent(stack, 0.25f));
