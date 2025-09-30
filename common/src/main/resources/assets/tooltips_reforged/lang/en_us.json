@@ -14,6 +14,7 @@
   "config.tooltips_reforged.container.render_mode.vanilla": "Vanilla",
   "config.tooltips_reforged.containerTooltip": "Container Preview Tooltip",
   "config.tooltips_reforged.debugInfoTooltip": "Debug Info Tooltip",
+  "config.tooltips_reforged.durability.render_mode.none": "None",
   "config.tooltips_reforged.durability.render_mode.percentage_background": "Percentage With Background",
   "config.tooltips_reforged.durability.render_mode.percentage_colored": "Percentage With Color",
   "config.tooltips_reforged.durability.render_mode.vanilla": "Vanilla",
@@ -78,5 +79,8 @@
   "type.tooltips_reforged.arthropod": "Arthropod",
   "type.tooltips_reforged.default": "Default",
   "type.tooltips_reforged.illager": "Illager",
-  "type.tooltips_reforged.undead": "Undead"
+  "type.tooltips_reforged.undead": "Undead",
+  "keybinding.tooltips_reforged.show_item_tag": "Toggle Display Item Tags",
+  "keybinding.tooltips_reforged.show_nbt_spawn_egg": "Toggle Display NBT / Spawn Egg Info",
+  "keybinding.tooltips_reforged.show_specific_info": "Toggle Display Specific Info"
 }

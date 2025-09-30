@@ -9,18 +9,24 @@ import java.util.Locale;
 
 //Vanilla: 64/64
 public enum DurabilityRenderMode implements IConfigEnumEntry {
-    VANILLA(false, false, false),
-    VANILLA_COLORED(true, false, false),
-    VANILLA_BACKGROUND(false, true, false),
-    PERCENTAGE_COLORED(true, false, true),
-    PERCENTAGE_BACKGROUND(false, true, true);
+    NONE(false, false, false, false),
+    VANILLA(true, false, false, false),
+    VANILLA_COLORED(true, true, false, false),
+    VANILLA_BACKGROUND(true, false, true, false),
+    PERCENTAGE_COLORED(true, true, false, true),
+    PERCENTAGE_BACKGROUND(true, false, true, true);
 
-    private final boolean colorText, renderBackground, percentage;
+    private final boolean enabled, colorText, renderBackground, percentage;
 
-    DurabilityRenderMode(boolean colorText, boolean renderBackground, boolean percentage) {
+    DurabilityRenderMode(boolean enabled, boolean colorText, boolean renderBackground, boolean percentage) {
+        this.enabled = enabled;
         this.colorText = colorText;
         this.renderBackground = renderBackground;
         this.percentage = percentage;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
     }
 
     public boolean shouldColorText() {
@@ -34,7 +40,6 @@ public enum DurabilityRenderMode implements IConfigEnumEntry {
     public boolean shouldRenderBackground() {
         return this.renderBackground;
     }
-
 
     @Override
     public Text getDisplayText() {

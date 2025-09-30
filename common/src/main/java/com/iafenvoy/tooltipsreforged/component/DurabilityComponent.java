@@ -1,8 +1,8 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
-import com.iafenvoy.tooltipsreforged.config.mode.DurabilityRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.config.mode.DurabilityRenderMode;
 import com.iafenvoy.tooltipsreforged.render.RenderHelper;
 import com.iafenvoy.tooltipsreforged.util.BadgesUtils;
 import net.fabricmc.api.EnvType;
@@ -26,7 +26,7 @@ public class DurabilityComponent implements TooltipComponent, RenderHelper {
     public DurabilityComponent(ItemStack stack) {
         this.stack = stack;
         this.mode = (DurabilityRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.durabilityTooltip.getValue();
-        this.enabled = this.stack.isDamageable() && this.stack.getMaxDamage() > 0;
+        this.enabled = this.mode.isEnabled() && this.stack.isDamageable() && this.stack.getMaxDamage() > 0;
         this.color = stack.getItemBarColor();
         this.text = this.enabled ? getDurabilityText(stack, this.mode) : Text.literal("");
     }

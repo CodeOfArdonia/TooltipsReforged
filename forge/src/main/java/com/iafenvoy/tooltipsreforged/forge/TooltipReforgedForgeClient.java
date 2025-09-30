@@ -4,9 +4,11 @@ import com.iafenvoy.jupiter.render.screen.ClientConfigScreen;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.hook.RarityHook;
+import com.iafenvoy.tooltipsreforged.util.TooltipKeyManager;
 import net.minecraft.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +23,12 @@ public class TooltipReforgedForgeClient {
         MinecraftForge.registerConfigScreen(parent -> new ClientConfigScreen(parent, TooltipReforgedConfig.INSTANCE));
         //Register Hooks
         RarityHook.register((text, rarity) -> text.fillStyle(rarity.getStyleModifier().apply(Style.EMPTY)));
-        MinecraftForge.EVENT_BUS.register(new TooltipReforgedForgeClient());
+    }
+
+    @SubscribeEvent
+    public static void registerKeyBindings(RegisterKeyMappingsEvent event){
+        event.register(TooltipKeyManager.SHOW_ITEM_TAG);
+        event.register(TooltipKeyManager.SHOW_NBT_SPAWN_EGG);
+        event.register(TooltipKeyManager.SHOW_SPECIFIC_INFO);
     }
 }

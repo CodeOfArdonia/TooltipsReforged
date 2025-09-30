@@ -62,42 +62,45 @@ public class DebugInfoComponent implements TooltipComponent {
     private List<MutableText> getDisplayTexts() {
         MutableText first = Text.empty();
         List<MutableText> infos = List.of();
-        Pair<String, List<MutableText>> ctrlInfo = this.getCtrlInfo();
-        if (ctrlInfo != null) {
-            if (KEY_MANAGER.ctrl()) {
-                first.append(Text.literal("[CTRL %s] ".formatted(I18n.translate(ctrlInfo.getLeft()))).formatted(Formatting.WHITE));
-                infos = ctrlInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
+        Pair<String, List<MutableText>> itemTagInfo = this.getItemTagInfo();
+        TooltipKeyManager.PressState itemTagState = KEY_MANAGER.itemTag();
+        if (itemTagInfo != null && itemTagState.show()) {
+            if (itemTagState.showDetail()) {
+                first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.itemTagKeyTranslation(), I18n.translate(itemTagInfo.getLeft()))).formatted(Formatting.WHITE));
+                infos = itemTagInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
             } else
-                first.append(Text.literal("[CTRL %s] ".formatted(I18n.translate(ctrlInfo.getLeft()))).formatted(Formatting.GRAY));
+                first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.itemTagKeyTranslation(), I18n.translate(itemTagInfo.getLeft()))).formatted(Formatting.GRAY));
         }
-        Pair<String, List<MutableText>> shiftInfo = this.getShiftInfo();
-        if (shiftInfo != null) {
-            if (KEY_MANAGER.shift()) {
-                first.append(Text.literal("[SHIFT %s] ".formatted(I18n.translate(shiftInfo.getLeft()))).formatted(Formatting.WHITE));
-                infos = shiftInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
+        Pair<String, List<MutableText>> specificInfo = this.getSpecificInfo();
+        TooltipKeyManager.PressState specificState = KEY_MANAGER.specific();
+        if (specificInfo != null && specificState.show()) {
+            if (specificState.showDetail()) {
+                first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.specificKeyTranslation(), I18n.translate(specificInfo.getLeft()))).formatted(Formatting.WHITE));
+                infos = specificInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
             } else
-                first.append(Text.literal("[SHIFT %s] ".formatted(I18n.translate(shiftInfo.getLeft()))).formatted(Formatting.GRAY));
+                first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.specificKeyTranslation(), I18n.translate(specificInfo.getLeft()))).formatted(Formatting.GRAY));
         }
-        Pair<String, List<MutableText>> altInfo = this.getAltInfo();
-        if (altInfo != null) {
-            if (KEY_MANAGER.alt()) {
-                first.append(Text.literal("[ALT %s] ".formatted(I18n.translate(altInfo.getLeft()))).formatted(Formatting.WHITE));
-                infos = altInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
+        Pair<String, List<MutableText>> nbtInfo = this.getNbtInfo();
+        TooltipKeyManager.PressState nbtState = KEY_MANAGER.nbt();
+        if (nbtInfo != null && nbtState.show()) {
+            if (nbtState.showDetail()) {
+                first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.nbtKeyTranslation(), I18n.translate(nbtInfo.getLeft()))).formatted(Formatting.WHITE));
+                infos = nbtInfo.getRight().stream().map(x -> x.formatted(Formatting.DARK_GRAY)).toList();
             } else
-                first.append(Text.literal("[ALT %s] ".formatted(I18n.translate(altInfo.getLeft()))).formatted(Formatting.GRAY));
+                first.append(Text.literal("[%s %s] ".formatted(TooltipKeyManager.nbtKeyTranslation(), I18n.translate(nbtInfo.getLeft()))).formatted(Formatting.GRAY));
         }
         return ImmutableList.<MutableText>builder().add(first).addAll(infos).build();
     }
 
     @Nullable
-    private Pair<String, List<MutableText>> getCtrlInfo() {
+    private Pair<String, List<MutableText>> getItemTagInfo() {
         if (!this.itemTags.isEmpty())
             return new Pair<>("tooltip.tooltips_reforged.item_tags", this.itemTags.stream().map(Text::literal).toList());
         return null;
     }
 
     @Nullable
-    private Pair<String, List<MutableText>> getShiftInfo() {
+    private Pair<String, List<MutableText>> getSpecificInfo() {
         if (!this.blockTags.isEmpty())
             return new Pair<>("tooltip.tooltips_reforged.block_tags", this.blockTags.stream().map(Text::literal).toList());
         if (!this.entityTags.isEmpty())
@@ -111,7 +114,7 @@ public class DebugInfoComponent implements TooltipComponent {
     }
 
     @Nullable
-    private Pair<String, List<MutableText>> getAltInfo() {
+    private Pair<String, List<MutableText>> getNbtInfo() {
         if (!this.entityInfo.isEmpty())
             return new Pair<>("tooltip.tooltips_reforged.mob_info", this.entityInfo);
         if (!this.nbt.isEmpty())

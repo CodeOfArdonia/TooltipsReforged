@@ -34,6 +34,8 @@ For block, it will display block tag.
 
 For spawn egg, it will display entity tag.
 
+**Note: These keybindings can be changed in options. If set to unbind the corresponding data will be hide.**
+
 ### Known capability issues
 
 - When some EMF resource packs installed (Such as `DetailedAnimations`), the spawn egg preview will meet some issues.
