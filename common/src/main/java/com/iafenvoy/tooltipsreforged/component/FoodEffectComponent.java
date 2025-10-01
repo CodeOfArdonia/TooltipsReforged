@@ -1,8 +1,8 @@
 package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
-import com.iafenvoy.tooltipsreforged.config.mode.EffectsRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.config.mode.EffectsRenderMode;
 import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;

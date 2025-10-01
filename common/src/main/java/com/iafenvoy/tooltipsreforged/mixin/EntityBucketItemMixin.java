@@ -1,6 +1,6 @@
 package com.iafenvoy.tooltipsreforged.mixin;
 
-import com.iafenvoy.tooltipsreforged.component.ModelViewerComponent;
+import com.iafenvoy.tooltipsreforged.component.EntityViewerComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.EntityType;
@@ -18,6 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EntityBucketItemMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void saveEntityType(EntityType<?> type, Fluid fluid, SoundEvent emptyingSound, Item.Settings settings, CallbackInfo ci) {
-        ModelViewerComponent.ENTITY_BUCKET_MAP.put((EntityBucketItem) (Object) this, () -> type);
+        EntityViewerComponent.ENTITY_BUCKET_MAP.put((EntityBucketItem) (Object) this, () -> type);
     }
 }

@@ -8,7 +8,6 @@ import com.iafenvoy.tooltipsreforged.component.StandaloneComponent;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
 import com.iafenvoy.tooltipsreforged.util.TextUtil;
-import com.iafenvoy.tooltipsreforged.util.TooltipScrollTracker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -36,17 +35,18 @@ public class TooltipsRenderHelper {
         components.removeIf(Objects::isNull);
         if (TooltipReforgedConfig.INSTANCE.misc.removeEmptyLines.getValue())
             components.removeIf(x -> x instanceof OrderedTextTooltipComponent ordered && ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(ordered)).getString().isEmpty());
-        TooltipsRenderHelper.drawTooltip(stack, context, textRenderer, components, mouseX + TooltipScrollTracker.getXOffset(), mouseY + TooltipScrollTracker.getYOffset(), positioner);
+        ResolveResult result = resolveTooltips(textRenderer, components);
+        Vector2ic position = resolvePosition(result, context, mouseX, mouseY, positioner);
+        TooltipsRenderHelper.drawWithResult(result, stack, context, textRenderer, position.x(), position.y());
     }
 
-    public static void drawTooltip(ItemStack stack, DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int mouseX, int mouseY, TooltipPositioner positioner) {
-        if (components.isEmpty()) return;
-        List<TooltipPage> pageList = new LinkedList<>();
+    public static ResolveResult resolveTooltips(TextRenderer textRenderer, List<TooltipComponent> components) {
+        if (components.isEmpty()) return new ResolveResult(List.of(), List.of(), 0);
+        List<Page> pageList = new LinkedList<>();
         List<StandaloneComponent> standaloneComponents = new LinkedList<>();
         int maxWidth = getMaxWidth(), maxHeight = getMaxHeight();
         int totalWidth = 0, pageHeight = -2;
-        //Collect pages
-        TooltipPage p = new TooltipPage();
+        Page p = new Page();
         for (TooltipComponent component : components) {
             if (component instanceof StandaloneComponent standalone) {
                 standaloneComponents.add(standalone);
@@ -62,7 +62,7 @@ public class TooltipsRenderHelper {
                 if (pageHeight + wrappedHeight > maxHeight) {
                     pageList.add(p);
                     totalWidth += p.width;
-                    p = new TooltipPage();
+                    p = new Page();
                     pageHeight = -2;
                 }
 
@@ -73,7 +73,7 @@ public class TooltipsRenderHelper {
                 if (pageHeight + height > maxHeight) {
                     pageList.add(p);
                     totalWidth += p.width;
-                    p = new TooltipPage();
+                    p = new Page();
                     pageHeight = -2;
                 }
 
@@ -86,18 +86,26 @@ public class TooltipsRenderHelper {
             pageList.add(p);
             totalWidth += p.width;
         }
+        return new ResolveResult(pageList, standaloneComponents, totalWidth);
+    }
+
+    public static Vector2ic resolvePosition(ResolveResult result, DrawContext context, int mouseX, int mouseY, TooltipPositioner positioner) {
+        return positioner.getPosition(context.getScaledWindowWidth(), context.getScaledWindowHeight(), mouseX, mouseY, result.totalWidth, result.pages.get(0).height);
+    }
+
+    public static void drawWithResult(ResolveResult result, ItemStack stack, DrawContext context, TextRenderer textRenderer, int x, int y) {
+        if (result.pages.isEmpty()) return;
         //Set actual position
-        Vector2ic position = positioner.getPosition(context.getScaledWindowWidth(), context.getScaledWindowHeight(), mouseX, mouseY, totalWidth, pageList.get(0).height);
-        int currentX = position.x();
-        for (TooltipPage tooltipPage : pageList) {
-            tooltipPage.x = currentX;
-            tooltipPage.y = position.y() - (pageList.size() > 1 ? EDGE_SPACING : 6);
-            currentX += tooltipPage.width + PAGE_SPACING;
+        int currentX = x;
+        for (Page page : result.pages) {
+            page.x = currentX;
+            page.y = y - (result.pages.size() > 1 ? EDGE_SPACING : 6);
+            currentX += page.width + PAGE_SPACING;
         }
         //Render start
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 400);
-        for (TooltipPage page : pageList) {
+        for (Page page : result.pages) {
             ExtendedTooltipBackgroundRenderer.render(stack, context, page.x, page.y, page.width, page.height, 0);
             int currentY = page.y;
             for (TooltipComponent component : page.components) {
@@ -110,9 +118,9 @@ public class TooltipsRenderHelper {
                 }
             }
         }
-        for (StandaloneComponent component : standaloneComponents)
+        for (StandaloneComponent component : result.standalone)
             try {
-                component.render(context, position.x(), position.y(), 0);
+                component.render(context, textRenderer, x, y, 0);
             } catch (Exception e) {
                 TooltipReforgedClient.LOGGER.error("{}", TooltipReforgedClient.MOD_ID, e);
             }
@@ -153,23 +161,30 @@ public class TooltipsRenderHelper {
         context.drawTexture(texture, x + i, y + j, u, v, width - i, height - j, textureWidth, textureHeight);
     }
 
-    private static class TooltipPage {
+    public record ResolveResult(List<Page> pages, List<StandaloneComponent> standalone, int totalWidth) {
+    }
+
+    public static class Page {
         private int x;
         private int y;
         private int width;
         private int height;
         private final List<TooltipComponent> components;
 
-        private TooltipPage() {
+        private Page() {
             this(0, 0, 0, 0, new LinkedList<>());
         }
 
-        private TooltipPage(int x, int y, int width, int height, List<TooltipComponent> components) {
+        private Page(int x, int y, int width, int height, List<TooltipComponent> components) {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
             this.components = components;
+        }
+
+        public int getHeight() {
+            return this.height;
         }
     }
 }

@@ -37,14 +37,17 @@ public class BuiltinTooltips {
         //Enchantments
         if (stack.getItem() instanceof EnchantedBookItem)
             headers.add(new EnchantmentsComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
-        if (stack.getItem().isEnchantable(stack))
+        if (stack.isEnchantable())
             headers.add(new EnchantmentsComponent(EnchantmentHelper.get(stack)));
         components.addAll(0, headers);
-
         //Equipments
-        if (stack.getItem() instanceof Equipment || stack.getItem() instanceof SkullItem || stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
-            components.add(new ModelViewerComponent(stack));
+        if (stack.getItem() instanceof Equipment || stack.getItem() instanceof SkullItem) {
+            components.add(new EquipmentViewerComponent(stack));
+            components.add(new EquipmentCompareComponent(stack));
+        }
         //Misc
+        if (stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
+            components.add(new EntityViewerComponent(stack));
         components.add(new ContainerPreviewComponent(stack));
         if (stack.getItem() instanceof FilledMapItem)
             components.add(new MapComponent(stack));
@@ -52,7 +55,7 @@ public class BuiltinTooltips {
             components.add(new PaintingComponent(stack));
         if (stack.getItem() instanceof BannerPatternItem)
             components.add(new BannerPatternComponent(stack));
-
+        //Debug & Durability
         if (MinecraftClient.getInstance().options.advancedItemTooltips) {
             for (int i = 0; i < components.size(); i++) {
                 TooltipComponent component = components.get(i);

@@ -3,6 +3,7 @@ package com.iafenvoy.tooltipsreforged.component;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.config.mode.ItemDisplayMode;
 import com.iafenvoy.tooltipsreforged.render.RenderHelper;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 
@@ -15,7 +16,7 @@ public class ItemZoomComponent extends StandaloneComponent implements RenderHelp
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int z) {
+    public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int z) {
         if (this.itemDisplayMode.shouldRenderZoom()) {
             int size = TooltipReforgedConfig.INSTANCE.misc.itemZoomSize.getValue();
             int zoomX = context.getScaledWindowWidth() / 2 - size / 2 - 170 + TooltipReforgedConfig.INSTANCE.misc.itemZoomXOffset.getValue();

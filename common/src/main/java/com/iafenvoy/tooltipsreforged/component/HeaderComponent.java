@@ -27,8 +27,8 @@ public class HeaderComponent implements TooltipComponent, RenderHelper {
     public HeaderComponent(ItemStack stack) {
         this.stack = stack;
         this.itemDisplayMode = (ItemDisplayMode) TooltipReforgedConfig.INSTANCE.tooltip.itemDisplayTooltip.getValue();
-        this.nameText = TooltipProviders.getDisplayName(stack).asOrderedText();
-        this.rarityName = TooltipProviders.getRarityName(stack).asOrderedText();
+        this.nameText = TooltipProviders.getDisplayName(this.stack).asOrderedText();
+        this.rarityName = TooltipProviders.getRarityName(this.stack).asOrderedText();
         this.badgePair = BadgesUtils.getBadgeText(this.stack);
     }
 

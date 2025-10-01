@@ -1,6 +1,6 @@
 package com.iafenvoy.tooltipsreforged.forge.mixin;
 
-import com.iafenvoy.tooltipsreforged.component.ModelViewerComponent;
+import com.iafenvoy.tooltipsreforged.component.EntityViewerComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.EntityBucketItem;
@@ -20,6 +20,6 @@ import java.util.function.Supplier;
 public class EntityBucketItemMixin {
     @Inject(method = "<init>(Ljava/util/function/Supplier;Ljava/util/function/Supplier;Ljava/util/function/Supplier;Lnet/minecraft/item/Item$Settings;)V", at = @At("RETURN"))
     private void saveEntityType(Supplier<? extends EntityType<?>> entitySupplier, Supplier<? extends Fluid> fluidSupplier, Supplier<? extends SoundEvent> soundSupplier, Item.Settings properties, CallbackInfo ci) {
-        ModelViewerComponent.ENTITY_BUCKET_MAP.put((EntityBucketItem) (Object) this, entitySupplier);
+        EntityViewerComponent.ENTITY_BUCKET_MAP.put((EntityBucketItem) (Object) this, entitySupplier);
     }
 }

@@ -10,6 +10,7 @@ features for both players and developers.
 ### Features for players
 
 - New item name render and rarity & item icon
+- Item zooming
 - Effects for food, potion and tipped arrows
 - New durability bar
 - Banner Pattern & Map & Paint preview
@@ -20,7 +21,7 @@ features for both players and developers.
   enchantments)
 - Container preview
 - Scrollable
-- Backport 1.21.2+ texture features.
+- Backport 1.21.2+ texture features
 
 ### Features for developers
 

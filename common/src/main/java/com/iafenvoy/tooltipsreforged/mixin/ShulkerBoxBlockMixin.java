@@ -1,7 +1,7 @@
 package com.iafenvoy.tooltipsreforged.mixin;
 
-import com.iafenvoy.tooltipsreforged.config.mode.ContainerPreviewRenderMode;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.iafenvoy.tooltipsreforged.config.mode.ContainerPreviewRenderMode;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.ShulkerBoxBlock;

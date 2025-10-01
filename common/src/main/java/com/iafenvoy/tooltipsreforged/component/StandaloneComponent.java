@@ -7,7 +7,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public abstract class StandaloneComponent implements TooltipComponent {
@@ -17,7 +16,7 @@ public abstract class StandaloneComponent implements TooltipComponent {
         this.stack = stack;
     }
 
-    public abstract void render(DrawContext context, int x, int y, int z);
+    public abstract void render(DrawContext context, TextRenderer textRenderer, int x, int y, int z);
 
     protected void renderBackground(DrawContext context, int x, int y, int width, int height, int z) {
         ExtendedTooltipBackgroundRenderer.render(this.stack, context, x, y, width, height, z);
