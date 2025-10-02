@@ -2,6 +2,7 @@ package com.iafenvoy.tooltipsreforged.component;
 
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.render.TooltipsRenderHelper;
+import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -32,12 +33,13 @@ public class EquipmentCompareComponent extends StandaloneComponent {
         this.equipped = player.getEquippedStack(equipment.getSlotType());
         if (this.equipped.isEmpty() || ItemStack.canCombine(this.equipped, this.stack)) return;
         for (Text text : this.equipped.getTooltip(player, TooltipContext.BASIC))
-            this.components.add(new OrderedTextTooltipComponent(text.asOrderedText()));
+            if (!TooltipReforgedConfig.INSTANCE.misc.removeEmptyLines.getValue() || !ExtendedTextVisitor.getText(text.asOrderedText()).getString().isEmpty())
+                this.components.add(new OrderedTextTooltipComponent(text.asOrderedText()));
         if (!this.components.isEmpty()) this.components.remove(0);
         List<TooltipComponent> headers = new LinkedList<>();
         headers.add(new OrderedTextTooltipComponent(Text.translatable("tooltip.tooltips_reforged.currently_equipped").asOrderedText()));
         headers.add(new HeaderComponent(this.equipped));
-        if (this.equipped.isEnchantable())
+        if (this.equipped.getItem().isEnchantable(this.equipped))
             headers.add(new EnchantmentsComponent(EnchantmentHelper.get(this.equipped)));
         this.components.addAll(0, headers);
         this.components.add(new DurabilityComponent(this.equipped));

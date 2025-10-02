@@ -37,7 +37,7 @@ public class BuiltinTooltips {
         //Enchantments
         if (stack.getItem() instanceof EnchantedBookItem)
             headers.add(new EnchantmentsComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
-        if (stack.isEnchantable())
+        if (stack.getItem().isEnchantable(stack))
             headers.add(new EnchantmentsComponent(EnchantmentHelper.get(stack)));
         components.addAll(0, headers);
         //Equipments
