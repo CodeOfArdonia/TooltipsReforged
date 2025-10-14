@@ -10,22 +10,24 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.text.Text;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class PotionEffectsComponent implements TooltipComponent {
     private final float durationMultiplier;
-    private final List<StatusEffectInstance> effects;
+    private final List<StatusEffectInstance> effects = new LinkedList<>();
     private final EffectsRenderMode effectsMode;
 
     public PotionEffectsComponent(ItemStack stack, float durationMultiplier) {
         this.durationMultiplier = durationMultiplier;
-        this.effects = PotionUtil.getPotionEffects(stack);
+        stack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).forEachEffect(this.effects::add);
         this.effectsMode = (EffectsRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.effectsTooltip.getValue();
     }
 
@@ -53,7 +55,7 @@ public class PotionEffectsComponent implements TooltipComponent {
         if (!this.effectsMode.shouldRender()) return;
         int lineY = y - textRenderer.fontHeight - 1;
         for (StatusEffectInstance effect : this.effects) {
-            int c = effect.getEffectType().getColor();
+            int c = effect.getEffectType().value().getColor();
             if (c == 0) c = 0xFF5454FC;
             Sprite effectTexture = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(effect.getEffectType());
             Text mutableText = Text.translatable(effect.getTranslationKey());

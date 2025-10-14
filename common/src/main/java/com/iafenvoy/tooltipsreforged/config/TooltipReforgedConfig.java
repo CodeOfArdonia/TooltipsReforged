@@ -6,6 +6,7 @@ import com.iafenvoy.jupiter.interfaces.IConfigEntry;
 import com.iafenvoy.jupiter.interfaces.IConfigEnumEntry;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.mode.*;
+import com.iafenvoy.tooltipsreforged.util.ComponentsProcessor;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
     @SuppressWarnings("unused")
     public static class MiscConfig extends AutoInitConfigCategoryBase {
         public final IConfigEntry<List<String>> blacklist = new ListStringEntry("config.tooltips_reforged.blacklist", List.of()).json("blacklist");
+        public final IConfigEntry<List<String>> ignoredComponents = new ListStringEntry("config.tooltips_reforged.ignoredComponents", ComponentsProcessor.DEFAULT_IGNORED).json("ignoredComponents");
         public final SeparatorEntry s1 = new SeparatorEntry();
         public final IConfigEntry<Boolean> mouseScrollTooltip = new BooleanEntry("config.tooltips_reforged.mouseScrollTooltip", false).json("mouseScrollTooltip");
         public final IConfigEntry<Boolean> useNameColor = new BooleanEntry("config.tooltips_reforged.useNameColor", false).json("useNameColor");

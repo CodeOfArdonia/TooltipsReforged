@@ -12,6 +12,7 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -29,11 +30,11 @@ public class DebugInfoComponent implements TooltipComponent {
     private final List<MutableText> nbt, entityInfo;
     private final ObjectLongPair<Identifier> lootTable;
 
-    public DebugInfoComponent(ItemStack stack) {
+    public DebugInfoComponent(ItemStack stack, DynamicRegistryManager registries) {
         this.itemTags = InfoCollectHelper.collectItemTags(stack);
         this.blockTags = InfoCollectHelper.collectBlockTags(stack);
         this.entityTags = InfoCollectHelper.collectEntityTags(stack);
-        this.nbt = InfoCollectHelper.collectNbt(stack);
+        this.nbt = InfoCollectHelper.collectNbt(stack, registries);
         this.entityInfo = InfoCollectHelper.collectEntityInfo(stack);
         this.lootTable = InfoCollectHelper.collectLootTable(stack);
     }

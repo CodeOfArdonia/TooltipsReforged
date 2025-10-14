@@ -31,7 +31,7 @@ public class TooltipProviders {
             Rarity rarity = stack.getRarity();
             TextColor textColor = RarityHook.applyColor(Text.empty(), rarity).getStyle().getColor();
             if (textColor != null) color = textColor.getRgb();
-            else color = rarity.formatting.getColorValue();
+            else color = rarity.getFormatting().getColorValue();
             if (color == null || color == 0xFFFFFF) color = 0xFFFFFFFF;
         }
         return color;
