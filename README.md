@@ -28,7 +28,7 @@ features for both players and developers.
 **You need to open advanced tooltip (F3+H) to use**
 
 - Ctrl: Display item tags
-- Alt: Display raw nbt & spawn egg entity info
+- Alt: Display raw nbt/components & spawn egg entity info
 - Shift: Specific information
 
 For block, it will display block tag.
