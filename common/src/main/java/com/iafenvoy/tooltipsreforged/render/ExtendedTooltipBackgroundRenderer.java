@@ -2,6 +2,8 @@ package com.iafenvoy.tooltipsreforged.render;
 
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +15,8 @@ public class ExtendedTooltipBackgroundRenderer {
     private static final Identifier DEFAULT_FRAME_TEXTURE = Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/gui/sprites/tooltip/frame.png");
 
     public static void render(ItemStack stack, DrawContext context, int x, int y, int width, int height, int z) {
-        Identifier texture = stack.getNbt() != null ? Identifier.tryParse(stack.getNbt().getString("tooltip_style")) : null;
+        NbtComponent component = stack.get(DataComponentTypes.CUSTOM_DATA);
+        Identifier texture = component != null ? Identifier.tryParse(component.copyNbt().getString("tooltip_style")) : null;
         int i = x - 4;
         int j = y - 4;
         int k = width + 8;

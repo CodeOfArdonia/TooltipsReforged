@@ -41,7 +41,7 @@ public class TooltipProviders {
                     textColor = TextColor.fromRgb(TooltipReforgedConfig.INSTANCE.misc.epicRarityColor.getValue());
             }
             if (textColor != null) color = textColor.getRgb();
-            else color = rarity.formatting.getColorValue();
+            else color = rarity.getFormatting().getColorValue();
             if (color == null || color == 0xFFFFFF) color = 0xFFFFFFFF;
         }
         return color;

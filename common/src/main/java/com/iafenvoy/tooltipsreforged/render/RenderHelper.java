@@ -44,7 +44,7 @@ public interface RenderHelper {
         entity.bodyYaw = rotationYaw;
         entity.headYaw = rotationYaw;
 
-        double boxX = entity.getBoundingBox().getXLength(), boxY = entity.getBoundingBox().getYLength(), scale = (boxX + boxY) / 2;
+        double boxX = entity.getBoundingBox().getLengthX(), boxY = entity.getBoundingBox().getLengthY(), scale = (boxX + boxY) / 2;
         Quaternionf correctionRotation = entity instanceof CodEntity || entity instanceof SalmonEntity ? new Quaternionf().rotateZ((float) Math.toRadians(-90)) : new Quaternionf().rotateX((float) Math.toRadians(180));
         Quaternionf combinedRotation = new Quaternionf().rotateY((float) Math.toRadians(rotationYaw)).mul(correctionRotation);
         if (entity instanceof SchoolingFishEntity) {

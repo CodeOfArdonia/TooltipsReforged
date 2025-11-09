@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[47,)"
+loaderVersion = "[2,)"
 issueTrackerURL = "https://github.com/CodeOfArdonia/TooltipsReforged/issues"
 license = "MIT"
 
@@ -14,16 +14,16 @@ Fully remake the whole tooltips and add various functions
 logoFile = "logo.png"
 
 [[dependencies.tooltips_reforged]]
-modId = "forge"
+modId = "neoforge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "[21,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.tooltips_reforged]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.1,1.20.5)"
+versionRange = "[1.21,1.21.2)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -33,3 +33,6 @@ mandatory = true
 versionRange = "[2,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[mixins]]
+config = "tooltips_reforged.mixins.json"

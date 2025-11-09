@@ -11,4 +11,4 @@ rootProject.name = 'tooltips_reforged'
 
 include 'common'
 include 'fabric'
-include 'forge'
+include 'neoforge'

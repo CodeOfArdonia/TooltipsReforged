@@ -8,6 +8,8 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
@@ -20,13 +22,13 @@ public class PaintingComponent implements TooltipComponent {
     private final int width, height;
 
     public PaintingComponent(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getSubNbt("EntityTag");
+        NbtCompound nbtCompound = stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT).copyNbt();
         PaintingEntity painting = EntityType.PAINTING.create(MinecraftClient.getInstance().world);
         if (nbtCompound != null && painting != null) {
             painting.readNbt(nbtCompound.copy());
             this.variant = painting.getVariant().value();
-            this.width = this.variant.getWidth() * 2;
-            this.height = this.variant.getHeight() * 2;
+            this.width = this.variant.width() * 2;
+            this.height = this.variant.height() * 2;
         } else {
             this.variant = null;
             this.width = 0;

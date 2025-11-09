@@ -10,6 +10,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import org.jetbrains.annotations.Nullable;
@@ -20,8 +21,8 @@ public class ContainerPreviewComponent implements TooltipComponent {
     @Nullable
     private final DefaultedList<ItemStack> stacks;
 
-    public ContainerPreviewComponent(ItemStack stack) {
-        this.stacks = InfoCollectHelper.collectContainer(stack);
+    public ContainerPreviewComponent(ItemStack stack, RegistryWrapper.WrapperLookup registries) {
+        this.stacks = InfoCollectHelper.collectContainer(stack, registries);
     }
 
     private boolean shouldRender() {

@@ -7,6 +7,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Bucketable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -51,7 +53,7 @@ public class EntityViewerComponent extends StandaloneComponent implements Render
         Entity entity = entityType.create(MinecraftClient.getInstance().world);
 
         if (entity instanceof Bucketable bucketable && entity instanceof LivingEntity livingEntity) {
-            NbtCompound nbtComponent = this.stack.getOrCreateNbt();
+            NbtCompound nbtComponent = this.stack.getOrDefault(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT).copyNbt();
             bucketable.copyDataFromNbt(nbtComponent);
             if (entityType == EntityType.TROPICAL_FISH) return;
             if (bucketable instanceof PufferfishEntity pufferfishEntity) pufferfishEntity.setPuffState(2);
@@ -63,7 +65,7 @@ public class EntityViewerComponent extends StandaloneComponent implements Render
     }
 
     private void renderSpawnEggEntity(DrawContext context, int x, int y, int z, SpawnEggItem spawnEggItem) {
-        EntityType<?> entityType = spawnEggItem.getEntityType(this.stack.getNbt());
+        EntityType<?> entityType = spawnEggItem.getEntityType(this.stack);
         Entity entity = entityType.create(MinecraftClient.getInstance().world);
         if (entity == null) return;
 
@@ -81,7 +83,7 @@ public class EntityViewerComponent extends StandaloneComponent implements Render
         if (entity instanceof SnowGolemEntity snowGolemEntity) snowGolemEntity.setHasPumpkin(false);
 
         if (entity instanceof LivingEntity livingEntity) {
-            NbtCompound nbt = this.stack.getSubNbt("EntityTag");
+            NbtCompound nbt = this.stack.getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT).copyNbt();
             if (nbt != null) livingEntity.readCustomDataFromNbt(nbt);
             this.renderBackground(context, x - ENTITY_OFFSET - 70, y, 80, 80, z);
             livingEntity.tick();
