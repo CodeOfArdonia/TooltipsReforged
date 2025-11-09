@@ -1,11 +1,9 @@
 package com.iafenvoy.tooltipsreforged.render;
 
-import com.iafenvoy.tooltipsreforged.Static;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -38,8 +36,8 @@ public class ExtendedTooltipBackgroundRenderer {
         int stackColor = TooltipProviders.getItemBorderColor(stack);
         int startColor = 0xff000000 | stackColor;
         if (stackColor == -1 || stackColor == 0)
-            startColor = Objects.requireNonNullElse(Rarity.COMMON.formatting.getColorValue(), -1);
-        int endColor = Static.END_COLOR;
+            startColor = TooltipReforgedConfig.INSTANCE.misc.commonRarityColor.getValue();
+        int endColor = TooltipReforgedConfig.INSTANCE.misc.endColor.getValue();
 
         if (TooltipReforgedConfig.INSTANCE.misc.useImageBorder.getValue())
             TooltipsRenderHelper.drawNineSlicedTexture(context, getFrameTexture(texture), i - 10, j - 10, k + 20, l + 20, 10, 100, 100);
