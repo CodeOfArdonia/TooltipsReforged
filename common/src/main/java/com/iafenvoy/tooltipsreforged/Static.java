@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import java.util.Map;
 
 public final class Static {
-    public static final int END_COLOR = 0x505000FF;
     public static final ThreadLocal<ItemStack> CACHE = new ThreadLocal<>();
 
     @ExpectPlatform

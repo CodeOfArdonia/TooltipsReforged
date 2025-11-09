@@ -30,6 +30,16 @@ public class TooltipProviders {
         if (color == null || color == -1) {
             Rarity rarity = stack.getRarity();
             TextColor textColor = RarityHook.applyColor(Text.empty(), rarity).getStyle().getColor();
+            if (TooltipReforgedConfig.INSTANCE.misc.overwriteRarityColor.getValue()) {
+                if (rarity == Rarity.COMMON)
+                    textColor = TextColor.fromRgb(TooltipReforgedConfig.INSTANCE.misc.commonRarityColor.getValue());
+                else if (rarity == Rarity.UNCOMMON)
+                    textColor = TextColor.fromRgb(TooltipReforgedConfig.INSTANCE.misc.uncommonRarityColor.getValue());
+                else if (rarity == Rarity.RARE)
+                    textColor = TextColor.fromRgb(TooltipReforgedConfig.INSTANCE.misc.rareRarityColor.getValue());
+                else if (rarity == Rarity.EPIC)
+                    textColor = TextColor.fromRgb(TooltipReforgedConfig.INSTANCE.misc.epicRarityColor.getValue());
+            }
             if (textColor != null) color = textColor.getRgb();
             else color = rarity.getFormatting().getColorValue();
             if (color == null || color == 0xFFFFFF) color = 0xFFFFFFFF;
