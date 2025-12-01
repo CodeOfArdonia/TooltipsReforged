@@ -21,6 +21,8 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class FoodEffectComponent implements TooltipComponent {
+    private static final Identifier FOOD_HALF_TEXTURE = Identifier.ofVanilla("hud/food_half");
+    private static final Identifier FOOD_FULL_TEXTURE = Identifier.ofVanilla("hud/food_full");
     protected final ItemStack stack;
     private final EffectsRenderMode effectsMode;
 
@@ -101,11 +103,11 @@ public class FoodEffectComponent implements TooltipComponent {
             boolean hasHalfHunger = (hunger % 2) != 0;
             int hungerWidth = textRenderer.getWidth(hungerText) + 1;
             for (int i = 0; i < (int) fullHungers; i++) {
-                context.drawTexture(Identifier.ofVanilla("textures/gui/icons.png"), x + hungerWidth, lineY, 52, 27, textRenderer.fontHeight, textRenderer.fontHeight, 256, 256);
+                context.drawGuiTexture(FOOD_FULL_TEXTURE, x + hungerWidth, lineY, 9, 9);
                 hungerWidth += textRenderer.fontHeight - 2;
             }
             if (hasHalfHunger)
-                context.drawTexture(Identifier.ofVanilla("textures/gui/icons.png"), x + hungerWidth, lineY, 61, 27, textRenderer.fontHeight, textRenderer.fontHeight, 256, 256);
+                context.drawGuiTexture(FOOD_HALF_TEXTURE, x + hungerWidth, lineY, 9, 9);
             lineY += textRenderer.fontHeight + 1;
         }
 
@@ -122,13 +124,11 @@ public class FoodEffectComponent implements TooltipComponent {
             if (c == 0) c = 0xFF5454FC;
 
             String effectName = Text.translatable(statusEffect.getTranslationKey()).getString();
-            if (statusEffect.getAmplifier() > 0) {
+            if (statusEffect.getAmplifier() > 0)
                 effectName = Text.translatable("potion.withAmplifier", effectName, Text.translatable("potion.potency." + statusEffect.getAmplifier()).getString()).getString();
-            }
             String fullText = effectName;
-            if (!statusEffect.isDurationBelow(20)) {
+            if (!statusEffect.isDurationBelow(20))
                 fullText += " (" + TextUtil.getDurationText(statusEffect, 1.0f).getString() + ")";
-            }
             Text renderText = Text.literal(fullText);
             if (this.effectsMode.shouldRenderIcon()) {
                 context.drawSprite(x - 1, lineY - 1, 0, textRenderer.fontHeight, textRenderer.fontHeight, effectTexture);
@@ -137,5 +137,4 @@ public class FoodEffectComponent implements TooltipComponent {
             lineY += textRenderer.fontHeight + 1;
         }
     }
-
 }
