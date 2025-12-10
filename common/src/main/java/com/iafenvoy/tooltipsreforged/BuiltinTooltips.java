@@ -2,17 +2,17 @@ package com.iafenvoy.tooltipsreforged;
 
 import com.iafenvoy.tooltipsreforged.component.*;
 import com.iafenvoy.tooltipsreforged.mixin.DecorationItemAccessor;
-import com.iafenvoy.tooltipsreforged.util.ExtendedTextVisitor;
-import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.SkullBlock;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 import net.minecraft.text.OrderedText;
+import net.minecraft.registry.DynamicRegistryManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,41 +38,32 @@ public class BuiltinTooltips {
         else if (stack.getItem() instanceof TippedArrowItem)
             headers.add(new PotionEffectsComponent(stack, 0.125f));
         //Food
-        if (stack.getItem().getFoodComponent() != null)
+        if (stack.contains(DataComponentTypes.FOOD))
             headers.add(new FoodEffectComponent(stack));
         //Enchantments
         if (stack.getItem() instanceof EnchantedBookItem)
-            headers.add(new EnchantmentsComponent(EnchantedBookItem.getEnchantmentNbt(stack)));
+            headers.add(new EnchantmentsComponent(stack.getOrDefault(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT)));
         if (stack.getItem().isEnchantable(stack))
-            headers.add(new EnchantmentsComponent(EnchantmentHelper.get(stack)));
+            headers.add(new EnchantmentsComponent(stack.getEnchantments()));
         components.addAll(0, headers);
         //Equipments
-        if (stack.getItem() instanceof Equipment || stack.getItem() instanceof SkullItem) {
+        if (stack.getItem() instanceof Equipment || stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof SkullBlock) {
             components.add(new EquipmentViewerComponent(stack));
             components.add(new EquipmentCompareComponent(stack));
         }
         //Misc
         if (stack.getItem() instanceof EntityBucketItem || stack.getItem() instanceof SpawnEggItem)
             components.add(new EntityViewerComponent(stack));
-        components.add(new ContainerPreviewComponent(stack));
+        components.add(new ContainerPreviewComponent(stack, registries));
         if (stack.getItem() instanceof FilledMapItem)
             components.add(new MapComponent(stack));
         if (stack.getItem() instanceof DecorationItemAccessor accessor && accessor.getEntityType() == EntityType.PAINTING)
             components.add(new PaintingComponent(stack));
         if (stack.getItem() instanceof BannerPatternItem)
-            components.add(new BannerPatternComponent(stack));
+            components.add(new BannerPatternComponent(stack, registries));
         //Debug & Durability
-        if (MinecraftClient.getInstance().options.advancedItemTooltips) {
-            for (int i = 0; i < components.size(); i++) {
-                TooltipComponent component = components.get(i);
-                if (component instanceof OrderedTextTooltipComponent ordered)
-                    if (ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(ordered)).getString().contains((stack.getMaxDamage() - stack.getDamage()) + " / " + stack.getMaxDamage())) {
-                        components.set(i, new DurabilityComponent(stack));
-                        break;
-                    }
-            }
-            components.add(new DebugInfoComponent(stack));
-        } else
-            components.add(new DurabilityComponent(stack));
+        components.add(new DurabilityComponent(stack));
+        if (MinecraftClient.getInstance().options.advancedItemTooltips)
+            components.add(new DebugInfoComponent(stack, registries));
     }
 }

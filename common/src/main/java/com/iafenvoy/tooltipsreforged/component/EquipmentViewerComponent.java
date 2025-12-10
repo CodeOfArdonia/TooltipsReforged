@@ -11,8 +11,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.item.Equipment;
 import net.minecraft.item.ItemStack;
 
 @Environment(EnvType.CLIENT)
@@ -37,7 +37,7 @@ public class EquipmentViewerComponent extends StandaloneComponent implements Ren
     private void renderPlayer(DrawContext context, int x, int y, int z) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
-        EquipmentSlot slot = LivingEntity.getPreferredEquipmentSlot(this.stack);
+        EquipmentSlot slot = getPreferredEquipmentSlot(this.stack);
         ItemStack original = player.getEquippedStack(slot);
         player.equipStack(slot, this.stack);
         this.renderBackground(context, x - ENTITY_OFFSET - 25, y, 40, 70, z);
@@ -47,9 +47,14 @@ public class EquipmentViewerComponent extends StandaloneComponent implements Ren
 
     private void renderArmorStand(DrawContext context, int x, int y, int z) {
         ArmorStandEntity armorStand = new ArmorStandEntity(EntityType.ARMOR_STAND, MinecraftClient.getInstance().world);
-        armorStand.equipStack(LivingEntity.getPreferredEquipmentSlot(this.stack), this.stack);
+        armorStand.equipStack(getPreferredEquipmentSlot(this.stack), this.stack);
         this.renderBackground(context, x - ENTITY_OFFSET - 25, y, 40, 70, z);
         armorStand.tick();
         this.drawEntity(context, x - 45, y + 65, 35, -CURRENT_ROTATION, armorStand);
+    }
+
+    private static EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
+        Equipment equipment = Equipment.fromStack(stack);
+        return equipment != null ? equipment.getSlotType() : EquipmentSlot.MAINHAND;
     }
 }

@@ -1,30 +1,52 @@
 package com.iafenvoy.tooltipsreforged.util;
 
+import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonObject;
+import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryOps;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class NbtProcessor {
-    public static List<MutableText> process(ItemStack stack) {
-        List<MutableText> list = new LinkedList<>();
-        if (!stack.hasNbt()) return list;
-        /*
-            Get the NBT list that we want to show.
-            And we set the symbols up where we look for, so we can detect what to give which color.
-         */
-        String nbtList = String.valueOf(stack.getNbt());
+public final class ComponentsProcessor {
+    public static final List<String> DEFAULT_IGNORED = List.of("minecraft:max_stack_size", "minecraft:rarity");
+
+    public static List<MutableText> processStack(ItemStack stack, DynamicRegistryManager registries) {
+        List<String> ignored = TooltipReforgedConfig.INSTANCE.misc.ignoredComponents.getValue();
+        ImmutableList.Builder<MutableText> builder = ImmutableList.builder();
+        for (ComponentType<?> type : stack.getComponents().getTypes()) {
+            Identifier id = Registries.DATA_COMPONENT_TYPE.getId(type);
+            if (id != null && ignored.contains(id.toString())) continue;
+            builder.addAll(processSingle(id, serialize(type, stack, registries)));
+        }
+        return builder.build();
+    }
+
+    private static <T> String serialize(ComponentType<T> type, ItemStack stack, DynamicRegistryManager registries) {
+        return type.getCodecOrThrow().encodeStart(RegistryOps.of(JsonOps.INSTANCE, registries), stack.get(type)).resultOrPartial().orElse(new JsonObject()).toString();
+    }
+
+    public static List<MutableText> processSingle(@Nullable Identifier id, String json) {
         Pattern p = Pattern.compile("[{}:\"\\[\\],']", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(nbtList);
-
         // Create new literalText, which we will be adding to the list.
-        MutableText mutableText = Text.empty();
+        MutableText mutableText = id == null ? Text.empty() : Text.empty().append(Text.literal(id.toString()).formatted(Formatting.GRAY)).append(" ");
+        if (!p.asPredicate().test(json))
+            return List.of(mutableText.append(Text.literal(json).formatted(Formatting.WHITE)));
 
+        List<MutableText> list = new LinkedList<>();
+        Matcher m = p.matcher(json);
 
         /*  **Loop through the NBT data**
          *
@@ -53,16 +75,16 @@ public final class NbtProcessor {
              *  We do this so the data between the single quotation marks will get the "stringColour".
              *  And we make sure that the single quotation marks get the "quotationColour".
              */
-            if (nbtList.charAt(m.start()) == '\'') {
+            if (json.charAt(m.start()) == '\'') {
                 if (singleQuotationMark.equals(Boolean.FALSE)) { // If false color only the quotation mark
-                    mutableText.append(Text.literal(String.valueOf(nbtList.charAt(m.start()))).formatted(quotationColour));
+                    mutableText.append(Text.literal(String.valueOf(json.charAt(m.start()))).formatted(quotationColour));
                     singleQuotationMark = Boolean.TRUE;
                 } else { // Else color the quotation mark and make the rest green
-                    mutableText.append(Text.literal(nbtList.substring(lastIndex + 1, m.start())).formatted(stringColour));
-                    mutableText.append(Text.literal(String.valueOf(nbtList.charAt(m.start()))).formatted(quotationColour));
+                    mutableText.append(Text.literal(json.substring(lastIndex + 1, m.start())).formatted(stringColour));
+                    mutableText.append(Text.literal(String.valueOf(json.charAt(m.start()))).formatted(quotationColour));
                     singleQuotationMark = Boolean.FALSE;
                 }
-                lastString = String.valueOf(nbtList.charAt(m.start()));
+                lastString = String.valueOf(json.charAt(m.start()));
                 lastIndex = m.start();
             }
 
@@ -80,9 +102,9 @@ public final class NbtProcessor {
                         Adds the found char and gives it the "separationColour"
                         Stores the lastString and lastIndex
                  */
-                if (nbtList.charAt(m.start()) == '{' || nbtList.charAt(m.start()) == '[') {
-                    mutableText.append(Text.literal(String.valueOf(nbtList.charAt(m.start()))).formatted(separationColour));
-                    lastString = String.valueOf(nbtList.charAt(m.start()));
+                if (json.charAt(m.start()) == '{' || json.charAt(m.start()) == '[') {
+                    mutableText.append(Text.literal(String.valueOf(json.charAt(m.start()))).formatted(separationColour));
+                    lastString = String.valueOf(json.charAt(m.start()));
                     lastIndex = m.start();
                 }
 
@@ -95,25 +117,25 @@ public final class NbtProcessor {
                         If the char was a comma add a space (this way it's more readable)
                         Stores the lastString and lastIndex
                  */
-                if (nbtList.charAt(m.start()) == '}' || nbtList.charAt(m.start()) == ']' || nbtList.charAt(m.start()) == ',') {
-                    if (nbtList.charAt(m.start() - 1) == 's' || nbtList.charAt(m.start() - 1) == 'S' ||
-                            nbtList.charAt(m.start() - 1) == 'b' || nbtList.charAt(m.start() - 1) == 'B' ||
-                            nbtList.charAt(m.start() - 1) == 'l' || nbtList.charAt(m.start() - 1) == 'L' ||
-                            nbtList.charAt(m.start() - 1) == 'f' || nbtList.charAt(m.start() - 1) == 'F'
+                if (json.charAt(m.start()) == '}' || json.charAt(m.start()) == ']' || json.charAt(m.start()) == ',') {
+                    if (json.charAt(m.start() - 1) == 's' || json.charAt(m.start() - 1) == 'S' ||
+                            json.charAt(m.start() - 1) == 'b' || json.charAt(m.start() - 1) == 'B' ||
+                            json.charAt(m.start() - 1) == 'l' || json.charAt(m.start() - 1) == 'L' ||
+                            json.charAt(m.start() - 1) == 'f' || json.charAt(m.start() - 1) == 'F'
                     ) {
-                        mutableText.append(Text.literal(nbtList.substring(lastIndex + 1, m.start() - 1)).formatted(integerColour));
-                        mutableText.append(Text.literal(nbtList.substring(m.start() - 1, m.start())).formatted(typeColour));
+                        mutableText.append(Text.literal(json.substring(lastIndex + 1, m.start() - 1)).formatted(integerColour));
+                        mutableText.append(Text.literal(json.substring(m.start() - 1, m.start())).formatted(typeColour));
 
                     } else {
-                        mutableText.append(Text.literal(nbtList.substring(lastIndex + 1, m.start())).formatted(integerColour));
+                        mutableText.append(Text.literal(json.substring(lastIndex + 1, m.start())).formatted(integerColour));
                     }
 
-                    mutableText.append(Text.literal(String.valueOf(nbtList.charAt(m.start())))).formatted(separationColour);
+                    mutableText.append(Text.literal(String.valueOf(json.charAt(m.start())))).formatted(separationColour);
 
-                    if (nbtList.charAt(m.start()) == ',') {
+                    if (json.charAt(m.start()) == ',') {
                         mutableText.append(Text.literal(" ").formatted(separationColour));
                     }
-                    lastString = String.valueOf(nbtList.charAt(m.start()));
+                    lastString = String.valueOf(json.charAt(m.start()));
                     lastIndex = m.start();
                 }
 
@@ -125,13 +147,13 @@ public final class NbtProcessor {
                                   Stores the lastString and lastIndex
 
                  */
-                if (nbtList.charAt(m.start()) == ':') { // 4).
+                if (json.charAt(m.start()) == ':') { // 4).
                     if (!lastString.equals("\"")) {
-                        mutableText.append(Text.literal(nbtList.substring(lastIndex + 1, m.start())).formatted(fieldColour));
+                        mutableText.append(Text.literal(json.substring(lastIndex + 1, m.start())).formatted(fieldColour));
 
-                        mutableText.append((Text.literal(String.valueOf(nbtList.charAt(m.start())))).formatted(separationColour));
+                        mutableText.append((Text.literal(String.valueOf(json.charAt(m.start())))).formatted(separationColour));
                         mutableText.append(Text.literal(" ").formatted(separationColour));
-                        lastString = String.valueOf(nbtList.charAt(m.start()));
+                        lastString = String.valueOf(json.charAt(m.start()));
                         lastIndex = m.start();
                     }
 
@@ -145,7 +167,7 @@ public final class NbtProcessor {
                             Else: Only add the " since it's the first one.
                         Stores the lastString and lastIndex
                  */
-                if (nbtList.charAt(m.start()) == '"') {
+                if (json.charAt(m.start()) == '"') {
                     if (lastString.equals("\"")) {
 
                         // Check if the string is way too long
@@ -153,14 +175,14 @@ public final class NbtProcessor {
                             mutableText.append(Text.literal("....").formatted(lstringColour));
                             removedCharters += m.start() - lineLimit;
                         } else {
-                            mutableText.append(Text.literal(nbtList.substring(lastIndex + 1, m.start())).formatted(stringColour));
+                            mutableText.append(Text.literal(json.substring(lastIndex + 1, m.start())).formatted(stringColour));
                         }
 
-                        mutableText.append(Text.literal(String.valueOf(nbtList.charAt(m.start()))).formatted(quotationColour));
+                        mutableText.append(Text.literal(String.valueOf(json.charAt(m.start()))).formatted(quotationColour));
                     } else {
-                        mutableText.append(Text.literal(String.valueOf(nbtList.charAt(m.start()))).formatted(quotationColour));
+                        mutableText.append(Text.literal(String.valueOf(json.charAt(m.start()))).formatted(quotationColour));
                     }
-                    lastString = String.valueOf(nbtList.charAt(m.start()));
+                    lastString = String.valueOf(json.charAt(m.start()));
                     lastIndex = m.start();
 
                 }
@@ -174,10 +196,10 @@ public final class NbtProcessor {
              *  4). The last thing we do is adding the text to the list and making sure that we go to the next line
              */
             if (m.start() - removedCharters >= lineLimit) { // 1).
-                if (nbtList.charAt(m.start()) == '}' || nbtList.charAt(m.start()) == ']' || nbtList.charAt(m.start()) == ',') { // 2).
+                if (json.charAt(m.start()) == '}' || json.charAt(m.start()) == ']' || json.charAt(m.start()) == ',') { // 2).
 
                     if (lastString.equals("'")) { // 3).
-                        mutableText.append(Text.literal(nbtList.substring(lastIndex + 1, m.start())).formatted(stringColour));
+                        mutableText.append(Text.literal(json.substring(lastIndex + 1, m.start())).formatted(stringColour));
                         lastIndex = m.start();
                     }
 

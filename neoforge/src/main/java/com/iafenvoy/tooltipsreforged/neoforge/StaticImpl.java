@@ -1,7 +1,7 @@
-package com.iafenvoy.tooltipsreforged.forge;
+package com.iafenvoy.tooltipsreforged.neoforge;
 
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.forgespi.language.IModInfo;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforgespi.language.IModInfo;
 
 import java.util.HashMap;
 import java.util.Map;

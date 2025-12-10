@@ -11,6 +11,8 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.MapRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapState;
@@ -39,7 +41,7 @@ public class MapComponent implements TooltipComponent {
         VertexConsumerProvider vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
         MapRenderer mapRenderer = MinecraftClient.getInstance().gameRenderer.getMapRenderer();
 
-        Integer mapId = FilledMapItem.getMapId(this.stack);
+        MapIdComponent mapId = this.stack.get(DataComponentTypes.MAP_ID);
         MapState mapState = FilledMapItem.getMapState(this.stack, MinecraftClient.getInstance().world);
         if (mapId == null || mapState == null) return;
 

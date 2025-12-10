@@ -16,7 +16,9 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import org.joml.Vector2ic;
 
@@ -30,8 +32,11 @@ public class TooltipsRenderHelper {
     private static final int PAGE_SPACING = 12;
 
     public static void render(ItemStack stack, List<TooltipComponent> components, DrawContext context, TextRenderer textRenderer, int mouseX, int mouseY, TooltipPositioner positioner) {
-        BuiltinTooltips.appendTooltip(stack, components);
-        EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(stack, components));
+        ClientWorld world = MinecraftClient.getInstance().world;
+        if (world == null) return;
+        DynamicRegistryManager registries = world.getRegistryManager();
+        BuiltinTooltips.appendTooltip(stack, components, registries);
+        EntryPointManager.getEntryPoints(TooltipReforgedClient.MOD_ID, TooltipsReforgeEntrypoint.class).forEach(e -> e.appendTooltip(stack, components, registries));
         components.removeIf(Objects::isNull);
         if (TooltipReforgedConfig.INSTANCE.misc.removeEmptyLines.getValue())
             components.removeIf(x -> x instanceof OrderedTextTooltipComponent ordered && ExtendedTextVisitor.getText(TextUtil.getTextFromComponent(ordered)).getString().isEmpty());
@@ -90,7 +95,7 @@ public class TooltipsRenderHelper {
     }
 
     public static Vector2ic resolvePosition(ResolveResult result, DrawContext context, int mouseX, int mouseY, TooltipPositioner positioner) {
-        return positioner.getPosition(context.getScaledWindowWidth(), context.getScaledWindowHeight(), mouseX, mouseY, result.totalWidth, result.pages.get(0).height);
+        return positioner.getPosition(context.getScaledWindowWidth(), context.getScaledWindowHeight(), mouseX, mouseY, result.totalWidth, result.pages.getFirst().height);
     }
 
     public static void drawWithResult(ResolveResult result, ItemStack stack, DrawContext context, TextRenderer textRenderer, int x, int y) {

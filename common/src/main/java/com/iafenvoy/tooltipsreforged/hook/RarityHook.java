@@ -23,6 +23,6 @@ public final class RarityHook {
     }
 
     static {
-        register((text, rarity) -> text.formatted(rarity.formatting == Formatting.BLACK ? Formatting.WHITE : rarity.formatting));
+        register((text, rarity) -> text.formatted(rarity.getFormatting() == Formatting.BLACK ? Formatting.WHITE : rarity.getFormatting()));
     }
 }

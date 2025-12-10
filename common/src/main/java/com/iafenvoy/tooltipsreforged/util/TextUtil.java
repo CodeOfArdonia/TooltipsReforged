@@ -124,7 +124,7 @@ public final class TextUtil {
             return Text.translatable("effect.duration.infinite");
         } else {
             int i = MathHelper.floor((float) effect.getDuration() * multiplier);
-            return Text.literal(StringHelper.formatTicks(i));
+            return Text.literal(StringHelper.formatTicks(i, 20));
         }
     }
 }

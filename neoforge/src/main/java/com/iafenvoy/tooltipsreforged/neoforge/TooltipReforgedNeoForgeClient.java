@@ -1,4 +1,4 @@
-package com.iafenvoy.tooltipsreforged.forge;
+package com.iafenvoy.tooltipsreforged.neoforge;
 
 import com.iafenvoy.jupiter.render.screen.ConfigContainerScreen;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
@@ -6,17 +6,24 @@ import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.hook.RarityHook;
 import com.iafenvoy.tooltipsreforged.util.TooltipKeyManager;
 import net.minecraft.text.Style;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class TooltipReforgedForgeClient {
+@Mod(value = TooltipReforgedClient.MOD_ID, dist = Dist.CLIENT)
+@EventBusSubscriber(Dist.CLIENT)
+public class TooltipReforgedNeoForgeClient {
+    public TooltipReforgedNeoForgeClient(ModContainer container) {
+        container.registerExtensionPoint(IConfigScreenFactory.class, (c, parent) -> new ClientConfigScreen(parent, TooltipReforgedConfig.INSTANCE));
+    }
+
     @SubscribeEvent
     public static void onInit(FMLClientSetupEvent event) {
         event.enqueueWork(TooltipReforgedClient::init);

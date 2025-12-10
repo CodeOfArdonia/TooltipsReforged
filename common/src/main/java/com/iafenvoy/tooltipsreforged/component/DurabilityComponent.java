@@ -35,7 +35,7 @@ public class DurabilityComponent implements TooltipComponent, RenderHelper {
         int maxDamage = stack.getMaxDamage(), damaged = maxDamage - stack.getDamage();
         if (mode.shouldInPercentage() && maxDamage > 0) {
             Text percentageText = Text.literal(" " + (damaged * 100 / maxDamage) + "%");
-            return mode.shouldColorText() ? percentageText.getWithStyle(Style.EMPTY.withColor(stack.getItemBarColor())).get(0) : percentageText;
+            return mode.shouldColorText() ? percentageText.getWithStyle(Style.EMPTY.withColor(stack.getItemBarColor())).getFirst() : percentageText;
         } else return mode.shouldColorText() ? Text.literal(" ")
                 .append(Text.literal(String.valueOf(damaged)).setStyle(Style.EMPTY.withColor(stack.getItemBarColor())))
                 .append(Text.literal(" / ").setStyle(Style.EMPTY.withColor(-8355712)))
