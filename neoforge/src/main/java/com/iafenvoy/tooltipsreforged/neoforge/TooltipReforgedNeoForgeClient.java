@@ -10,6 +10,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -21,13 +22,13 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 @EventBusSubscriber(Dist.CLIENT)
 public class TooltipReforgedNeoForgeClient {
     public TooltipReforgedNeoForgeClient(ModContainer container) {
-        container.registerExtensionPoint(IConfigScreenFactory.class, (c, parent) -> new ClientConfigScreen(parent, TooltipReforgedConfig.INSTANCE));
+        container.registerExtensionPoint(IConfigScreenFactory.class, (c, parent) -> new ConfigContainerScreen(parent, TooltipReforgedConfig.INSTANCE, true));
     }
 
     @SubscribeEvent
     public static void onInit(FMLClientSetupEvent event) {
         event.enqueueWork(TooltipReforgedClient::init);
-        MinecraftForge.registerConfigScreen(parent -> new ConfigContainerScreen(parent, TooltipReforgedConfig.INSTANCE, true));
+        ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (container, parent) -> new ConfigContainerScreen(parent, TooltipReforgedConfig.INSTANCE, true));
         //Register Hooks
         RarityHook.register((text, rarity) -> text.fillStyle(rarity.getStyleModifier().apply(Style.EMPTY)));
     }

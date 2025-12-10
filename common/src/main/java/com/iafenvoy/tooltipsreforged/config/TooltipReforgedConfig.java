@@ -4,8 +4,8 @@ import com.iafenvoy.jupiter.config.container.AutoInitConfigContainer;
 import com.iafenvoy.jupiter.config.entry.*;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.mode.*;
-import net.minecraft.text.Text;
 import com.iafenvoy.tooltipsreforged.util.ComponentsProcessor;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class TooltipReforgedConfig extends AutoInitConfigContainer {
     @SuppressWarnings("unused")
     public static class MiscConfig extends AutoInitConfigCategoryBase {
         public final ListStringEntry blacklist = ListStringEntry.builder("config.tooltips_reforged.blacklist", List.of()).json("blacklist").build();
-        public final IConfigEntry<List<String>> ignoredComponents = new ListStringEntry("config.tooltips_reforged.ignoredComponents", ComponentsProcessor.DEFAULT_IGNORED).json("ignoredComponents");
+        public final ListStringEntry ignoredComponents = ListStringEntry.builder("config.tooltips_reforged.ignoredComponents", ComponentsProcessor.DEFAULT_IGNORED).json("ignoredComponents").build();
         public final SeparatorEntry s1 = SeparatorEntry.builder().build();
         public final BooleanEntry overwriteRarityColor = BooleanEntry.builder("config.tooltips_reforged.overwriteRarityColor", false).json("overwriteRarityColor").build();
         public final IntegerEntry commonRarityColor = IntegerEntry.builder("config.tooltips_reforged.commonRarityColor", 0x505000FF).json("commonRarityColor").build();

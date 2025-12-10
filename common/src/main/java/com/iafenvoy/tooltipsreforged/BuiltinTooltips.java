@@ -2,10 +2,12 @@ package com.iafenvoy.tooltipsreforged;
 
 import com.iafenvoy.tooltipsreforged.component.*;
 import com.iafenvoy.tooltipsreforged.mixin.DecorationItemAccessor;
+import com.iafenvoy.tooltipsreforged.util.TextUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.SkullBlock;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
@@ -19,7 +21,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class BuiltinTooltips {
-    public static void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
+    public static void appendTooltip(ItemStack stack, List<TooltipComponent> components, DynamicRegistryManager registries) {
         OrderedText text = null;
         if (!components.isEmpty()) {
             TooltipComponent component = components.remove(0);
