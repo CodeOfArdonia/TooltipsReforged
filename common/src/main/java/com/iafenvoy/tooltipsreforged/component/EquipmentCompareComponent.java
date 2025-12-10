@@ -38,7 +38,7 @@ public class EquipmentCompareComponent extends StandaloneComponent {
         if (!this.components.isEmpty()) this.components.remove(0);
         List<TooltipComponent> headers = new LinkedList<>();
         headers.add(new OrderedTextTooltipComponent(Text.translatable("tooltip.tooltips_reforged.currently_equipped").asOrderedText()));
-        headers.add(new HeaderComponent(this.equipped));
+        headers.add(new HeaderComponent(this.equipped, null));
         if (this.equipped.getItem().isEnchantable(this.equipped))
             headers.add(new EnchantmentsComponent(EnchantmentHelper.get(this.equipped)));
         this.components.addAll(0, headers);

@@ -28,7 +28,7 @@ public class EquipmentViewerComponent extends StandaloneComponent implements Ren
     @Override
     public void render(DrawContext context, TextRenderer textRenderer, int x, int y, int z) {
         CURRENT_ROTATION = (CURRENT_ROTATION + ROTATION_INCREMENT) % 360;
-        switch ((ArmorRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.armorTooltip.getValue()) {
+        switch (TooltipReforgedConfig.INSTANCE.tooltip.armorTooltip.getValue()) {
             case PLAYER -> this.renderPlayer(context, x, y, z);
             case ARMOR_STAND -> this.renderArmorStand(context, x, y, z);
         }

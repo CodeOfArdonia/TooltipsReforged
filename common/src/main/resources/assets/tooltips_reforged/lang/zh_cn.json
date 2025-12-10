@@ -62,6 +62,7 @@
   "config.tooltips_reforged.useImageBackground": "使用贴图背景（类似1.21.2+特性）",
   "config.tooltips_reforged.useImageBorder": "使用贴图边框（类似1.21.2+特性）",
   "config.tooltips_reforged.useNameColor": "使用物品名称颜色作为提示框颜色",
+  "config.tooltips_reforged.useOriginalTitle": "使用原始物品名",
   "config.tooltips_reforged.usePlayer": "使用玩家取代盔甲架进行装备渲染",
   "keybinding.tooltips_reforged.show_item_tag": "切换物品标签显示",
   "keybinding.tooltips_reforged.show_nbt_spawn_egg": "切换NBT/刷怪蛋信息显示",

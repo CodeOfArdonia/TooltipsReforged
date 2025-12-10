@@ -12,6 +12,7 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
+import net.minecraft.text.OrderedText;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,10 +20,15 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class BuiltinTooltips {
     public static void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
-        if (!components.isEmpty()) components.remove(0);
+        OrderedText text = null;
+        if (!components.isEmpty()) {
+            TooltipComponent component = components.remove(0);
+            if (component instanceof OrderedTextTooltipComponent ordered)
+                text = TextUtil.getTextFromComponent(ordered);
+        }
         List<TooltipComponent> headers = new LinkedList<>();
         //Header
-        headers.add(new HeaderComponent(stack));
+        headers.add(new HeaderComponent(stack, text));
         headers.add(new ItemZoomComponent(stack));
         //Effects
         if (stack.getItem() instanceof LingeringPotionItem)

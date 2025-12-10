@@ -30,6 +30,6 @@ side = "BOTH"
 [[dependencies.tooltips_reforged]]
 modId = "jupiter"
 mandatory = true
-versionRange = "[2,)"
+versionRange = "[2.3.1,)"
 ordering = "NONE"
 side = "BOTH"

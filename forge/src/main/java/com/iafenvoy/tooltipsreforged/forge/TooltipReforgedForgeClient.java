@@ -1,6 +1,6 @@
 package com.iafenvoy.tooltipsreforged.forge;
 
-import com.iafenvoy.jupiter.render.screen.ClientConfigScreen;
+import com.iafenvoy.jupiter.render.screen.ConfigContainerScreen;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.hook.RarityHook;
@@ -20,13 +20,13 @@ public class TooltipReforgedForgeClient {
     @SubscribeEvent
     public static void onInit(FMLClientSetupEvent event) {
         event.enqueueWork(TooltipReforgedClient::init);
-        MinecraftForge.registerConfigScreen(parent -> new ClientConfigScreen(parent, TooltipReforgedConfig.INSTANCE));
+        MinecraftForge.registerConfigScreen(parent -> new ConfigContainerScreen(parent, TooltipReforgedConfig.INSTANCE, true));
         //Register Hooks
         RarityHook.register((text, rarity) -> text.fillStyle(rarity.getStyleModifier().apply(Style.EMPTY)));
     }
 
     @SubscribeEvent
-    public static void registerKeyBindings(RegisterKeyMappingsEvent event){
+    public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
         event.register(TooltipKeyManager.SHOW_ITEM_TAG);
         event.register(TooltipKeyManager.SHOW_NBT_SPAWN_EGG);
         event.register(TooltipKeyManager.SHOW_SPECIFIC_INFO);

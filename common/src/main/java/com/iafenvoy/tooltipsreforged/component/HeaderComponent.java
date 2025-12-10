@@ -15,6 +15,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
@@ -24,10 +25,10 @@ public class HeaderComponent implements TooltipComponent, RenderHelper {
     private final OrderedText nameText, rarityName;
     private final Pair<Text, Integer> badgePair;
 
-    public HeaderComponent(ItemStack stack) {
+    public HeaderComponent(ItemStack stack, @Nullable OrderedText original) {
         this.stack = stack;
-        this.itemDisplayMode = (ItemDisplayMode) TooltipReforgedConfig.INSTANCE.tooltip.itemDisplayTooltip.getValue();
-        this.nameText = TooltipProviders.getDisplayName(this.stack).asOrderedText();
+        this.itemDisplayMode = TooltipReforgedConfig.INSTANCE.tooltip.itemDisplayTooltip.getValue();
+        this.nameText = TooltipReforgedConfig.INSTANCE.misc.useOriginalTitle.getValue() && original != null ? original : TooltipProviders.getDisplayName(this.stack).asOrderedText();
         this.rarityName = TooltipProviders.getRarityName(this.stack).asOrderedText();
         this.badgePair = BadgesUtils.getBadgeText(this.stack);
     }

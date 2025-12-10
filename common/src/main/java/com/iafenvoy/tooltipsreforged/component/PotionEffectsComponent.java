@@ -26,7 +26,7 @@ public class PotionEffectsComponent implements TooltipComponent {
     public PotionEffectsComponent(ItemStack stack, float durationMultiplier) {
         this.durationMultiplier = durationMultiplier;
         this.effects = PotionUtil.getPotionEffects(stack);
-        this.effectsMode = (EffectsRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.effectsTooltip.getValue();
+        this.effectsMode = TooltipReforgedConfig.INSTANCE.tooltip.effectsTooltip.getValue();
     }
 
     @Override

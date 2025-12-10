@@ -33,7 +33,7 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
-    modImplementation "maven.modrinth:jupiter:VYBZUMOv"
+    modImplementation "maven.modrinth:jupiter:pdN7X2Mh"
     modImplementation(include("com.github.IAFEnvoy.Integration:integration-fabric:$integration_version"))
 
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")

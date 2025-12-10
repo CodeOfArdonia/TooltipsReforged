@@ -43,13 +43,13 @@ public class EnchantmentsComponent implements TooltipComponent, RenderHelper {
     }
 
     public EnchantmentsComponent(Map<Enchantment, Integer> map) {
-        this.mode = (EnchantmentsRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue();
+        this.mode = TooltipReforgedConfig.INSTANCE.tooltip.enchantmentTooltip.getValue();
         for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
             Enchantment enchantment = entry.getKey();
             String descriptionKey = enchantment.getTranslationKey() + ".desc";
             this.enchantments.add(new EnchantmentInfo(enchantment, entry.getValue(), I18n.hasTranslation(descriptionKey) ? TextUtil.splitText(Text.literal(I18n.translate(descriptionKey)), 300, MinecraftClient.getInstance().textRenderer) : List.of()));
         }
-        this.enchantments.sort(((EnchantmentSortMode) TooltipReforgedConfig.INSTANCE.misc.enchantmentSort.getValue()).getComparator());
+        this.enchantments.sort(TooltipReforgedConfig.INSTANCE.misc.enchantmentSort.getValue().getComparator());
         this.extraColor = TooltipReforgedConfig.INSTANCE.misc.advancedEnchantmentColor.getValue();
     }
 
