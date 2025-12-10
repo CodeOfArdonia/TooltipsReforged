@@ -26,6 +26,6 @@
   ],
   "depends": {
     "minecraft": "~1.21",
-    "jupiter": ">=2"
+    "jupiter": ">=2.3.1"
   }
 }

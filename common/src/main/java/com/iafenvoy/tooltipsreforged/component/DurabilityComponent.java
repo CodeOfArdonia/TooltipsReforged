@@ -25,7 +25,7 @@ public class DurabilityComponent implements TooltipComponent, RenderHelper {
 
     public DurabilityComponent(ItemStack stack) {
         this.stack = stack;
-        this.mode = (DurabilityRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.durabilityTooltip.getValue();
+        this.mode = TooltipReforgedConfig.INSTANCE.tooltip.durabilityTooltip.getValue();
         this.enabled = this.mode.isEnabled() && this.stack.isDamageable() && this.stack.getMaxDamage() > 0;
         this.color = stack.getItemBarColor();
         this.text = this.enabled ? getDurabilityText(stack, this.mode) : Text.literal("");

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ShulkerBoxBlockMixin {
     @Inject(method = "appendTooltip", at = @At("HEAD"), cancellable = true)
     private void wrapTooltip(CallbackInfo ci) {
-        if (!((ContainerPreviewRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.containerTooltip.getValue()).shouldRenderText())
+        if (!TooltipReforgedConfig.INSTANCE.tooltip.containerTooltip.getValue().shouldRenderText())
             ci.cancel();
     }
 }

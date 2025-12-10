@@ -12,7 +12,7 @@ public class ItemZoomComponent extends StandaloneComponent implements RenderHelp
 
     public ItemZoomComponent(ItemStack stack) {
         super(stack);
-        this.itemDisplayMode = (ItemDisplayMode) TooltipReforgedConfig.INSTANCE.tooltip.itemDisplayTooltip.getValue();
+        this.itemDisplayMode = TooltipReforgedConfig.INSTANCE.tooltip.itemDisplayTooltip.getValue();
     }
 
     @Override

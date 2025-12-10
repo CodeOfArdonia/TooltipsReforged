@@ -63,6 +63,7 @@
   "config.tooltips_reforged.useImageBackground": "Use Image Background (Like 1.21.2+)",
   "config.tooltips_reforged.useImageBorder": "Use Image Border (Like 1.21.2+)",
   "config.tooltips_reforged.useNameColor": "Use Name Color As Tooltip Border Color",
+  "config.tooltips_reforged.useOriginalTitle": "Use Original Item Name",
   "config.tooltips_reforged.usePlayer": "Use Player Instead Of Armor Stand",
   "keybinding.tooltips_reforged.show_item_tag": "Toggle Display Item Tags",
   "keybinding.tooltips_reforged.show_nbt_spawn_egg": "Toggle Display Components / Spawn Egg Info",

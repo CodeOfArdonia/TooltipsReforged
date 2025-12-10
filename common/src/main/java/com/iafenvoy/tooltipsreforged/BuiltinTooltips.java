@@ -11,6 +11,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
+import net.minecraft.text.OrderedText;
 import net.minecraft.registry.DynamicRegistryManager;
 
 import java.util.LinkedList;
@@ -18,11 +19,16 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class BuiltinTooltips {
-    public static void appendTooltip(ItemStack stack, List<TooltipComponent> components, DynamicRegistryManager registries) {
-        if (!components.isEmpty()) components.removeFirst();
+    public static void appendTooltip(ItemStack stack, List<TooltipComponent> components) {
+        OrderedText text = null;
+        if (!components.isEmpty()) {
+            TooltipComponent component = components.remove(0);
+            if (component instanceof OrderedTextTooltipComponent ordered)
+                text = TextUtil.getTextFromComponent(ordered);
+        }
         List<TooltipComponent> headers = new LinkedList<>();
         //Header
-        headers.add(new HeaderComponent(stack));
+        headers.add(new HeaderComponent(stack, text));
         headers.add(new ItemZoomComponent(stack));
         //Effects
         if (stack.getItem() instanceof LingeringPotionItem)

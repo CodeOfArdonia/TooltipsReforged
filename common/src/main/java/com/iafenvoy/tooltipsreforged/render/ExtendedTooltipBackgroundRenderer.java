@@ -8,8 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public class ExtendedTooltipBackgroundRenderer {
     private static final Identifier DEFAULT_BACKGROUND_TEXTURE = Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/gui/sprites/tooltip/background.png");
     private static final Identifier DEFAULT_FRAME_TEXTURE = Identifier.of(Identifier.DEFAULT_NAMESPACE, "textures/gui/sprites/tooltip/frame.png");

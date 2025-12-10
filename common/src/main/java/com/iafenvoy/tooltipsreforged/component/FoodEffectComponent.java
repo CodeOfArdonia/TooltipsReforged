@@ -28,7 +28,7 @@ public class FoodEffectComponent implements TooltipComponent {
 
     public FoodEffectComponent(ItemStack stack) {
         this.stack = stack;
-        this.effectsMode = (EffectsRenderMode) TooltipReforgedConfig.INSTANCE.tooltip.effectsTooltip.getValue();
+        this.effectsMode = TooltipReforgedConfig.INSTANCE.tooltip.effectsTooltip.getValue();
     }
 
     public FoodComponent getFoodComponent() {

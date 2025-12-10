@@ -1,6 +1,6 @@
 package com.iafenvoy.tooltipsreforged.neoforge;
 
-import com.iafenvoy.jupiter.render.screen.ClientConfigScreen;
+import com.iafenvoy.jupiter.render.screen.ConfigContainerScreen;
 import com.iafenvoy.tooltipsreforged.TooltipReforgedClient;
 import com.iafenvoy.tooltipsreforged.config.TooltipReforgedConfig;
 import com.iafenvoy.tooltipsreforged.hook.RarityHook;
@@ -27,6 +27,7 @@ public class TooltipReforgedNeoForgeClient {
     @SubscribeEvent
     public static void onInit(FMLClientSetupEvent event) {
         event.enqueueWork(TooltipReforgedClient::init);
+        MinecraftForge.registerConfigScreen(parent -> new ConfigContainerScreen(parent, TooltipReforgedConfig.INSTANCE, true));
         //Register Hooks
         RarityHook.register((text, rarity) -> text.fillStyle(rarity.getStyleModifier().apply(Style.EMPTY)));
     }
