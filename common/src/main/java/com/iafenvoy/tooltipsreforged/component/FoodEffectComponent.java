@@ -21,8 +21,8 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class FoodEffectComponent implements TooltipComponent {
-    private static final Identifier FOOD_HALF_TEXTURE = Identifier.ofVanilla("hud/food_half");
     private static final Identifier FOOD_FULL_TEXTURE = Identifier.ofVanilla("hud/food_full");
+    private static final Identifier SATURATION_TEXTURE = Identifier.of(TooltipReforgedClient.MOD_ID, "textures/gui/saturation.png");
     protected final ItemStack stack;
     private final EffectsRenderMode effectsMode;
 
@@ -35,16 +35,13 @@ public class FoodEffectComponent implements TooltipComponent {
         return this.stack.getOrDefault(DataComponentTypes.FOOD, FoodComponents.APPLE);
     }
 
-    public int getHunger() {
+    public float getHunger() {
         return this.getFoodComponent().nutrition();
     }
 
-    public int getSaturation() {
+    public float getSaturation() {
         FoodComponent foodComponent = this.getFoodComponent();
-        int saturation = 0;
-        if (foodComponent != null)
-            saturation = (int) (foodComponent.saturation() * 100);
-        return saturation;
+        return foodComponent != null ? foodComponent.saturation() : 0;
     }
 
     @Override
@@ -66,16 +63,15 @@ public class FoodEffectComponent implements TooltipComponent {
     public int getWidth(TextRenderer textRenderer) {
         int foodWidth, effectsWidth = 0, hungerLine = 0, saturationLine = 0;
         FoodComponent foodComponent = this.getFoodComponent();
-        int hunger = this.getHunger();
+        if (foodComponent == null) return 0;
 
         if (TooltipReforgedConfig.INSTANCE.tooltip.hungerTooltip.getValue() && foodComponent.nutrition() > 0)
-            hungerLine = textRenderer.getWidth(Text.translatable("tooltip.%s.hunger".formatted(TooltipReforgedClient.MOD_ID))) + 1 + ((textRenderer.fontHeight - 2) * hunger);
+            hungerLine = textRenderer.getWidth(Text.translatable("tooltip.%s.hunger".formatted(TooltipReforgedClient.MOD_ID))) + 1 + (int) ((textRenderer.fontHeight - 2) * this.getHunger() / 2);
         if (TooltipReforgedConfig.INSTANCE.tooltip.saturationTooltip.getValue() && foodComponent.saturation() > 0)
-            saturationLine = textRenderer.getWidth(Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID), "100%"));
+            saturationLine = textRenderer.getWidth(Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID))) + 1 + (int) ((textRenderer.fontHeight - 2) * this.getSaturation() / 2);
         foodWidth = Math.max(hungerLine, saturationLine);
 
         if (!this.effectsMode.shouldRender()) return foodWidth + 4;
-        if (foodComponent == null) return 0;
         for (FoodComponent.StatusEffectEntry effect : foodComponent.effects()) {
             StatusEffectInstance statusEffect = effect.effect();
             String text = Text.translatable(statusEffect.getTranslationKey()).getString();
@@ -92,27 +88,33 @@ public class FoodEffectComponent implements TooltipComponent {
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         FoodComponent foodComponent = this.getFoodComponent();
         if (foodComponent == null) return;
-        int hunger = this.getHunger();
-        Text hungerText = Text.translatable("tooltip.%s.hunger".formatted(TooltipReforgedClient.MOD_ID));
-        Text saturationText = Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID), this.getSaturation());
         int lineY = y;
 
         if (TooltipReforgedConfig.INSTANCE.tooltip.hungerTooltip.getValue() && foodComponent.nutrition() > 0) {
+            float hungerIcons = this.getHunger() / 2;
+            Text hungerText = Text.translatable("tooltip.%s.hunger".formatted(TooltipReforgedClient.MOD_ID));
             context.drawText(textRenderer, hungerText, x, lineY, 0xffffffff, true);
-            float fullHungers = hunger / 2f;
-            boolean hasHalfHunger = (hunger % 2) != 0;
             int hungerWidth = textRenderer.getWidth(hungerText) + 1;
-            for (int i = 0; i < (int) fullHungers; i++) {
+            for (; hungerIcons >= 1; hungerIcons--) {
                 context.drawGuiTexture(FOOD_FULL_TEXTURE, x + hungerWidth, lineY, 9, 9);
                 hungerWidth += textRenderer.fontHeight - 2;
             }
-            if (hasHalfHunger)
-                context.drawGuiTexture(FOOD_HALF_TEXTURE, x + hungerWidth, lineY, 9, 9);
+            if (hungerIcons > 0)
+                context.drawGuiTexture(FOOD_FULL_TEXTURE, 9, 9, 0, 0, x + hungerWidth, lineY, (int) (9 * hungerIcons), 9);
             lineY += textRenderer.fontHeight + 1;
         }
 
         if (TooltipReforgedConfig.INSTANCE.tooltip.saturationTooltip.getValue() && foodComponent.saturation() > 0) {
-            context.drawText(textRenderer, saturationText, x, lineY, 0xff00ffff, true);
+            float saturationIcons = this.getSaturation() / 2;
+            Text saturationText = Text.translatable("tooltip.%s.saturation".formatted(TooltipReforgedClient.MOD_ID));
+            context.drawText(textRenderer, saturationText, x, lineY, 0xffffffff, true);
+            int saturationWidth = textRenderer.getWidth(saturationText) + 1;
+            for (; saturationIcons >= 1; saturationIcons--) {
+                context.drawTexture(SATURATION_TEXTURE, x + saturationWidth, lineY, 0, 0, textRenderer.fontHeight, textRenderer.fontHeight, 9, 9);
+                saturationWidth += textRenderer.fontHeight - 2;
+            }
+            if (saturationIcons > 0)
+                context.drawTexture(SATURATION_TEXTURE, x + saturationWidth, lineY, 0, 0, 0, (int) (9 * saturationIcons), 9, 9, 9);
             lineY += textRenderer.fontHeight + 1;
         }
 

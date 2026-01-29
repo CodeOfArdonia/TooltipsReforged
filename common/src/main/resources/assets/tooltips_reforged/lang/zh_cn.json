@@ -86,7 +86,7 @@
   "tooltip.tooltips_reforged.loot_table": "掉落物表",
   "tooltip.tooltips_reforged.mob_info": "生物信息",
   "tooltip.tooltips_reforged.nbt": "组件",
-  "tooltip.tooltips_reforged.saturation": "+ %d%% 饱食度",
+  "tooltip.tooltips_reforged.saturation": "饱食度",
   "tooltip.tooltips_reforged.seed": "种子: ",
   "type.tooltips_reforged.aquatic": "水生生物",
   "type.tooltips_reforged.arthropod": "节肢生物",
